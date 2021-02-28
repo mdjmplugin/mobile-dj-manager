@@ -153,20 +153,13 @@ function mdjm_render_single_task_view( $id ) {
                                                 <?php echo esc_html( $task['totalruns'] ); ?>
                                             </p>
 
-											<?php if ( 'upload-playlists' == $id ) : ?>
-                                                <p>
-                                                    <span class="label"><?php esc_html_e( 'Entries Uploaded:', 'mobile-dj-manager' ); ?>&nbsp;</span>
-													<?php echo esc_html( mdjm_get_uploaded_playlist_entry_count() ); ?>
-                                                </p>
-                                            <?php else : ?>
-                                            	<p>
-													<?php echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-														'name'    => 'task_active',
-														'current' => !empty( $task['active'] ) ? true : false // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-													) ); ?>&nbsp;
-                                                    <span class="label"><?php esc_html_e( 'Task Active', 'mobile-dj-manager' ); ?></span>
-                                                </p>
-                                            <?php endif; ?>
+											<p>
+												<?php echo MDJM()->html->checkbox( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+													'name'    => 'task_active',
+													'current' => !empty( $task['active'] ) ? true : false // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+												) ); ?>&nbsp;
+												<span class="label"><?php esc_html_e( 'Task Active', 'mobile-dj-manager' ); ?></span>
+											</p>
 
 											<?php if ( ! empty( $task['active'] ) ) : ?>
                                             	<p>

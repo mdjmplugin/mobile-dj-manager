@@ -63,6 +63,10 @@ function mdjm_do_automatic_upgrades() {
 		mdjm_v157_upgrades();
 	}
 
+	if ( version_compare( $mdjm_version, '1.5.9', '<' ) ) {
+		mdjm_v159_upgrades();
+	}
+
 	if ( version_compare( $mdjm_version, MDJM_VERSION_NUM, '<' ) ) {
 		// Let us know that an upgrade has happened
 		$did_upgrade = true;
@@ -1149,3 +1153,27 @@ function mdjm_v157_upgrades()	{
         mdjm_update_option( $key, $value );
     }
 } // mdjm_v157_upgrades
+
+
+/**
+ * 1.5.9 Upgrade.
+ *
+ * @since	1.5.9
+ * @return	void
+ */
+function mdjm_v159_upgrades()	{
+	if ( ! mdjm_employee_can( 'manage_mdjm' ) ) {
+		wp_die( esc_html__( 'You do not have permission to do perform MDJM upgrades', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
+	}
+
+	ignore_user_abort( true );
+
+	mdjm_set_time_limit( 0 );
+
+	// Remove "upload playlist to MDJM" task
+	$tasks = get_option( 'mdjm_schedules' );
+	unset($tasks['upload-playlists']);
+
+	update_option( 'mdjm_schedules', $tasks );
+
+} // mdjm_v159_upgrades

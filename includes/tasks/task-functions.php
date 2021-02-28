@@ -189,7 +189,7 @@ function mdjm_get_task_run_times( $id = false )	{
  * @return	arr		The run time schedules
  */
 function mdjm_filter_task_run_times( $run_times, $id )	{
-	if ( 'complete-events' == $id || 'upload-playlists' == $id )	{
+	if ( 'complete-events' == $id )	{
 		$unset = array( 'event_created', 'after_approval', 'before_event' );
 	} elseif( 'fail-enquiry' == $id )	{
 		$unset = array( 'after_approval', 'before_event', 'after_event' );

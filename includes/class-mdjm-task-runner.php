@@ -274,22 +274,6 @@ class MDJM_Task_Runner {
 	} // set_next_run
 
 	/**
-	 * Execute the Upload Playlist task
-	 *
-	 * @since	1.4.7
-	 * @return	bool
-	 */
-	public function upload_playlists()	{
-		MDJM()->debug->log_it( "*** Starting the $this->name task ***", true );
-
-		mdjm_process_playlist_upload();
-
-		MDJM()->debug->log_it( "*** $this->name task Completed ***", true );
-
-		return true;
-	} // upload_playlists
-
-	/**
 	 * Execute the Complete Events task
 	 *
 	 * @since	1.4.7
@@ -322,7 +306,7 @@ class MDJM_Task_Runner {
 				$date_format = 'Y-m-d H:i:s';
 				$time       = $event->get_finish_time();
 				$end_date   = get_post_meta( $event->ID, '_mdjm_event_end_date', true );
-		
+
 				if ( ! $end_date )	{
 					$end_date = $event->date;
 				}

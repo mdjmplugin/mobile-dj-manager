@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) )
 	exit;
 
 class MDJM_Cron	{
-		
+
 	/*
 	 * Get things going
 	 */
@@ -127,15 +127,9 @@ class MDJM_Cron	{
 	 */
 	public function create_tasks()	{
 		global $mdjm_options;
-		
+
 		$time = current_time( 'timestamp' );
-		
-		if( isset( $mdjm_options['upload_playlists'] ) )	{
-			$playlist_nextrun = strtotime( '+1 day', $time );
-		} else	{
-			$playlist_nextrun = 'N/A';
-		}
-		
+
 		$mdjm_schedules = array(
 			'complete-events'    => array(
 				'slug'           => 'complete-events',
@@ -152,7 +146,7 @@ class MDJM_Cron	{
 				'totalruns'      => '0',
 				'default'        => true,
 				'last_result'    => false
-			),			
+			),
 			'request-deposit'    => array(
 				'slug'           => 'request-deposit',
 				'name'           => __( 'Request Deposit', 'mobile-dj-manager' ),
@@ -171,7 +165,7 @@ class MDJM_Cron	{
 				'totalruns'      => '0',
 				'default'        => true,
 				'last_result'    => false
-			),			
+			),
 			'balance-reminder'    => array(
 				'slug'            => 'balance-reminder',
 				'name'            => __( 'Balance Reminder', 'mobile-dj-manager' ),
@@ -190,7 +184,7 @@ class MDJM_Cron	{
 				'totalruns'       => '0',
 				'default'         => true,
 				'last_result'     => false
-			), 
+			),
 			'fail-enquiry'         => array(
 				'slug'             => 'fail-enquiry',
 				'name'             => __( 'Fail Enquiry', 'mobile-dj-manager' ),
@@ -243,25 +237,9 @@ class MDJM_Cron	{
 				'totalruns'           => '0',
 				'default'             => true,
 				'last_result'         => false
-			),
-			'upload-playlists'      => array(
-				'slug'              => 'upload-playlists',
-				'name'              => __( 'Upload Playlists', 'mobile-dj-manager' ),
-				'active'            => true,
-				'desc'              => __( 'Transmit playlist information back to the MDJM servers to help build an information library. This option is updated the MDJM Settings pages.', 'mobile-dj-manager' ),
-				'frequency'         => 'Twice Daily',
-				'nextrun'           => $playlist_nextrun,
-				'lastran'           => 'Never',
-				'options'           => array(
-					'run_when'        => 'after_event',
-					'age'             => '1 HOUR'
-				),
-				'totalruns'           => '0',
-				'default'             => true,
-				'last_result'         => false
 			)
 		);
-		
+
 		update_option( 'mdjm_schedules', $mdjm_schedules );
 	} // create_tasks
 

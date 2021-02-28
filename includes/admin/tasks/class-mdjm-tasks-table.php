@@ -212,12 +212,10 @@ class MDJM_Tasks_Table extends WP_List_Table {
 			'view'   => '<a href="' . $edit_url . '">' . __( 'Edit', 'mobile-dj-manager' ) . '</a>'
 		);
 
-		if ( 'upload-playlists' != $item['id'] )	{
-			if ( empty( $item['active'] ) )	{
-				$actions['activate'] = '<a href="' . $activate_url . '">' . __( 'Activate', 'mobile-dj-manager' ) . '</a>';
-			} else	{
-				$actions['deactivate'] = '<a class="mdjm-delete" href="' . $deactivate_url . '">' . __( 'Deactivate', 'mobile-dj-manager' ) . '</a>';
-			}
+		if ( empty( $item['active'] ) )	{
+			$actions['activate'] = '<a href="' . $activate_url . '">' . __( 'Activate', 'mobile-dj-manager' ) . '</a>';
+		} else	{
+			$actions['deactivate'] = '<a class="mdjm-delete" href="' . $deactivate_url . '">' . __( 'Deactivate', 'mobile-dj-manager' ) . '</a>';
 		}
 
 		if ( ! empty( $item['active'] ) )	{
@@ -320,10 +318,6 @@ class MDJM_Tasks_Table extends WP_List_Table {
 
 		if ( $tasks ) {
 			foreach ( $tasks as $task ) {
-
-				if ( 'upload-playlists' == $task['slug'] )	{
-					$task['active'] = mdjm_get_option( 'upload_playlists' );
-				}
 
 				$data[] = array(
 					'id'           => $task['slug'],

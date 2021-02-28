@@ -509,14 +509,6 @@ function mdjm_get_registered_settings()	{
 						'type'        => 'text',
 						'size'        => 'small',
 						'std'		  => '5'
-					),
-					'upload_playlists' => array(
-						'id'          => 'upload_playlists',
-						'name'        => __( 'Upload Playlists?', 'mobile-dj-manager' ),
-						'desc'        => sprintf( __( 'With this option checked, your playlist information will occasionally be transmitted back to the MDJM servers ' .
-										'to help build an information library. The consolidated list of playlist songs will be freely shared. ' .
-										'Only song, artist and the %s type information is transmitted.', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-						'type'        => 'checkbox'
 					)
 				),
 				// Packages & Addons
