@@ -29,7 +29,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 }
 
 .mdjm-small	{
-	font-size: 11px;	
+	font-size: 11px;
 }
 .mdjm-loader	{
 	background-image: url(../images/loading.gif);
@@ -39,7 +39,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 
 .mdjm-new	{
 	font-weight: bold;
-	color: #F90;	
+	color: #F90;
 }
 
 .mdjm-bug	{
@@ -56,7 +56,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 }
 
 .mdjm-color	{
-	color: #F90;	
+	color: #F90;
 }
 
 .mdjm-select-chosen { min-width: 200px; margin: 4px; padding-bottom: 5px; }
@@ -239,7 +239,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 	float: right;
 	width: 30%;
 }
-	
+
 /* =Custom Event Fields
 -------------------------------------------------------------- */
 .mdjm-event-field-container	{
@@ -256,7 +256,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 	float: right;
 	width: 30%;
 }
-	
+
 /* =Notifications
 -------------------------------------------------------------- */
 .mdjm-info, .mdjm-success, .mdjm-warning, .mdjm-error, .mdjm-validation	{
@@ -299,7 +299,7 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 }
 .mdjm-updating	{
 	border: solid 1px #F90 !important;
-	color: #F90 !important;	
+	color: #F90 !important;
 }
 
 /* =jQuery Validation
@@ -669,8 +669,8 @@ checkbox.mdjm-form-error {
   background: #FFFFFF;
   margin: 25px auto;
   text-align: left;
-  height: 425px;
-  
+  height: 500px;
+
   -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
   -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
   box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
@@ -679,12 +679,12 @@ checkbox.mdjm-form-error {
 .mdjm-extension-item-img {
   position: relative;
   width: 100%;
+  height: 256px;
+  background-color: #288bba;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
-.mdjm-extension-item-img img {
-  position: relative;
-  width: 100%;
-}
 
 .mdjm-extension-item-desc {
   position: relative;

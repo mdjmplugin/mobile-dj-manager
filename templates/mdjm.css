@@ -1,4 +1,4 @@
-plre/**
+/**
  * MDJM Event Management Styles
  *
  * @package     MDJM
@@ -367,7 +367,7 @@ a	{
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
-		
+
 .btn i {
 	padding-right:0.8em;
 	line-height:22px;
@@ -906,7 +906,7 @@ p.view_current_playlist {
 -------------------------------------------------------------- */
 
 #mdjm_availability_widget	{
-	
+
 }
 
 #mdjm_availability_widget label	{

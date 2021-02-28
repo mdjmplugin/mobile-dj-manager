@@ -202,9 +202,8 @@ if ( ! class_exists( 'MDJM_License' ) )	{
 			}
 
 			echo '<p>' . sprintf(
-				__( 'Enter your extension <a href="%s" target="_blank">license keys</a> here to receive updates for purchased extensions. If your license key has expired, please <a href="%s" target="_blank">renew your license</a>.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				__( 'Enter your extension <a href="%s" target="_blank">license keys</a> here to receive updates for purchased extensions.', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				'https://mdjm.co.uk/your-account/',
-				'https://mdjm.co.uk/articles/renewing-add-licenses/'
 			) . '</p>';
 
 			$has_ran = true;
