@@ -1232,7 +1232,7 @@ function mdjm_event_overview_metabox_event_type_contract_venue_row( $event_id ) 
 			<?php else : ?>
 
 				<?php if ( mdjm_employee_can( 'manage_events' ) ) : ?>
-                    <a id="view_contract" href="<?php echo esc_url( add_query_arg( array( 'mdjm_action' => 'review_contract', 'event_id' => $event_id ), home_url() ) ); ?>" target="_blank"><?php esc_html_e( 'View signed contract', 'mobile-dj-manager' ); ?></a>
+					<a id="view_contract" href="<?php echo esc_url( add_query_arg( array( 'page' => 'mdjm-view-contract', 'event_id' => $event_id ), admin_url( 'admin.php' ) ) ); ?>" target="_blank"><?php esc_html_e( 'View signed contract', 'mobile-dj-manager' ); ?></a>
                 <?php else : ?>
                     <?php esc_html_e( 'Contract is Signed', 'mobile-dj-manager' ); ?>
                 <?php endif; ?>
