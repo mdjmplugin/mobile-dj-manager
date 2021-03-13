@@ -30,10 +30,8 @@ function mdjm_extensions_page()	{
 	), 'https://mdjm.co.uk/add-ons/' ) );
 
 	$donate_url = esc_url( add_query_arg( array(
-		'utm_source'   => 'plugin-addons-page',
-		'utm_medium'   => 'plugin',
-		'utm_campaign' => 'MDJM_Addons_Page',
-		'utm_content'  => 'All Addons'
+		'mtm_campaign'   => 'donate',
+		'mtm_kwd'   => 'mobile-dj-manager'
 	), 'https://mdjm.co.uk/donate/' ) );
 
 	?>
