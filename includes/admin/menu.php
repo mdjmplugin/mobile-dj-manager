@@ -540,26 +540,16 @@ function mdjm_admin_toolbar( $admin_bar )	{
 	}
 	do_action( 'mdjm_admin_bar_settings_items', $admin_bar );
 	// MDJM Links
-	$admin_bar->add_menu( array(
-		'id'     => 'mdjm-user-guides',
-		'parent' => 'mdjm',
-		'title'  => sprintf( __( '%sDocumentation%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
-		'href'   => 'https://mdjm.co.uk/support/',
-		'meta'   => array(
-			'title' => __( 'Documentation', 'mobile-dj-manager' ),
-			'target' => '_blank'
-		),
-	));
-	$admin_bar->add_menu( array(
-		'id'     => 'mdjm-support',
-		'parent' => 'mdjm',
-		'title'  => sprintf( __( '%sSupport%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
-		'href'   => 'http://www.mydjplanner.co.uk/forums/',
-		'meta'   => array(
-			'title' => __( 'MDJM Support Forums', 'mobile-dj-manager' ),
-			'target' => '_blank'
-		),
-	));
+//	$admin_bar->add_menu( array(
+//		'id'     => 'mdjm-user-guides',
+//		'parent' => 'mdjm',
+//		'title'  => sprintf( __( '%sDocumentation%s', 'mobile-dj-manager' ), '<span style="color:#F90">', '</span>' ),
+//		'href'   => 'https://mdjm.co.uk/support/',
+//		'meta'   => array(
+//			'title' => __( 'Documentation', 'mobile-dj-manager' ),
+//			'target' => '_blank'
+//		),
+//	));
 } // mdjm_admin_toolbar
 add_action( 'admin_bar_menu', 'mdjm_admin_toolbar', 99 );
 

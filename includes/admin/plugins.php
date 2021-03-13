@@ -41,7 +41,7 @@ function mdjm_plugin_row_meta( $links, $file ) {
 		return $links;
 	}
 
-	$mdjm_links[] = '<a href="https://mdjm.co.uk/support/" target="_blank">' . __( 'Documentation', 'mobile-dj-manager' ) . '</a>';
+	//$mdjm_links[] = '<a href="https://mdjm.co.uk/docs/" target="_blank">' . __( 'Documentation', 'mobile-dj-manager' ) . '</a>';
 	$mdjm_links[] = '<a href="https://mdjm.co.uk/donate/?mtm_campaign=donate&mtm_kwd=mobile-dj-manager" target="_blank">' . __( 'Donate', 'mobile-dj-manager' ) . '</a>';
 	$mdjm_links[] = '<a href="https://mdjm.co.uk/extensions/" target="_blank">' . __( 'Extensions', 'mobile-dj-manager' ) . '</a>';
 
