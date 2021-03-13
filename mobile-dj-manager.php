@@ -7,9 +7,9 @@ if ( ! defined( 'ABSPATH' ) )
  * Plugin Name: MDJM Event Management
  * Plugin URI: https://mdjm.co.uk
  * Description: The most efficient and versatile event management solution for WordPress.
- * Version: 1.5.8
+ * Version: 1.5.9
  * Date: 23 December 2020
- * Author: DeckBooks <info@deckbooks.co.uk>
+ * Author: MDJM <info@mdjm.co.uk>
  * Author URI: https://mdjm.co.uk
  * Text Domain: mobile-dj-manager
  * Domain Path: /languages
@@ -138,7 +138,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.5.8' );
+			define( 'MDJM_VERSION_NUM', '1.5.9' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -288,6 +288,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrade-functions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/welcome.php' );
+				require_once( MDJM_PLUGIN_DIR . '/includes/admin/contract/class-contract.php' );
 
 			}
 
@@ -314,7 +315,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		private function has_paid_extensions()	{
 			$extensions = [
 				'mdjm-dynamic-contact-forms.php',
-				'mdjm-google-calendar-sync.php',
 				'mdjm-mailchimp-subscribe.php',
 				'mdjm-mailpoet-subscribe.php',
 				'mdjm-payfast-gateway.php',

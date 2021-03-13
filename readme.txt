@@ -2,12 +2,12 @@
 Contributors: mikeyhoward1977, bcdandd, deckbooks
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 5.3
-Tested up to: 5.6
+Tested up to: 5.7
 Requires PHP: 7.3
 Stable tag: 1.5.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://mdjm.co.uk/support-our-work/
+Donate link: https://mdjm.co.uk/donate/?mtm_campaign=donate&mtm_kwd=mobile-dj-manager
 
 The most efficient and versatile event management solution for WordPress.
 
@@ -86,6 +86,17 @@ Premium addons are available to enhance the plugin via our [Plugin Store](https:
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.5.9 =
+
+**Monday, 1st March 2021**
+
+**New**: Compatibility up to WordPress 5.7
+
+**Bug**: Fixed PHP error on equipment package and add-ons pages
+**Bug**: Fixed contract viewing conflict with Elementor / Elementor Pro
+
+**Removed**: Optional upload playlist data to MDJM servers task
 
 = 1.5.8 =
 
