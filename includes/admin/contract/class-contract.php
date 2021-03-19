@@ -44,7 +44,7 @@ class Contract_View {
 			esc_html__( 'Contract View', 'mobile-dj-manager' ),
 			'mdjm_employee',
 			$this->slug,
-			[ $this, 'admin_page' ]
+			array( $this, 'admin_page' )
 		);
 	}
 
@@ -62,11 +62,11 @@ class Contract_View {
 			ob_end_clean();
 		}
 
-		if ( ! mdjm_employee_can( 'manage_events' ) )	{
+		if ( ! mdjm_employee_can( 'manage_events' ) ) {
 			return;
 		}
 
-		$event_id = isset($_GET['event_id']) ? absint( wp_unslash( $_GET['event_id'] ) ) : 0;
+		$event_id = isset( $_GET['event_id'] ) ? absint( wp_unslash( $_GET['event_id'] ) ) : 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if ( empty( $event_id ) ) {
 			esc_html_e( 'The event cannot be found', 'mobile-dj-manager' );
@@ -75,20 +75,20 @@ class Contract_View {
 
 		$mdjm_event = new MDJM_Event( $event_id );
 
-		if ( ! mdjm_is_admin() )	{
-			if ( ! array_key_exists( get_current_user_id(), $mdjm_event->get_all_employees() ) )	{
+		if ( ! mdjm_is_admin() ) {
+			if ( ! array_key_exists( get_current_user_id(), $mdjm_event->get_all_employees() ) ) {
 				return;
 			}
 		}
 
-		if ( ! $mdjm_event->get_contract_status() )	{
+		if ( ! $mdjm_event->get_contract_status() ) {
 			printf( esc_html__( 'The contract for this %s is not signed', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) );
 			exit;
 		}
 
 		$contract_id = $mdjm_event->get_contract();
 
-		if ( empty( $contract_id ) )	{
+		if ( empty( $contract_id ) ) {
 			return;
 		}
 
@@ -103,7 +103,7 @@ class Contract_View {
 	 * @return boolean
 	 */
 	public function is_current_page() {
-		$page = isset( $_GET['page'] ) && ! empty( $_GET['page'] ) ? filter_input( INPUT_GET, 'page' ) : false;
+		$page = isset( $_GET['page'] ) && ! empty( $_GET['page'] ) ? filter_input( INPUT_GET, 'page' ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		return $page === $this->slug;
 	}
 
@@ -112,7 +112,7 @@ class Contract_View {
 	 *
 	 * @return mixed
 	 */
-	public static function get( $id, $default = false, $filter = FILTER_DEFAULT, $flag = [] ) {
+	public static function get( $id, $default = false, $filter = FILTER_DEFAULT, $flag = array() ) {
 		return filter_has_var( INPUT_GET, $id ) ? filter_input( INPUT_GET, $id, $filter, $flag ) : $default;
 	}
 
