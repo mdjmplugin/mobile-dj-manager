@@ -219,16 +219,6 @@ function mdjm_admin_toolbar( $admin_bar )	{
 				'title' => __(  'Employee Availability', 'mobile-dj-manager' ),
 			),
 		) );
-	// Automated Tasks
-		$admin_bar->add_menu( array(
-			'id'		=> 'mdjm-tasks',
-			'parent'	=> 'mdjm',
-			'title'	 => __( 'Automated Tasks', 'mobile-dj-manager' ),
-			'href'	  => admin_url( 'admin.php?page=mdjm-tasks' ),
-			'meta'	  => array(
-				'title' => __( 'Automated Tasks', 'mobile-dj-manager' ),
-			),
-		) );
 	}
 	if( mdjm_employee_can( 'view_clients_list' ) )	{
 		// Clients
@@ -466,8 +456,19 @@ function mdjm_admin_toolbar( $admin_bar )	{
 			) );
 		}
 	}
-	// Settings
+
 	if( mdjm_is_admin() )	{
+		// Automated Tasks
+		$admin_bar->add_menu( array(
+			'id'		=> 'mdjm-tasks',
+			'parent'	=> 'mdjm',
+			'title'	 => __( 'Automated Tasks', 'mobile-dj-manager' ),
+			'href'	  => admin_url( 'admin.php?page=mdjm-tasks' ),
+			'meta'	  => array(
+				'title' => __( 'Automated Tasks', 'mobile-dj-manager' ),
+			),
+		) );
+		// Settings
 		$admin_bar->add_menu( array(
 			'id'		=> 'mdjm-settings',
 			'parent'	=> 'mdjm',
