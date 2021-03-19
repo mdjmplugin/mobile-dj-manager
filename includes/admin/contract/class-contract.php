@@ -1,6 +1,6 @@
 <?php
 /**
- * The Wizard pages helper.
+ * The Contract pages helper.
  *
  * @package     MDJM
  * @subpackage  Admin\Contract
