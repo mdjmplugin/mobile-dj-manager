@@ -1395,6 +1395,10 @@ Our fully customisable Contact Forms enable full management of events from the i
 
 == Upgrade Notice ==
 
+= 1.5.9 =
+
+Ensure you have backed up your database prior to upgrading. This release removes the optional upload playlist data to MDJM servers task.
+
 = 1.5.8 =
 
 Fixes numerous security issues and general security improvements. Upgrade immediately.
