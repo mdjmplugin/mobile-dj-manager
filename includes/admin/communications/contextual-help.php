@@ -43,8 +43,8 @@ function mdjm_comms_email_contextual_help() {
 					esc_url( 'https://github.com/mdjm/mobile-dj-manager/' )
 				) . '</p>' .
 		'<p>' . sprintf(
-					__( 'View <a href="%s">add-ons</a>.', 'mobile-dj-manager' ),
-					esc_url( 'https://mdjm.co.uk/add-ons/' )
+					__( 'View <a href="%s">extensions</a>.', 'mobile-dj-manager' ),
+					esc_url( 'https://mdjm.co.uk/extensions/' )
 				) . '</p>'
 	);
 

@@ -26,8 +26,8 @@ function mdjm_extensions_page()	{
 		'utm_source'   => 'plugin-addons-page',
 		'utm_medium'   => 'plugin',
 		'utm_campaign' => 'MDJM_Addons_Page',
-		'utm_content'  => 'All Addons'
-	), 'https://mdjm.co.uk/add-ons/' ) );
+		'utm_content'  => 'All Extensions'
+	), 'https://mdjm.co.uk/extensions/' ) );
 
 	$donate_url = esc_url( add_query_arg( array(
 		'mtm_campaign'   => 'donate',
@@ -41,7 +41,7 @@ function mdjm_extensions_page()	{
 		</h1>
 		<div>
 			<p><?php esc_html_e( 'These extensions', 'mobile-dj-manager' ); ?> <em><strong><?php esc_html_e( 'add even more functionality', 'mobile-dj-manager' ); ?></em></strong> <?php esc_html_e( 'to your MDJM Event Management solution.', 'mobile-dj-manager' ); ?></p>
-			<p><?php printf( __( '<em><strong>Remember</strong></em> your donations help pay for the development of the MDJM Event Management plugin, it\'s extensions, and allows us to provide these extensions for free. <a href="%s" target="_blank">Please make a donation today</a>.', 'mobile-dj-manager'), $donate_url ); ?></p>
+			<p><?php printf( __( '<em><strong>Remember</strong></em> your donations help pay for the development of the MDJM Event Management plugin, it\'s extensions, and allows us to provide these extensions for free. <a href="%s" target="_blank">Please make a donation today</a>.', 'mobile-dj-manager'), esc_url( $donate_url ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 		</div>
 
 		<div class="mdjm-extension-wrapper grid3">

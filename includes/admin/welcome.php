@@ -435,12 +435,12 @@ class MDJM_Welcome {
 				<h3><?php esc_html_e( 'Extensions', 'mobile-dj-manager' );?></h3>
 				<div class="feature-section two-col">
 					<div class="col">
-						<h4><?php esc_html_e( 'A Growing List of Add-ons','mobile-dj-manager' );?></h4>
-						<p><?php esc_html_e( 'Add-on plugins are available that greatly extend the default functionality of MDJM Event Management. There are extensions to further automate MDJM Event Management, payment processing and calendar syncronisation.', 'mobile-dj-manager' );?></p>
+						<h4><?php esc_html_e( 'A Growing List of Extensions','mobile-dj-manager' );?></h4>
+						<p><?php esc_html_e( 'Extension plugins are available that greatly extend the default functionality of MDJM Event Management. There are extensions to further automate MDJM Event Management, payment processing and calendar synchronisation.', 'mobile-dj-manager' );?></p>
 					</div>
 					<div class="col">
 						<h4><?php esc_html_e( 'Visit the Add-ons Store', 'mobile-dj-manager' );?></h4>
-						<p><?php printf( __( '<a href="%s" target="_blank">The Add-ons store</a> has a list of all available extensions, including convenient category filters so you can find exactly what you are looking for.', 'mobile-dj-manager' ), 'https://mdjm.co.uk/add-ons' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
+						<p><?php printf( __( '<a href="%s" target="_blank">The Extensions store</a> has a list of all available extensions, including convenient category filters so you can find exactly what you are looking for.', 'mobile-dj-manager' ), 'https://mdjm.co.uk/extensions' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></p>
 					</div>
 				</div>
 			</div>

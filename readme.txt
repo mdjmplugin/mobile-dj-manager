@@ -1,5 +1,5 @@
 === MDJM Event Management ===
-Contributors: mikeyhoward1977, bcdandd, deckbooks
+Contributors: mdjm
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 5.3
 Tested up to: 5.7
@@ -38,7 +38,7 @@ MDJM Event Management allows you to manage your events from enquiry stage throug
 * Automate daily and weekly tasks
 * Create an unlimited number of custom email and contract templates
 * Developer friendly
-* A number of [plugin extensions](https://mdjm.co.uk/add-ons/ "MDJM Add-ons") are available to further enhance the automation including Contact Forms, Payment Gateways and Calendar Sync
+* A number of [plugin extensions](https://mdjm.co.uk/extensions/ "MDJM Add-ons") are available to further enhance the automation including Contact Forms, Payment Gateways and Calendar Sync
 
 **Communication with MDJM Event Management Servers**
 This plugin will only communicate with MDJM Event Management servers when paid MDJM extensions are installed for the purpose of license checks and providing updates to the paid extensions only. This communication does not happen when there are no paid MDJM extensions installed.
@@ -69,11 +69,11 @@ Once you have downloaded the plugin zip file, follow these simple instructions t
 = Is any support provided? =
 
 Support can be obtained via our online [Support Pages](https://mdjm.co.uk/support/ "MDJM Support").
-Support is provided on a best-endeavours basis. For premium support you must be an active license holder for one of the [MDJM Event Management add-ons](https://mdjm.co.uk/add-ons/ "MDJM Event Management add-ons")
+Support is provided on a best-endeavours basis.
 
 = Is there a Pro version with additional features? =
 
-Premium addons are available to enhance the plugin via our [Plugin Store](https://mdjm.co.uk/add-ons/ "MDJM Add-ons")
+Extensions are available to enhance the plugin via our [Extension Store](https://mdjm.co.uk/extensions/ "MDJM Extensions")
 
 == Screenshots ==
 

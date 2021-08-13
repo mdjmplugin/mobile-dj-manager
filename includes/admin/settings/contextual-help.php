@@ -41,8 +41,8 @@ function mdjm_settings_contextual_help() {
 					esc_url( 'https://github.com/mdjm/mobile-dj-manager/' )
 				) . '</p>' .
 		'<p>' . sprintf(
-					__( 'View <a href="%s">add-ons</a>.', 'mobile-dj-manager' ),
-					esc_url( 'https://mdjm.co.uk/add-ons/' )
+					__( 'View <a href="%s">extensions</a>.', 'mobile-dj-manager' ),
+					esc_url( 'https://mdjm.co.uk/extensions/' )
 				) . '</p>'
 	);
 
@@ -94,8 +94,8 @@ function mdjm_settings_contextual_help() {
 		'title'	    => __( 'Licenses', 'mobile-dj-manager' ),
 		'content'	=>
 			'<p>' . sprintf(
-						__( 'If you have any <a href="%s">MDJM Event Management paid add-ons</a> installed, this screen is where you should add the license to enable automatic updates whilst your license is valid.', 'mobile-dj-manager' ),
-						esc_url( 'https://mdjm.co.uk/add-ons/' )
+						__( 'If you have any <a href="%s">MDJM Event Management paid extensions</a> installed, this screen is where you should add the license to enable automatic updates whilst your license is valid.', 'mobile-dj-manager' ),
+						esc_url( 'https://mdjm.co.uk/extensions/' )
 					) . '</p>'
 	) );
 
