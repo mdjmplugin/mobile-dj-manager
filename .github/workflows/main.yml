@@ -3,6 +3,9 @@ on:
   push:
     tags:
       - "*"
+      - '!*-alpha*'
+      - '!*-beta*'
+      - '!*-rc*'
 jobs:
   tag:
     name: New tag
