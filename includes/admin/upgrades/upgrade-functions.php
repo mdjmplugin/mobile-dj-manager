@@ -1172,8 +1172,12 @@ function mdjm_v159_upgrades()	{
 
 	// Remove "upload playlist to MDJM" task
 	$tasks = get_option( 'mdjm_schedules' );
-	unset($tasks['upload-playlists']);
 
-	update_option( 'mdjm_schedules', $tasks );
+	// Check we have upload-playlists in the task list before removing
+	if (array_key_exists('upload-playlists', $tasks)) {
+		unset($tasks['upload-playlists']);
+
+		update_option( 'mdjm_schedules', $tasks );
+	}
 
 } // mdjm_v159_upgrades

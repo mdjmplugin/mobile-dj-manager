@@ -2,9 +2,9 @@
 Contributors: mdjm
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 5.3
-Tested up to: 5.7
+Tested up to: 5.8
 Requires PHP: 7.3
-Stable tag: 1.5.8
+Stable tag: 1.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 Donate link: https://mdjm.co.uk/donate/?mtm_campaign=donate&mtm_kwd=mobile-dj-manager
@@ -89,9 +89,9 @@ Extensions are available to enhance the plugin via our [Extension Store](https:/
 
 = 1.5.9 =
 
-**Monday, 1st March 2021**
+**Monday, 14th August 2021**
 
-**New**: Compatibility up to WordPress 5.7
+**New**: Compatibility up to WordPress 5.8
 
 **Bug**: Fixed PHP error on equipment package and add-ons pages
 **Bug**: Fixed contract viewing conflict with Elementor / Elementor Pro

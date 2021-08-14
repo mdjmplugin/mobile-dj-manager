@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) )
  * Plugin URI: https://mdjm.co.uk
  * Description: The most efficient and versatile event management solution for WordPress.
  * Version: 1.5.9
- * Date: 23 December 2020
+ * Date: 14 August 2021
  * Author: MDJM <info@mdjm.co.uk>
  * Author URI: https://mdjm.co.uk
  * Text Domain: mobile-dj-manager
@@ -314,7 +314,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 
 		private function has_paid_extensions()	{
 			$extensions = [
-				'mdjm-dynamic-contact-forms.php',
 				'mdjm-mailchimp-subscribe.php',
 				'mdjm-mailpoet-subscribe.php',
 				'mdjm-payfast-gateway.php',
