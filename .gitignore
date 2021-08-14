@@ -26,3 +26,5 @@ Thumbs.db
 
 # Debug
 mdjm_debug.log
+phpcs_all.txt
+phpcs_source.txt
