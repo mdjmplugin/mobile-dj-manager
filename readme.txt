@@ -89,7 +89,7 @@ Extensions are available to enhance the plugin via our [Extension Store](https:/
 
 = 1.5.9 =
 
-**Monday, 14th August 2021**
+**Saturday, 14th August 2021**
 
 **New**: Compatibility up to WordPress 5.8
 
