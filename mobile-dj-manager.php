@@ -7,8 +7,8 @@ if ( ! defined( 'ABSPATH' ) )
  * Plugin Name: MDJM Event Management
  * Plugin URI: https://mdjm.co.uk
  * Description: The most efficient and versatile event management solution for WordPress.
- * Version: 1.5.9
- * Date: 14 August 2021
+ * Version: 1.5.9.1
+ * Date: 6th February 2022
  * Author: Mobile Events Manager <support@mobileeventsmanager.co.uk>
  * Author URI: https://mdjm.co.uk
  * Text Domain: mobile-dj-manager
@@ -138,7 +138,7 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants()	{
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.5.9' );
+			define( 'MDJM_VERSION_NUM', '1.5.9.1' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version');
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -288,7 +288,6 @@ if( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrade-functions.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php' );
 				require_once( MDJM_PLUGIN_DIR . '/includes/admin/welcome.php' );
-				require_once( MDJM_PLUGIN_DIR . '/includes/admin/contract/class-contract.php' );
 
 			}
 
