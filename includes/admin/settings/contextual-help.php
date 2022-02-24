@@ -1,5 +1,13 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Contextual Help
  *
  * @package     MDJM
@@ -9,9 +17,10 @@
  * @since       1.3
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Settings contextual help.
@@ -22,82 +31,99 @@ if ( ! defined( 'ABSPATH' ) )
 function mdjm_settings_contextual_help() {
 	$screen = get_current_screen();
 
-	if ( $screen->id != 'mdjm-event_page_mdjm-settings' )
+	if ( $screen->id != 'mdjm-event_page_mdjm-settings' ) {
 		return;
+	}
 
 	$screen->set_help_sidebar(
 		'<p><strong>' . __( 'For more information:', 'mobile-dj-manager' ) . '</strong></p>' .
 		'<p>' . sprintf(
-					__( 'Visit the <a href="%s">documentation</a> on the MDJM Event Management website.', 'mobile-dj-manager' ),
-					esc_url( 'https://mdjm.co.uk/support/' )
-				) . '</p>' .
+			__( 'Visit the <a href="%s">documentation</a> on the Mobile DJ Manager website.', 'mobile-dj-manager' ),
+			esc_url( 'http://mobileeventsmanager.co.uk/support/' )
+		) . '</p>' .
 		'<p>' . sprintf(
-					__( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ),
-					esc_url( 'https://www.facebook.com/groups/mobiledjmanager/' )
-				) . '</p>' .
+			__( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ),
+			esc_url( 'https://www.facebook.com/groups/mdjmusers/' )
+		) . '</p>' .
 		'<p>' . sprintf(
-					__( '<a href="%s">Post an issue</a> on <a href="%s">GitHub</a>.', 'mobile-dj-manager' ),
-					esc_url( 'https://github.com/mdjm/mobile-dj-manager/issues' ),
-					esc_url( 'https://github.com/mdjm/mobile-dj-manager/' )
-				) . '</p>' .
+			__( '<a href="%1$s">Post an issue</a> on <a href="%2$s">GitHub</a>.', 'mobile-dj-manager' ),
+			esc_url( 'https://github.com/mdjm/mobile-dj-manager/issues' ),
+			esc_url( 'https://github.com/mdjm/mobile-dj-manager/' )
+		) . '</p>' .
 		'<p>' . sprintf(
-					__( 'View <a href="%s">extensions</a>.', 'mobile-dj-manager' ),
-					esc_url( 'https://mdjm.co.uk/extensions/' )
-				) . '</p>'
+			__( 'View <a href="%s">add-ons</a>.', 'mobile-dj-manager' ),
+			esc_url( 'http://mobileeventsmanager.co.uk/add-ons/' )
+		) . '</p>'
 	);
 
 	do_action( 'mdjm_pre_settings_contextual_help', $screen );
 
-	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-settings-general',
-		'title'	    => __( 'General', 'mobile-dj-manager' ),
-		'content'	=> '<p>' . __( 'This screen provides the most basic settings for configuring MDJM. Set your company name and preferred date and time format.', 'mobile-dj-manager' ) . '</p>'
-	) );
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mdjm-settings-general',
+			'title'   => __( 'General', 'mobile-dj-manager' ),
+			'content' => '<p>' . __( 'This screen provides the most basic settings for configuring MDJM. Set your company name and preferred date and time format.', 'mobile-dj-manager' ) . '</p>',
+		)
+	);
 
-	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-settings-events',
-		'title'	    => mdjm_get_label_plural(),
-		'content'	=>
-			'<p>' . sprintf( __( 'This screen enables to you configure options %1$s and playlists. Select your %1$s default contract template, whether or not you are an employer and enable equipment packages.', 'mobile-dj-manager' ) . '</p>' .
-			'<p>' . __( 'You can also toggle playlists on or off, select when a playlist should close choose whether or not to upload your playlists to the MDJM servers.', 'mobile-dj-manager' ),
-						mdjm_get_label_plural( true ) ) . '</p>'
-	) );
-
-	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-settings-emails-templates',
-		'title'	    => __( 'Emails &amp; Templates', 'mobile-dj-manager' ),
-		'content'	=>
-			'<p>' . __( 'This screen allows you to adjust options for emails, toggle on or off the email tracking feature and select which templates to use as content for emails.', 'mobile-dj-manager' ) . '</p>'
-	) );
-
-	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-settings-client-zone',
-		'title'	    => mdjm_get_application_name(),
-		'content'	=> '<p>' . sprintf( __( "This screen allows you to configure settings associated with the %s as well as set various pages and configure the Availability Checker.", 'mobile-dj-manager' ), mdjm_get_application_name() ) . '</p>'
-	) );
-
-	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-settings-payments',
-		'title'	    => __( 'Payments', 'mobile-dj-manager' ),
-		'content'	=>
-			'<p>' . __( 'This screen allows you to configure the payment settings. Specify your currency, format currency display, set default deposits and select whether or not to apply tax.', 'mobile-dj-manager' ) . '</p>'
-	) );
-
-	$screen->add_help_tab( array(
-		'id'		=> 'mdjm-settings-extensions',
-		'title'		=> __( 'Extensions', 'mobile-dj-manager' ),
-		'content'	=> '<p>' . __( 'This screen provides access to settings added by most MDJM Event Management extensions.', 'mobile-dj-manager' ) . '</p>'
-	) );
-
-	$screen->add_help_tab( array(
-		'id'	    => 'mdjm-settings-licenses',
-		'title'	    => __( 'Licenses', 'mobile-dj-manager' ),
-		'content'	=>
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mdjm-settings-events',
+			'title'   => mdjm_get_label_plural(),
+			'content' =>
 			'<p>' . sprintf(
-						__( 'If you have any <a href="%s">MDJM Event Management paid extensions</a> installed, this screen is where you should add the license to enable automatic updates whilst your license is valid.', 'mobile-dj-manager' ),
-						esc_url( 'https://mdjm.co.uk/extensions/' )
-					) . '</p>'
-	) );
+				__( 'This screen enables to you configure options %1$s and playlists. Select your %1$s default contract template, whether or not you are an employer and enable equipment packages.', 'mobile-dj-manager' ) . '</p>' .
+				 '<p>' . __( 'You can also toggle playlists on or off, select when a playlist should close choose whether or not to upload your playlists to the MDJM servers.', 'mobile-dj-manager' ),
+				mdjm_get_label_plural( true )
+			) . '</p>',
+		)
+	);
+
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mdjm-settings-emails-templates',
+			'title'   => __( 'Emails &amp; Templates', 'mobile-dj-manager' ),
+			'content' =>
+				'<p>' . __( 'This screen allows you to adjust options for emails, toggle on or off the email tracking feature and select which templates to use as content for emails.', 'mobile-dj-manager' ) . '</p>',
+		)
+	);
+
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mdjm-settings-client-zone',
+			'title'   => mdjm_get_application_name(),
+			'content' => '<p>' . sprintf( __( 'This screen allows you to configure settings associated with the %s as well as set various pages and configure the Availability Checker.', 'mobile-dj-manager' ), mdjm_get_application_name() ) . '</p>',
+		)
+	);
+
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mdjm-settings-payments',
+			'title'   => __( 'Payments', 'mobile-dj-manager' ),
+			'content' =>
+				'<p>' . __( 'This screen allows you to configure the payment settings. Specify your currency, format currency display, set default deposits and select whether or not to apply tax.', 'mobile-dj-manager' ) . '</p>',
+		)
+	);
+
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mdjm-settings-extensions',
+			'title'   => __( 'Extensions', 'mobile-dj-manager' ),
+			'content' => '<p>' . __( 'This screen provides access to settings added by most Mobile DJ Manager extensions.', 'mobile-dj-manager' ) . '</p>',
+		)
+	);
+
+	$screen->add_help_tab(
+		array(
+			'id'      => 'mdjm-settings-licenses',
+			'title'   => __( 'Licenses', 'mobile-dj-manager' ),
+			'content' =>
+			'<p>' . sprintf(
+				__( 'If you have any <a href="%s">Mobile DJ Manager paid add-ons</a> installed, this screen is where you should add the license to enable automatic updates whilst your license is valid.', 'mobile-dj-manager' ),
+				esc_url( 'http://mobileeventsmanager.co.uk/add-ons/' )
+			) . '</p>',
+		)
+	);
 
 	do_action( 'mdjm_post_settings_contextual_help', $screen );
 }

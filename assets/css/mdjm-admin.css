@@ -1,10 +1,8 @@
 /**
- * MDJM Event Management Admin Styles
- *
- * @package     MDJM
- * @subpackage  Admin/CSS
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- */
+* @package MDJM
+* @subpackage Admin/CSS
+* @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
+*/
 
 @charset "UTF-8";
 
@@ -470,6 +468,102 @@ checkbox.mdjm-form-error {
 	height:100%;
 }
 
+.mdjm_event_grid table {
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.mdjm_event_grid {
+	font: normal 12px/150% Arial, Helvetica, sans-serif;
+	background: #fff;
+	overflow: hidden;
+}
+
+.mdjm_event_grid table td, .mdjm_event_grid table th {
+	padding: 3px 10px;
+}
+
+.mdjm_event_grid table thead th {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FFFFFF), color-stop(1, #FFFFFF) );
+	background:-moz-linear-gradient( center top, #FFFFFF 5%, #FFFFFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#FFFFFF');
+	background-color:#FFFFFF;
+	color:#B0B0B0;
+	font-size: 11px;
+	font-weight: bold;
+	border-left: 1px solid #DBDBDB;
+	border-bottom: 1px solid #DBDBDB;
+}
+
+.mdjm_event_grid table tbody th {
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FFFFFF), color-stop(1, #FFFFFF) );
+	background:-moz-linear-gradient( center top, #FFFFFF 5%, #FFFFFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FFFFFF', endColorstr='#FFFFFF');
+	background-color:#FFFFFF;
+	color:#B0B0B0;
+	font-size: 11px;
+	font-weight: bold;
+	border-left: 1px solid #DBDBDB;
+}
+
+.mdjm_event_grid table thead th:first-child {
+	border-bottom: 1px solid #DBDBDB;
+	border-left: none;
+	width: 33%;
+	text-align: left;
+}
+
+.mdjm_event_grid table tbody td {
+	color: #B0B0B0;
+	border-left: 1px solid #DBDBDB;
+	font-size: 12px;
+	border-bottom: none;
+	font-weight: normal;
+	text-align: center;
+}
+
+.mdjm_event_grid table tbody td:first-child {
+	border: none;
+	width: 35%;
+}
+
+.mdjm_event_grid table tbody th:first-child {
+	border: none;
+	text-align: left;
+	width: 35%;
+}
+
+.mdjm_event_grid table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.mdjm_event_grid table tbody tr:last-child td {
+	border-bottom: none;
+}
+
+.mdjm_event_grid p	{
+	text-align: center;
+	font-size: 12px;
+}
+
+.mdjm-current-day-overview	{
+	font-size: 12px;
+	color: #b0b0b0;
+	position: relative;
+	width: 100%;
+	padding: 8px;
+}
+
+.mdjm-current-day-overview .cell	{
+	height: 100%;
+	display: inline-block;
+}
+
+.mdjm-current-day-overview .cell:first-of-type{
+	width:25%;
+	height:100%;
+}
+
 /* =Task Page Styles
 -------------------------------------------------------------- */
 .wp-list-table th.column-active	{
@@ -665,44 +759,44 @@ checkbox.mdjm-form-error {
 }
 
 .mdjm-extension-item {
-  width: calc(100% - 25px);
-  background: #FFFFFF;
-  margin: 25px auto;
-  text-align: left;
-  height: 500px;
+width: calc(100% - 25px);
+background: #FFFFFF;
+margin: 25px auto;
+text-align: left;
+height: 425px;
 
-  -webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
-  -moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
-  box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+-webkit-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+-moz-box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
+box-shadow: 0px 0px 5px 0px rgba(50, 50, 50, 0.75);
 }
 
 .mdjm-extension-item-img {
-  position: relative;
-  width: 100%;
-  height: 256px;
-  background-color: #288bba;
-  background-repeat: no-repeat;
-  background-position: center;
+position: relative;
+width: 100%;
 }
 
+.mdjm-extension-item-img img {
+position: relative;
+width: 100%;
+}
 
 .mdjm-extension-item-desc {
-  position: relative;
-  padding: 25px;
+position: relative;
+padding: 25px;
 }
 
 .mdjm-extension-item-desc a {
-  position: relative;
-  display: block;
-  font-weight: 500;
-  margin: 25px 0 0 0;
-  color: #37474F;
+position: relative;
+display: block;
+font-weight: 500;
+margin: 25px 0 0 0;
+color: #37474F;
 }
 
 .mdjm-extension-item-heading {
-  margin: 0 0 10px 0;
-  font-weight: 500;
-  font-size: 16px;
+margin: 0 0 10px 0;
+font-weight: 500;
+font-size: 16px;
 }
 
 .mdjm-extension-item-excerpt	{
@@ -718,14 +812,14 @@ checkbox.mdjm-form-error {
 /* =Metaboxes
 -------------------------------------------------------------- */
 #titlediv #_mdjm_event_name {
-    padding: 3px 8px;
-    font-size: 1.7em;
-    line-height: 100%;
-    height: 1.7em;
-    width: 100%;
-    outline: none;
-    margin: 0 0 3px;
-    background-color: #fff;
+	padding: 3px 8px;
+	font-size: 1.7em;
+	line-height: 100%;
+	height: 1.7em;
+	width: 100%;
+	outline: none;
+	margin: 0 0 3px;
+	background-color: #fff;
 }
 
 /* Bootstrap sets the font-size too high, undo */
@@ -878,7 +972,7 @@ checkbox.mdjm-form-error {
 .mdjm-repeatable-option {
 	display: inline-block;
 	vertical-align: top;
-    margin-right: 10px;
+	margin-right: 10px;
 }
 .mdjm-client-name,
 .mdjm-quote-template,
@@ -934,8 +1028,8 @@ checkbox.mdjm-form-error {
 	width: 100%;
 }
 
-#mdjm-event-worker-add    {
-    display: block;
+#mdjm-event-worker-add {
+	display: block;
 }
 
 /* Visible Sections */
@@ -988,7 +1082,7 @@ checkbox.mdjm-form-error {
 .mdjm-venue-custom-fields,
 .mdjm-check-availabilty-action,
 .mdjm-add-absence-action {
-    display: block !important;
+	display: block !important;
 	margin-top: 6px;
 }
 
@@ -998,23 +1092,23 @@ checkbox.mdjm-form-error {
 
 .mdjm-absence-notes-option textarea { min-width: 480px; }
 
-#mdjm-playlist-view    {
-    text-align: center;
+#mdjm-playlist-view {
+	text-align: center;
 }
 
 #_mdjm_event_notes,
 #_mdjm_event_dj_notes,
 #_mdjm_event_admin_notes {
-    min-height: 5em;
+	min-height: 5em;
 }
 
-.mdjm_event_employee_list    {
-    min-width: 25%;
-    margin: 4px;
+.mdjm_event_employee_list {
+	min-width: 25%;
+	margin: 4px;
 }
 
 @media screen and ( max-width: 480px ) {
-    .mdjm-repeatable-row-title,
+	.mdjm-repeatable-row-title,
 	.mdjm-repeatable-row-actions {
 		text-align: left;
 		width: 100%;
@@ -1022,12 +1116,12 @@ checkbox.mdjm-form-error {
 	.mdjm-repeatable-row-title {
 		padding-bottom: 0;
 	}
-    .mdjm-client-name,
-    .mdjm-quote-template,
-    .mdjm-online-template,
+	.mdjm-client-name,
+	.mdjm-quote-template,
+	.mdjm-online-template,
 	.mdjm-event-primary-employee,
 	.mdjm-event-employee-wage,
-    .mdjm-event-add-worker,
+	.mdjm-event-add-worker,
 	.mdjm-event-type,
 	.mdjm-event-contract,
 	.mdjm-event-venue,
@@ -1039,16 +1133,16 @@ checkbox.mdjm-form-error {
 	.mdjm-event-setup-time,
 	.mdjm-event-package,
 	.mdjm-event-addons,
-    .mdjm-event-package-cost,
-    .mdjm-event-addons-cost,
-    .mdjm-event-travel-cost,
-    .mdjm-event-additional-cost,
+	.mdjm-event-package-cost,
+	.mdjm-event-addons-cost,
+	.mdjm-event-travel-cost,
+	.mdjm-event-additional-cost,
 	.mdjm-event-discount,
-    .mdjm-event-deposit,
-    .mdjm-event-cost,
+	.mdjm-event-deposit,
+	.mdjm-event-cost,
 	.mdjm-custom-field,
 	.mdjm-availability-check-date,
-    .mdjm-repeatable-option {
+	.mdjm-repeatable-option {
 		float: none;
 		text-align: left;
 		width: 100% !important;
@@ -1064,21 +1158,21 @@ input[class*="mdjm-name-field"] {
 	padding-right: 5px;
 }
 
-#mdjm-travel-data    {
-    display: block;
+#mdjm-travel-data {
+	display: block;
 }
 
-span.mdjm-travel-unit    {
-    padding: 5px;
+span.mdjm-travel-unit {
+	padding: 5px;
 }
 
 /* OLD STYLES */
 .mdjm_field_wrap	{
 	width: 100%;
-    vertical-align: top;
-    display: inline-block;
-    *display: inline;
-    zoom: 1
+	vertical-align: top;
+	display: inline-block;
+	*display: inline;
+	zoom: 1
 }
 
 .mdjm_remove_repeatable { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
@@ -1121,7 +1215,7 @@ span.mdjm-travel-unit    {
 #mdjm-event-employee-list { padding-bottom: 5px; }
 
 .mdjm_field_wrap .mdjm_col	{
-    float: left;
+	float: left;
 	min-height: 60px;
 	vertical-align: baseline;
 }
@@ -1180,8 +1274,8 @@ span.mdjm-travel-unit    {
 #mdjm-new-event-type-row { display: none; vertical-align: top; }
 
 .mdjm-execute-event-task {
-    text-align: center;
-    margin: 0px;
+	text-align: center;
+	margin: 0px;
 }
 
 /* System Info page styles

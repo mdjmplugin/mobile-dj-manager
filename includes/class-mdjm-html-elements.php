@@ -1,34 +1,38 @@
 <?php
+
+
 /**
  * HTML Elements
  *
  * A helper class for outputting common HTML elements.
  *
- * @package     MDJM
- * @subpackage  Classes/HTML
- * @copyright   Copyright (c) 2016, Mike Howard
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.0
+ * @package MDJM
+ * @subpackage Classes/HTML
+ * @copyright Copyright (c) 2016, Mike Howard
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since 1.0
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * MDJM_HTML_Elements Class
  *
- * @since	1.3.7
+ * @since 1.3.7
  */
 class MDJM_HTML_Elements {
 
 	/**
 	 * Renders an HTML Dropdown of all the event Post Statuses
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	str		$name		Name attribute of the dropdown
-	 * @param	str		$selected	Status to select automatically
-	 * @return	str		$output		Status dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param str $name Name attribute of the dropdown.
+	 * @param str $selected Status to select automatically.
+	 * @return str $output Status dropdown
 	 */
 	public function event_status_dropdown( $name = 'post_status', $selected = 0 ) {
 		$event_statuses = mdjm_get_post_statuses( 'labels' );
@@ -38,18 +42,21 @@ class MDJM_HTML_Elements {
 			$options[ $event_statuses->name ] = esc_html( $event_statuses->label );
 		}
 
-		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
-			'options'          => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false,
-            'chosen'           => true,
-            'data'             => array(
-				'search-type'        => 'status',
-				'search-placeholder' => sprintf( __( 'Type to search all %s statuses', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
+		$output = $this->select(
+			array(
+				'name'             => $name,
+				'selected'         => $selected,
+				'options'          => $options,
+				'show_option_all'  => false,
+				'show_option_none' => false,
+				'chosen'           => true,
+				'data'             => array(
+					'search-type'        => 'status',
+					/* translators: %s: different word for event */
+					'search-placeholder' => sprintf( esc_html__( 'Type to search all %s statuses', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular( true ) ) ),
+				),
 			)
-		) );
+		);
 
 		return $output;
 	} // event_status_dropdown
@@ -57,11 +64,11 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown of all the Enquiry Sources
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	str		$name		Name attribute of the dropdown
-	 * @param	int		$selected	Category to select automatically
-	 * @return	str		$output		Category dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param str $args Name attribute of the dropdown.
+	 * @param int $selected Category to select automatically.
+	 * @return str $output Category dropdown
 	 */
 	public function event_type_dropdown( $args = array() ) {
 
@@ -75,16 +82,17 @@ class MDJM_HTML_Elements {
 			'multiple'         => false,
 			'show_option_all'  => false,
 			'show_option_none' => false,
-            'data'             => array(
+			'data'             => array(
 				'search-type'        => 'type',
-				'search-placeholder' => sprintf( __( 'Type to search all %s types', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) )
-			)
+				/* translators: %s: different word for event */
+				'search-placeholder' => sprintf( esc_html__( 'Type to search all %s types', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular( true ) ) ),
+			),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
 
 		$cat_args = array(
-			'hide_empty' => false
+			'hide_empty' => false,
 		);
 
 		$categories      = get_terms( 'event-types', apply_filters( 'mdjm_event_types_dropdown', $cat_args ) );
@@ -95,7 +103,7 @@ class MDJM_HTML_Elements {
 		}
 
 		$category_labels = mdjm_get_taxonomy_labels( 'event-types' );
-		$output = $this->select( $args );
+		$output          = $this->select( $args );
 
 		return $output;
 
@@ -104,22 +112,22 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown of all the Enquiry Sources
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	str		$name		Name attribute of the dropdown
-	 * @param	int		$selected	Category to select automatically
-	 * @return	str		$output		Category dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param str $name Name attribute of the dropdown.
+	 * @param int $selected Category to select automatically.
+	 * @return str $output Category dropdown
 	 */
 	public function enquiry_source_dropdown( $name = 'mdjm_enquiry_source', $selected = 0 ) {
 
 		$args = array(
-			'hide_empty' => false
+			'hide_empty' => false,
 		);
 
 		$categories = get_terms( 'enquiry-source', apply_filters( 'mdjm_enquiry_source_dropdown', $args ) );
 		$options    = array();
 
-		if ( empty( $selected ) )	{
+		if ( empty( $selected ) ) {
 			$selected = mdjm_get_option( 'enquiry_source_default' );
 		}
 
@@ -128,13 +136,15 @@ class MDJM_HTML_Elements {
 		}
 
 		$category_labels = mdjm_get_taxonomy_labels( 'enquiry-source' );
-		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
-			'options'          => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false
-		) );
+		$output          = $this->select(
+			array(
+				'name'             => $name,
+				'selected'         => $selected,
+				'options'          => $options,
+				'show_option_all'  => false,
+				'show_option_none' => false,
+			)
+		);
 
 		return $output;
 	} // enquiry_source_dropdown
@@ -142,16 +152,16 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown of all Transaction Types
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	str		$name		Name attribute of the dropdown
-	 * @param	int		$selected	Category to select automatically
-	 * @return	str		$output		Category dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param str $name Name attribute of the dropdown.
+	 * @param int $selected Category to select automatically.
+	 * @return str $output Category dropdown
 	 */
 	public function txn_type_dropdown( $name = 'mdjm_txn_for', $selected = 0 ) {
 
 		$args = array(
-			'hide_empty' => false
+			'hide_empty' => false,
 		);
 
 		$categories = get_terms( 'transaction-types', apply_filters( 'mdjm_txn_types_dropdown', $args ) );
@@ -162,60 +172,62 @@ class MDJM_HTML_Elements {
 		}
 
 		$category_labels = mdjm_get_taxonomy_labels( 'transaction-types' );
-		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
-			'options'          => $options,
-			'show_option_all'  => false,
-			'show_option_none' => __( ' - Select Txn Type - ', 'mobile-dj-manager' ),
-            'data'             => array(
-				'search-type'        => 'txn_type',
-				'search-placeholder' => __( 'Type to search all transaction statuses', 'mobile-dj-manager' )
+		$output          = $this->select(
+			array(
+				'name'             => $name,
+				'selected'         => $selected,
+				'options'          => $options,
+				'show_option_all'  => false,
+				'show_option_none' => __( ' - Select Txn Type - ', 'mobile-dj-manager' ),
+				'data'             => array(
+					'search-type'        => 'txn_type',
+					'search-placeholder' => __( 'Type to search all transaction statuses', 'mobile-dj-manager' ),
+				),
 			)
-		) );
+		);
 
 		return $output;
 	} // txn_type_dropdown
-	
+
 	/**
 	 * Renders an HTML Dropdown of all Transaction Types
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	arr		$args		See @defaults
-	 * @return	str		$output		Venue dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param arr $args See @defaults.
+	 * @return str $output Venue dropdown
 	 */
 	public function venue_dropdown( $args = array() ) {
 
 		$defaults = array(
-			'name'             => 'venue_id',
-			'class'            => 'mdjm-venue-select',
-			'id'               => '',
-			'selected'         => 0,
-			'chosen'           => false,
-			'placeholder'      => null,
-			'multiple'         => false,
-			'allow_add'        => true,
-			'show_option_all'  => false,
-            'blank_first'      => true,
-			'data'             => array(
+			'name'            => 'venue_id',
+			'class'           => 'mdjm-venue-select',
+			'id'              => '',
+			'selected'        => 0,
+			'chosen'          => false,
+			'placeholder'     => null,
+			'multiple'        => false,
+			'allow_add'       => true,
+			'show_option_all' => false,
+			'blank_first'     => true,
+			'data'            => array(
 				'search-type'        => 'venue',
-				'search-placeholder' => __( 'Type to search all venues', 'mobile-dj-manager' )
-			)
+				'search-placeholder' => __( 'Type to search all venues', 'mobile-dj-manager' ),
+			),
 		);
-		
+
 		$args = wp_parse_args( $args, $defaults );
 
-		if ( $args['allow_add'] )	{
-			$args['options']  = array(
+		if ( $args['allow_add'] ) {
+			$args['options'] = array(
 				'manual' => __( 'Enter Manually', 'mobile-dj-manager' ),
-				'client' => __( 'Use Client Address', 'mobile-dj-manager' )
+				'client' => __( 'Use Client Address', 'mobile-dj-manager' ),
 			);
 		}
 
 		$venues = mdjm_get_venues();
 
-		if ( $venues )	{
+		if ( $venues ) {
 			foreach ( $venues as $venue ) {
 				$args['options'][ $venue->ID ] = $venue->post_title;
 			}
@@ -229,33 +241,35 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown of years
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	str		$name			Name attribute of the dropdown
-	 * @param	int		$selected		Year to select automatically
-	 * @param	int		$years_before	Number of years before the current year the dropdown should start with
-	 * @param	int		$years_after	Number of years after the current year the dropdown should finish at
-	 * @return	str		$output			Year dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param str $name Name attribute of the dropdown.
+	 * @param int $selected Year to select automatically.
+	 * @param int $years_before Number of years before the current year the dropdown should start with.
+	 * @param int $years_after Number of years after the current year the dropdown should finish at.
+	 * @return str $output Year dropdown
 	 */
 	public function year_dropdown( $name = 'year', $selected = 0, $years_before = 5, $years_after = 0 ) {
-		$current     = date( 'Y' );
-		$start_year  = $current - absint( $years_before );
-		$end_year    = $current + absint( $years_after );
-		$selected    = empty( $selected ) ? date( 'Y' ) : $selected;
-		$options     = array();
+		$current    = gmdate( 'Y' );
+		$start_year = $current - absint( $years_before );
+		$end_year   = $current + absint( $years_after );
+		$selected   = empty( $selected ) ? gmdate( 'Y' ) : $selected;
+		$options    = array();
 
 		while ( $start_year <= $end_year ) {
 			$options[ absint( $start_year ) ] = $start_year;
 			$start_year++;
 		}
 
-		$output = $this->select( array(
-			'name'             => $name,
-			'selected'         => $selected,
-			'options'          => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false
-		) );
+		$output = $this->select(
+			array(
+				'name'             => $name,
+				'selected'         => $selected,
+				'options'          => $options,
+				'show_option_all'  => false,
+				'show_option_none' => false,
+			)
+		);
 
 		return $output;
 	} // year_dropdown
@@ -263,10 +277,10 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown of months
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	arr		$args		see @defaults.
-	 * @return	str		$output		Month dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param arr $args see @defaults.
+	 * @return str $output Month dropdown
 	 */
 	public function month_dropdown( $args ) {
 
@@ -276,30 +290,32 @@ class MDJM_HTML_Elements {
 			'fullname'    => false,
 			'multiple'    => false,
 			'chosen'      => false,
-			'placeholder' => __( 'Select a Month', 'mobile-dj-manager' )
+			'placeholder' => __( 'Select a Month', 'mobile-dj-manager' ),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$month   = 1;
-		$options = array();
-		$selected = ( empty( $args['selected'] ) && ! $args['multiple'] ) ? date( 'n' ) : $args['selected'];
+		$month    = 1;
+		$options  = array();
+		$selected = ( empty( $args['selected'] ) && ! $args['multiple'] ) ? gmdate( 'n' ) : $args['selected'];
 
 		while ( $month <= 12 ) {
 			$options[ absint( $month ) ] = mdjm_month_num_to_name( $month, $args['fullname'] );
 			$month++;
 		}
 
-		$output = $this->select( array(
-			'name'             => $args['name'],
-			'selected'         => $selected,
-			'options'          => $options,
-			'show_option_all'  => false,
-			'show_option_none' => false,
-			'multiple'         => $args['multiple'],
-			'chosen'           => $args['chosen'],
-			'placeholder'      => $args['placeholder']
-		) );
+		$output = $this->select(
+			array(
+				'name'             => $args['name'],
+				'selected'         => $selected,
+				'options'          => $options,
+				'show_option_all'  => false,
+				'show_option_none' => false,
+				'multiple'         => $args['multiple'],
+				'chosen'           => $args['chosen'],
+				'placeholder'      => $args['placeholder'],
+			)
+		);
 
 		return $output;
 	} // month_dropdown
@@ -307,11 +323,11 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders a dropdown list of employees.
 	 *
-	 * @since	1.3.7
-	 * @param	arr		$args	@see $default
-	 * @return	str
+	 * @since 1.3.7
+	 * @param arr $args @see $default.
+	 * @return str
 	 */
-	public function employee_dropdown( $args = array() )	{
+	public function employee_dropdown( $args = array() ) {
 		global $wp_roles;
 
 		$defaults = array(
@@ -331,62 +347,64 @@ class MDJM_HTML_Elements {
 			'blank_first'      => true,
 			'data'             => array(
 				'search-type'        => 'employee',
-				'search-placeholder' => __( 'Type to search all employees', 'mobile-dj-manager' )
-			)
+				'search-placeholder' => __( 'Type to search all employees', 'mobile-dj-manager' ),
+			),
 		);
-		
+
 		$args    = wp_parse_args( $args, $defaults );
 		$options = array();
 
 		$employees = mdjm_get_employees( $args['role'] );
 
-		if ( $employees )	{
-			foreach( $employees as $employee )	{
+		if ( $employees ) {
+			foreach ( $employees as $employee ) {
 				$roles = array_values( $employee->roles );
 				$role  = $roles[0];
 
-				if( $role == 'administrator' )	{
-					if ( ! empty( $roles[1] ) )	{
+				if ( 'administrator' === $role ) {
+					if ( ! empty( $roles[1] ) ) {
 						$role = $roles[1];
-					} else	{
+					} else {
 						$role = 'dj';
 					}
 				}
 
-				if( ! empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) )	{
+				if ( ! empty( $args['exclude'] ) && in_array( $employee->ID, $args['exclude'] ) ) {
 					continue;
 				}
 
-				if ( ! empty( $args['group'] ) )	{
+				if ( ! empty( $args['group'] ) ) {
 					$options['groups'][ translate_user_role( $wp_roles->roles[ $role ]['name'] ) ][] = array( $employee->ID => $employee->display_name );
-				} else	{
+				} else {
 					$options[ $employee->ID ] = $employee->display_name;
 				}
 			}
 		}
 
-		if ( ! empty( $options ) )	{
-			if ( ! empty( $options['groups'] ) )	{
+		if ( ! empty( $options ) ) {
+			if ( ! empty( $options['groups'] ) ) {
 				ksort( $options['groups'] );
-			} else	{
+			} else {
 				asort( $options );
 			}
 		}
 
-		$output = $this->select( array(
-			'name'             => $args['name'],
-			'class'            => $args['class'],
-			'id'               => $args['id'],
-			'selected'         => $args['selected'],
-			'options'          => $options,
-			'chosen'           => $args['chosen'],
-			'placeholder'      => $args['placeholder'],
-			'multiple'         => $args['multiple'],
-			'show_option_none' => $employees ? $args['show_option_none'] : __( 'No Employees', 'mobile-dj-manager' ),
-			'show_option_all'  => $args['show_option_all'],
-			'blank_first'      => $args['blank_first'],
-			'data'             => $args['data']
-		) );
+		$output = $this->select(
+			array(
+				'name'             => $args['name'],
+				'class'            => $args['class'],
+				'id'               => $args['id'],
+				'selected'         => $args['selected'],
+				'options'          => $options,
+				'chosen'           => $args['chosen'],
+				'placeholder'      => $args['placeholder'],
+				'multiple'         => $args['multiple'],
+				'show_option_none' => $employees ? $args['show_option_none'] : __( 'No Employees', 'mobile-dj-manager' ),
+				'show_option_all'  => $args['show_option_all'],
+				'blank_first'      => $args['blank_first'],
+				'data'             => $args['data'],
+			)
+		);
 
 		return $output;
 
@@ -395,10 +413,10 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown of employee roles
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	arr		$args		Select list arguments. See @defaults.
-	 * @return	str		$output		Client dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param arr $args Select list arguments. See @defaults.
+	 * @return str $output Client dropdown
 	 */
 	public function roles_dropdown( $args = array() ) {
 
@@ -411,12 +429,12 @@ class MDJM_HTML_Elements {
 			'chosen'      => false,
 			'data'        => array(
 				'search-type'        => 'roles',
-				'search-placeholder' => __( 'Type to search all roles', 'mobile-dj-manager' )
-			)
+				'search-placeholder' => __( 'Type to search all roles', 'mobile-dj-manager' ),
+			),
 		);
 
-		$args             = wp_parse_args( $args, $defaults );
-		$args['options']  = mdjm_get_roles();
+		$args            = wp_parse_args( $args, $defaults );
+		$args['options'] = mdjm_get_roles();
 
 		$output = $this->select( $args );
 
@@ -427,13 +445,13 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown of clients
 	 *
-	 * @access	public
-	 * @since	1.3.7
-	 * @param	arr		$args		Select list arguments. See @defaults.
-	 * @return	str		$output		Client dropdown
+	 * @access public
+	 * @since 1.3.7
+	 * @param arr $args Select list arguments. See @defaults.
+	 * @return str $output Client dropdown
 	 */
 	public function client_dropdown( $args = array() ) {
-		$options  = array();
+		$options = array();
 
 		$defaults = array(
 			'name'             => 'client_name',
@@ -450,8 +468,8 @@ class MDJM_HTML_Elements {
 			'show_option_none' => _x( 'Select a Client', 'no dropdown items', 'mobile-dj-manager' ),
 			'data'             => array(
 				'search-type'        => 'client',
-				'search-placeholder' => __( 'Type to search all clients', 'mobile-dj-manager' )
-			)
+				'search-placeholder' => __( 'Type to search all clients', 'mobile-dj-manager' ),
+			),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -459,36 +477,38 @@ class MDJM_HTML_Elements {
 		$selected = empty( $args['selected'] ) ? 0 : $args['selected'];
 
 		$clients = mdjm_get_clients( $args['roles'] );
-		
-		if ( ! empty( $args['null_value'] ) )	{
-			foreach( $args['null_value'] as $key => $value )	{
+
+		if ( ! empty( $args['null_value'] ) ) {
+			foreach ( $args['null_value'] as $key => $value ) {
 				$options[ $key ] = $value;
 			}
 		}
-		
-		if ( ! empty( $args['add_new'] ) )	{
+
+		if ( ! empty( $args['add_new'] ) ) {
 			$options['mdjm_add_client'] = __( 'Add New Client', 'mobile-dj-manager' );
 		}
-		
-		if ( $clients )	{
-			foreach( $clients as $client )	{
+
+		if ( $clients ) {
+			foreach ( $clients as $client ) {
 				$options[ $client->ID ] = $client->display_name;
 			}
 		}
 
-		$output = $this->select( array(
-			'name'             => $args['name'],
-			'class'            => $args['class'],
-			'id'               => $args['id'],
-			'selected'         => $selected,
-			'options'          => $options,
-			'chosen'           => $args['chosen'],
-			'placeholder'      => $args['placeholder'],
-			'multiple'         => $args['multiple'],
-			'show_option_all'  => $args['show_option_all'],
-			'show_option_none' => $args['show_option_none'],
-			'data'             => $args['data']
-		) );
+		$output = $this->select(
+			array(
+				'name'             => $args['name'],
+				'class'            => $args['class'],
+				'id'               => $args['id'],
+				'selected'         => $selected,
+				'options'          => $options,
+				'chosen'           => $args['chosen'],
+				'placeholder'      => $args['placeholder'],
+				'multiple'         => $args['multiple'],
+				'show_option_all'  => $args['show_option_all'],
+				'show_option_none' => $args['show_option_none'],
+				'data'             => $args['data'],
+			)
+		);
 
 		return $output;
 	} // client_dropdown
@@ -496,13 +516,13 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown of all users
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @param	arr		$args		Select list arguments. See @defaults.
-	 * @return	str		$output		Users dropdown
+	 * @access public
+	 * @since 1.4
+	 * @param arr $args Select list arguments. See @defaults.
+	 * @return str $output Users dropdown
 	 */
 	public function users_dropdown( $args = array() ) {
-		$options  = array();
+		$options = array();
 
 		$defaults = array(
 			'name'             => 'users',
@@ -516,8 +536,8 @@ class MDJM_HTML_Elements {
 			'show_option_none' => _x( 'Select a User', 'no dropdown items', 'mobile-dj-manager' ),
 			'data'             => array(
 				'search-type'        => 'user',
-				'search-placeholder' => __( 'Type to search all users', 'mobile-dj-manager' )
-			)
+				'search-placeholder' => __( 'Type to search all users', 'mobile-dj-manager' ),
+			),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -525,26 +545,28 @@ class MDJM_HTML_Elements {
 		$selected = empty( $args['selected'] ) ? 0 : $args['selected'];
 
 		$users = get_users();
-				
-		if ( $users )	{
-			foreach( $users as $user )	{
+
+		if ( $users ) {
+			foreach ( $users as $user ) {
 				$options[ $user->ID ] = $user->display_name;
 			}
 		}
 
-		$output = $this->select( array(
-			'name'             => $args['name'],
-			'class'            => $args['class'],
-			'id'               => $args['id'],
-			'selected'         => $selected,
-			'options'          => $options,
-			'chosen'           => $args['chosen'],
-			'placeholder'      => $args['placeholder'],
-			'multiple'         => $args['multiple'],
-			'show_option_all'  => $args['show_option_all'],
-			'show_option_none' => $args['show_option_none'],
-			'data'             => $args['data']
-		) );
+		$output = $this->select(
+			array(
+				'name'             => $args['name'],
+				'class'            => $args['class'],
+				'id'               => $args['id'],
+				'selected'         => $selected,
+				'options'          => $options,
+				'chosen'           => $args['chosen'],
+				'placeholder'      => $args['placeholder'],
+				'multiple'         => $args['multiple'],
+				'show_option_all'  => $args['show_option_all'],
+				'show_option_none' => $args['show_option_none'],
+				'data'             => $args['data'],
+			)
+		);
 
 		return $output;
 	} // users_dropdown
@@ -552,11 +574,11 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders a dropdown list of packages.
 	 *
-	 * @since	1.3.7
-	 * @param	arr		$args	@see $default
-	 * @return	str
+	 * @since 1.3.7
+	 * @param arr $args @see $default.
+	 * @return str
 	 */
-	public function packages_dropdown( $args = array() )	{
+	public function packages_dropdown( $args = array() ) {
 		$defaults = array(
 			'name'             => '_mdjm_event_package',
 			'id'               => '',
@@ -568,7 +590,7 @@ class MDJM_HTML_Elements {
 			'employee'         => false,
 			'event_type'       => false,
 			'event_date'       => false,
-            'exclude_cats'     => null,
+			'exclude_cats'     => null,
 			'placeholder'      => __( 'Select a Package', 'mobile-dj-manager' ),
 			'multiple'         => false,
 			'cost'             => true,
@@ -578,80 +600,80 @@ class MDJM_HTML_Elements {
 			'blank_first'      => true,
 			'data'             => array(
 				'search-type'        => 'package',
-				'search-placeholder' => __( 'Type to search all packages', 'mobile-dj-manager' )
-			)
+				'search-placeholder' => __( 'Type to search all packages', 'mobile-dj-manager' ),
+			),
 		);
-		
+
 		$args         = wp_parse_args( $args, $defaults );
-        $package_args = array();
+		$package_args = array();
 		$options      = array();
 
-		$args['id']       = ! empty( $args['id'] )       ? $args['id'] : $args['name'];
+		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
-        if ( isset( $args['exclude_cats'] ) && ! empty( $args['exclude_cats'] ) )   {
-            $exclude = $args['exclude_cats'];
+		if ( isset( $args['exclude_cats'] ) && ! empty( $args['exclude_cats'] ) ) {
+			$exclude = $args['exclude_cats'];
 
-            if ( ! is_array( $exclude ) )   {
-                $exclude = array( $exclude );
+			if ( ! is_array( $exclude ) ) {
+				$exclude = array( $exclude );
 
-                $package_args['tax_query'] = array( array(
-                    'taxonomy' => 'package-category',
-                    'field'    => 'term_id',
-                    'terms'    => $exclude,
-                    'operator' => 'NOT IN'
-                ) );
-            }
-        }
+				$package_args['tax_query'] = array(
+					array(
+						'taxonomy' => 'package-category',
+						'field'    => 'term_id',
+						'terms'    => $exclude,
+						'operator' => 'NOT IN',
+					),
+				);
+			}
+		}
 
 		$packages = mdjm_get_packages( $package_args );
 
-		if ( $packages )	{
+		if ( $packages ) {
 
-			foreach( $packages as $package )	{
+			foreach ( $packages as $package ) {
 
-				if( $args['employee'] )	{	
-					if( ! mdjm_employee_has_package( $package->ID, $args['employee'] ) )	{
+				if ( $args['employee'] ) {
+					if ( ! mdjm_employee_has_package( $package->ID, $args['employee'] ) ) {
 						continue;
 					}
 				}
 
-				if ( $args['event_type'] )	{
-					if ( ! mdjm_package_is_available_for_event_type( $package->ID, $args['event_type'] ) )	{
+				if ( $args['event_type'] ) {
+					if ( ! mdjm_package_is_available_for_event_type( $package->ID, $args['event_type'] ) ) {
 						continue;
 					}
 				}
 
-				if ( $args['event_date'] )	{
-					if ( ! mdjm_package_is_available_for_event_date( $package->ID, $args['event_date'] ) )	{
+				if ( $args['event_date'] ) {
+					if ( ! mdjm_package_is_available_for_event_date( $package->ID, $args['event_date'] ) ) {
 						continue;
 					}
-				} else	{
-					$args['event_date'] = NULL;
+				} else {
+					$args['event_date'] = null;
 				}
 
 				$price         = '';
 				$package_price = mdjm_get_package_price( $package->ID, $args['event_date'] );
-				if ( $args['cost'] == true )	{
-					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $package_price ) ) ;
+				if ( true === $args['cost'] ) {
+					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $package_price ) );
 				}
 
 				$args['options'][ $package->ID ] = $package->post_title . '' . $price;
 
 				$args['atts'][ $package->ID ] = array( 'price' => mdjm_sanitize_amount( $package_price ) );
 
-				if ( $args['titles'] )	{
+				if ( $args['titles'] ) {
 					$titles[ $package->ID ] = mdjm_get_package_excerpt( $package->ID );
 				}
-
 			}
+		}
 
-		} 
-
-		if ( empty( $args['options'] ) )	{
+		if ( empty( $args['options'] ) ) {
 			$args['placeholder'] = __( 'No Packages Available', 'mobile-dj-manager' );
 		}
 
-		if ( ! empty( $titles ) )	{
+		if ( ! empty( $titles ) ) {
 			$args['titles'] = $titles;
 		}
 
@@ -664,11 +686,11 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders a dropdown list of equipment add-ons.
 	 *
-	 * @since	1.3.7
-	 * @param	arr		$args	@see $default
-	 * @return	str
+	 * @since 1.3.7
+	 * @param arr $args @see $default.
+	 * @return str
 	 */
-	public function addons_dropdown( $args = array() )	{
+	public function addons_dropdown( $args = array() ) {
 		$defaults = array(
 			'name'             => 'event_addons',
 			'id'               => '',
@@ -680,7 +702,7 @@ class MDJM_HTML_Elements {
 			'employee'         => false,
 			'event_type'       => false,
 			'event_date'       => false,
-            'exclude_cats'     => null,
+			'exclude_cats'     => null,
 			'placeholder'      => null,
 			'multiple'         => true,
 			'package'          => '',
@@ -692,85 +714,87 @@ class MDJM_HTML_Elements {
 			'blank_first'      => false,
 			'data'             => array(
 				'search-type'        => 'addons',
-				'search-placeholder' => __( 'Type to search all addons', 'mobile-dj-manager' )
-			)
+				'search-placeholder' => __( 'Type to search all addons', 'mobile-dj-manager' ),
+			),
 		);
-		
+
 		$args        = wp_parse_args( $args, $defaults );
-        $addons_args = array();
+		$addons_args = array();
 		$options     = array();
 		$titles      = array();
 
-        if ( isset( $args['exclude_cats'] ) && ! empty( $args['exclude_cats'] ) )   {
-            $exclude = $args['exclude_cats'];
+		if ( isset( $args['exclude_cats'] ) && ! empty( $args['exclude_cats'] ) ) {
+			$exclude = $args['exclude_cats'];
 
-            if ( ! is_array( $exclude ) )   {
-                $exclude = array( $exclude );
+			if ( ! is_array( $exclude ) ) {
+				$exclude = array( $exclude );
 
-                $addons_args['tax_query'] = array( array(
-                    'taxonomy' => 'addon-category',
-                    'field'    => 'term_id',
-                    'terms'    => $exclude,
-                    'operator' => 'NOT IN'
-                ) );
-            }
-        }
+				$addons_args['tax_query'] = array(
+					array(
+						'taxonomy' => 'addon-category',
+						'field'    => 'term_id',
+						'terms'    => $exclude,
+						'operator' => 'NOT IN',
+					),
+				);
+			}
+		}
 
-		$addons      = mdjm_get_addons( $addons_args );
+		$addons = mdjm_get_addons( $addons_args );
 
-		if ( $addons )	{
-			foreach( $addons as $addon )	{
-				if ( ! empty( $args['package'] ) )	{
-					if ( is_numeric( $args['package'] ) )	{
+		if ( $addons ) {
+			foreach ( $addons as $addon ) {
+				if ( ! empty( $args['package'] ) ) {
+					if ( is_numeric( $args['package'] ) ) {
 						$package = mdjm_get_package( $args['package'] );
-					} else	{
+					} else {
 						$package = mdjm_get_package_by( 'slug', $args['package'] );
 					}
 
-					if ( $package )	{
+					if ( $package ) {
 						$package_items = mdjm_get_package_addons( $package->ID );
 					}
 
-					if ( ! empty( $package_items ) && in_array( $addon->ID, $package_items ) )	{
+					if ( ! empty( $package_items ) && in_array( $addon->ID, $package_items ) ) {
 						continue;
 					}
 				}
 
-				if ( ! empty( $args['employee'] ) )	{
-					if ( ! mdjm_employee_has_addon( $addon->ID, $args['employee'] ) )	{
+				if ( ! empty( $args['employee'] ) ) {
+					if ( ! mdjm_employee_has_addon( $addon->ID, $args['employee'] ) ) {
 						continue;
 					}
 				}
 
-				if ( $args['event_type'] )	{
-					if ( ! mdjm_addon_is_available_for_event_type( $addon->ID, $args['event_type'] ) )	{
+				if ( $args['event_type'] ) {
+					if ( ! mdjm_addon_is_available_for_event_type( $addon->ID, $args['event_type'] ) ) {
 						continue;
 					}
 				}
 
-				if ( $args['event_date'] )	{
-					if ( ! mdjm_addon_is_available_for_event_date( $addon->ID, $args['event_date'] ) )	{
+				if ( $args['event_date'] ) {
+					if ( ! mdjm_addon_is_available_for_event_date( $addon->ID, $args['event_date'] ) ) {
 						continue;
 					}
-				} else	{
-					$args['event_date'] = NULL;
+				} else {
+					$args['event_date'] = null;
 				}
 
 				$price       = '';
 				$addon_price = mdjm_get_addon_price( $addon->ID, $args['event_date'] );
-				if( $args['cost'] == true )	{
-					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $addon_price ) ) ;
+				if ( true === $args['cost'] ) {
+					$price .= ' - ' . mdjm_currency_filter( mdjm_format_amount( $addon_price ) );
 				}
-				$desc           = '';
+				$desc = '';
 
-				if( $args['desc'] )	{
+				if ( $args['desc'] ) {
 					$desc .= ' - ' . mdjm_get_addon_excerpt( $addon->ID, $args['desc'] );
 				}
 
 				$term  = '';
 				$terms = get_the_terms( $addon->ID, 'addon-category' );
 
-				if ( ! empty( $terms ) )	{
+				if ( ! empty( $terms ) ) {
 					$term = esc_html( $terms[0]->name );
 				}
 
@@ -778,18 +802,17 @@ class MDJM_HTML_Elements {
 
 				$args['atts'][ $addon->ID ] = array( 'price' => mdjm_sanitize_amount( $addon_price ) );
 
-				if ( $args['titles'] )	{
+				if ( $args['titles'] ) {
 					$titles[ $addon->ID ] = mdjm_get_addon_excerpt( $addon->ID );
 				}
-
 			}
 		}
 
-		if ( ! empty( $args['options']['groups'] ) )	{
+		if ( ! empty( $args['options']['groups'] ) ) {
 			ksort( $args['options']['groups'] );
 		}
 
-		if ( ! empty( $titles ) )	{
+		if ( ! empty( $titles ) ) {
 			$args['titles'] = $titles;
 		}
 
@@ -802,63 +825,63 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an Time Dropdown of Hours
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args
+	 * @param arr $args Time dropdown of Hours.
 	 *
-	 * @return	str
+	 * @return str
 	 */
-	public function time_hour_select( $args = array() )	{
+	public function time_hour_select( $args = array() ) {
 		$options  = array();
 		$defaults = array(
 			'name'             => 'event_start_hr',
 			'class'            => 'mdjm-time',
 			'id'               => '',
 			'selected'         => 0,
-            'show_option_all'  => false,
-			'show_option_none' => false
+			'show_option_all'  => false,
+			'show_option_none' => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-		
+
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
-		
-		if( 'H:i' == mdjm_get_option( 'time_format', 'H:i' ) )	{
+
+		if ( 'H:i' === mdjm_get_option( 'time_format', 'H:i' ) ) {
 			$i      = '00';
 			$x      = '23';
 			$format = 'H';
-		} else	{
+		} else {
 			$i      = '1';
 			$x      = '12';
-			$format = 'g';	
+			$format = 'g';
 		}
 
-		while( $i <= $x )	{
-			if( $i != 0 && $i < 10 && $format == 'H' )	{
+		while ( $i <= $x ) {
+			if ( 0 === $i && $i < 10 && 'H' === $format ) {
 				$i = '0' . $i;
 			}
 			$options[ $i ] = $i;
 			$i++;
 		}
 
-        $args['options'] = $options;
+		$args['options'] = $options;
 
 		$output = $this->select( $args );
 
 		return $output;
 
 	} // time_hour_select
-	
+
 	/**
 	 * Renders an Time Dropdown of Minutes
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args
+	 * @param arr $args Time Dropdown of minutes.
 	 *
-	 * @return	str
+	 * @return str
 	 */
-	public function time_minute_select( $args = array() )	{
+	public function time_minute_select( $args = array() ) {
 		$options  = array();
 		$minutes  = apply_filters( 'mdjm_time_minutes', array( '00', '15', '30', '45' ) );
 		$defaults = array(
@@ -866,19 +889,19 @@ class MDJM_HTML_Elements {
 			'class'            => 'mdjm-time',
 			'id'               => '',
 			'selected'         => 0,
-            'show_option_all'  => false,
-			'show_option_none' => false
+			'show_option_all'  => false,
+			'show_option_none' => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-		
+
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
-		foreach( $minutes as $minute )	{
+		foreach ( $minutes as $minute ) {
 			$options[ $minute ] = $minute;
 		}
 
-        $args['options'] = $options;
+		$args['options'] = $options;
 
 		$output = $this->select( $args );
 
@@ -889,13 +912,13 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders a Time Period Dropdown
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args
+	 * @param arr $args Time Period Drop down.
 	 *
-	 * @return	str
+	 * @return str
 	 */
-	public function time_period_select( $args = array() )	{
+	public function time_period_select( $args = array() ) {
 		$options  = array();
 		$minutes  = apply_filters( 'mdjm_time_minutes', array( '00', '15', '30', '45' ) );
 		$defaults = array(
@@ -903,20 +926,20 @@ class MDJM_HTML_Elements {
 			'class'            => 'mdjm-time',
 			'id'               => '',
 			'selected'         => 0,
-            'show_option_all'  => false,
-			'show_option_none' => false
+			'show_option_all'  => false,
+			'show_option_none' => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-		
+
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
 		$options = array(
 			'AM' => __( 'AM', 'mobile-dj-manager' ),
-			'PM' => __( 'PM', 'mobile-dj-manager' )
+			'PM' => __( 'PM', 'mobile-dj-manager' ),
 		);
 
-        $args['options'] = $options;
+		$args['options'] = $options;
 
 		$output = $this->select( $args );
 
@@ -927,11 +950,11 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Dropdown
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args
+	 * @param arr $args HTML Dropdown.
 	 *
-	 * @return	str
+	 * @return str
 	 */
 	public function select( $args = array() ) {
 		$defaults = array(
@@ -949,11 +972,11 @@ class MDJM_HTML_Elements {
 			'options_only'     => false,
 			'titles'           => false,
 			'data'             => array(),
-			'atts'             => array()
+			'atts'             => array(),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-		
+
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
 		$data_elements = '';
@@ -961,7 +984,7 @@ class MDJM_HTML_Elements {
 			$data_elements .= ' data-' . esc_attr( $key ) . '="' . esc_attr( $value ) . '"';
 		}
 
-		if( $args['multiple'] ) {
+		if ( $args['multiple'] ) {
 			$multiple = ' MULTIPLE';
 			$multi    = '[]';
 		} else {
@@ -969,11 +992,11 @@ class MDJM_HTML_Elements {
 			$multi    = '';
 		}
 
-		if( $args['chosen'] ) {
+		if ( $args['chosen'] ) {
 			$args['class'] .= ' mdjm-select-chosen';
 		}
 
-		if( $args['placeholder'] ) {
+		if ( $args['placeholder'] ) {
 			$placeholder = $args['placeholder'];
 		} else {
 			$placeholder = '';
@@ -982,16 +1005,16 @@ class MDJM_HTML_Elements {
 		$output = '';
 		$class  = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
 
-		if ( ! $args['options_only'] )	{
-			$output .= '<select name="' . esc_attr( $args['name'] ) . '' . $multi . '" id="' . esc_attr( mdjm_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="mdjm-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"'. $data_elements . '>' . "\r\n";
+		if ( ! $args['options_only'] ) {
+			$output .= '<select name="' . esc_attr( $args['name'] ) . '' . $multi . '" id="' . esc_attr( mdjm_sanitize_key( str_replace( '-', '_', $args['id'] ) ) ) . '" class="mdjm-select ' . $class . '"' . $multiple . ' data-placeholder="' . $placeholder . '"' . $data_elements . '>' . "\r\n";
 		}
 
-		if ( $args['blank_first'] )	{
+		if ( $args['blank_first'] ) {
 			$output .= '<option value=""></option>' . "\n";
 		}
 
 		if ( $args['show_option_all'] ) {
-			if( $args['multiple'] ) {
+			if ( $args['multiple'] ) {
 				$selected = selected( true, in_array( 'all', $args['selected'] ), false );
 			} else {
 				$selected = selected( $args['selected'], 'all', false );
@@ -1002,7 +1025,7 @@ class MDJM_HTML_Elements {
 		if ( ! empty( $args['options'] ) ) {
 
 			if ( $args['show_option_none'] ) {
-				if( $args['multiple'] ) {
+				if ( $args['multiple'] ) {
 					$selected = selected( true, in_array( 0, $args['selected'] ), false );
 				} else {
 					$selected = selected( $args['selected'], 0, false );
@@ -1010,56 +1033,55 @@ class MDJM_HTML_Elements {
 				$output .= '<option value="0"' . $selected . '>' . esc_html( $args['show_option_none'] ) . '</option>' . "\r\n";
 			}
 
-			if ( ! isset( $args['options']['groups'] ) )	{
+			if ( ! isset( $args['options']['groups'] ) ) {
 
-				foreach( $args['options'] as $key => $option ) {
-					if( $args['multiple'] && is_array( $args['selected'] ) ) {
+				foreach ( $args['options'] as $key => $option ) {
+					if ( $args['multiple'] && is_array( $args['selected'] ) ) {
 						$selected = selected( true, in_array( $key, $args['selected'] ), false );
 					} else {
 						$selected = selected( $args['selected'], $key, false );
 					}
 
 					$title = '';
-					if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) )	{
+					if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) ) {
 						$title = ' title="' . $args['titles'][ $key ] . '"';
 					}
 
 					$atts = '';
-					if ( ! empty( $args['atts'] ) && isset( $args['atts'][ $key ] ) )	{
-						foreach( $args['atts'][ $key ] as $data_key => $data_value )	{
+					if ( ! empty( $args['atts'] ) && isset( $args['atts'][ $key ] ) ) {
+						foreach ( $args['atts'][ $key ] as $data_key => $data_value ) {
 							$atts = ' data-' . $data_key . '="' . $data_value . '"';
 						}
 					}
 
 					$output .= '<option value="' . esc_attr( $key ) . '"' . $title . '' . $atts . '' . $selected . '>' . esc_html( $option ) . '</option>' . "\r\n";
 				}
-				
-			} else	{
+			} else {
 
 				$i = 0;
-				foreach( $args['options']['groups'] as $group => $items )	{
+				foreach ( $args['options']['groups'] as $group => $items ) {
 
-					if ( $i == 0 )	{
+					if ( 0 === $i ) {
 						$output .= '<optgroup label="' . esc_html( $group ) . '">' . "\r\n";
 					}
 
-					foreach( $items as $options ) {
-						foreach ( $options as $key => $option )	{
+					foreach ( $items as $options ) {
+						foreach ( $options as $key => $option ) {
 
 							$title = '';
-							if( $args['multiple'] && is_array( $args['selected'] ) ) {
+							if ( $args['multiple'] && is_array( $args['selected'] ) ) {
 								$selected = selected( true, in_array( $key, $args['selected'] ), false );
 							} else {
 								$selected = selected( $args['selected'], $key, false );
 							}
 
-							if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) )	{
+							if ( ! empty( $args['titles'] ) && array_key_exists( $key, $args['titles'] ) ) {
 								$title = ' title="' . $args['titles'][ $key ] . '"';
 							}
 
 							$atts = '';
-							if ( ! empty( $args['atts'] ) && isset( $args['atts'][ $key ] ) )	{
-								foreach( $args['atts'][ $key ] as $data_key => $data_value )	{
+							if ( ! empty( $args['atts'] ) && isset( $args['atts'][ $key ] ) ) {
+								foreach ( $args['atts'][ $key ] as $data_key => $data_value ) {
 									$atts = ' data-' . $data_key . '="' . $data_value . '"';
 								}
 							}
@@ -1070,17 +1092,15 @@ class MDJM_HTML_Elements {
 
 					$i++;
 
-					if ( $i == count( $options ) )	{
+					if ( count( $options ) === $i ) {
 						$output .= '</optgroup>' . "\r\n";
-						$i = 0;
+						$i       = 0;
 					}
-
 				}
-	
 			}
 		}
 
-		if ( ! $args['options_only'] )	{
+		if ( ! $args['options_only'] ) {
 			$output .= '</select>' . "\r\n";
 		}
 
@@ -1090,27 +1110,27 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Checkbox
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args
+	 * @param arr $args HTML Checkbox.
 	 *
-	 * @return	string
+	 * @return string
 	 */
 	public function checkbox( $args = array() ) {
 		$defaults = array(
-			'name'     => null,
-			'current'  => null,
-			'class'    => 'mdjm-checkbox',
-			'value'    => 1,
-			'options'  => array(
+			'name'    => null,
+			'current' => null,
+			'class'   => 'mdjm-checkbox',
+			'value'   => 1,
+			'options' => array(
 				'disabled' => false,
-				'readonly' => false
-			)
+				'readonly' => false,
+			),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
+		$class   = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
 		$options = '';
 		if ( ! empty( $args['options']['disabled'] ) ) {
 			$options .= ' disabled="disabled"';
@@ -1122,22 +1142,22 @@ class MDJM_HTML_Elements {
 
 		return $output;
 	} // checkbox
-	
+
 	/**
 	 * Renders an HTML Checkbox List
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args
+	 * @param arr $args HTML Checkbox list.
 	 *
-	 * @return	string
+	 * @return string
 	 */
 	public function checkbox_list( $args = array() ) {
 		$defaults = array(
 			'name'      => null,
 			'class'     => 'mdjm-checkbox',
 			'label_pos' => 'before',
-			'options'   => array()
+			'options'   => array(),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -1147,52 +1167,51 @@ class MDJM_HTML_Elements {
 		$label_pos = isset( $args['label_pos'] ) ? $args['label_pos'] : 'before';
 
 		$output = '';
-		
-		if ( ! empty( $args['options'] ) )	{
+
+		if ( ! empty( $args['options'] ) ) {
 
 			$i = 0;
 
-			foreach( $args['options'] as $key => $value )	{
+			foreach ( $args['options'] as $key => $value ) {
 
-				if ( $label_pos == 'before' )	{
+				if ( 'before' === $label_pos ) {
 					$output .= $value . '&nbsp';
 				}
 
 				$output .= '<input type="checkbox" name="' . esc_attr( $args['name'] ) . '[]" id="' . esc_attr( $args['name'] ) . '-' . $key . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" value="' . $key . '" />';
 
-				if ( $label_pos == 'after' )	{
+				if ( 'after' !== $label_pos ) {
 					$output .= '&nbsp' . $value;
 				}
 
-				if ( $i < count( $args['options'] ) )	{
+				if ( $i < count( $args['options'] ) ) {
 					$output .= '<br />';
 				}
 
 				$i++;
 
 			}
-			
 		}
 
 		return $output;
 	} // checkbox_list
-	
+
 	/**
 	 * Renders HTML Radio Buttons
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args
+	 * @param arr $args HTML Radio buttons.
 	 *
-	 * @return	string
+	 * @return string
 	 */
 	public function radio( $args = array() ) {
 		$defaults = array(
-			'name'     => null,
-			'current'  => null,
-			'class'    => 'mdjm-radio',
+			'name'      => null,
+			'current'   => null,
+			'class'     => 'mdjm-radio',
 			'label_pos' => 'before',
-			'options'  => array()
+			'options'   => array(),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -1200,31 +1219,30 @@ class MDJM_HTML_Elements {
 		$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
 
 		$output = '';
-		
-		if ( ! empty( $args['options'] ) )	{
+
+		if ( ! empty( $args['options'] ) ) {
 
 			$i = 0;
 
-			foreach( $args['options'] as $key => $value )	{
+			foreach ( $args['options'] as $key => $value ) {
 
-				if ( $label_pos == 'before' )	{
+				if ( 'before' === $label_pos ) {
 					$output .= $value . '&nbsp';
 				}
 
 				$output = '<input type="radio" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['name'] ) . '-' . $key . '" class="' . $class . ' ' . esc_attr( $args['name'] ) . '" />';
 
-				if ( $label_pos == 'after' )	{
+				if ( 'after' === $label_pos ) {
 					$output .= '&nbsp' . $value;
 				}
 
-				if ( $i < count( $args['options'] ) )	{
+				if ( $i < count( $args['options'] ) ) {
 					$output .= '<br />';
 				}
 
 				$i++;
 
 			}
-			
 		}
 
 		return $output;
@@ -1233,44 +1251,44 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML Text field
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args	Arguments for the text field
-	 * @return	str		Text field
+	 * @param arr $args Arguments for the text field.
+	 * @return str Text field
 	 */
 	public function text( $args = array() ) {
 
 		$defaults = array(
 			'id'           => '',
-			'name'         => isset( $name )  ? $name  : 'text',
+			'name'         => isset( $name ) ? $name : 'text',
 			'type'         => 'text',
 			'value'        => isset( $value ) ? $value : null,
 			'label'        => isset( $label ) ? $label : null,
-			'desc'         => isset( $desc )  ? $desc  : null,
+			'desc'         => isset( $desc ) ? $desc : null,
 			'placeholder'  => '',
 			'class'        => 'regular-text',
 			'readonly'     => false,
 			'disabled'     => false,
 			'autocomplete' => '',
 			'required'     => false,
-			'data'         => false
+			'data'         => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-		
+
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
-		$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
+		$class    = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
 		$disabled = '';
 		$readonly = '';
 		$required = '';
-		if( $args['disabled'] ) {
+		if ( $args['disabled'] ) {
 			$disabled = ' disabled="disabled"';
 		}
-		if( $args['readonly'] ) {
+		if ( $args['readonly'] ) {
 			$readonly = ' readonly="readonly"';
 		}
-		if( $args['required'] ) {
+		if ( $args['required'] ) {
 			$required = ' required';
 		}
 
@@ -1285,10 +1303,10 @@ class MDJM_HTML_Elements {
 
 		$output .= '<label for="' . mdjm_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
-		$output .= '<input type="' . $args['type'] . '" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $disabled . '' . $readonly . '' . $required . '/>';
-		
+		$output .= '<input type="' . $args['type'] . '" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] ) . '" autocomplete="' . esc_attr( $args['autocomplete'] ) . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $disabled . '' . $readonly . '' . $required . '/>';
+
 		$output .= '</span>';
-		
+
 		if ( ! empty( $args['desc'] ) ) {
 			$output .= '<br />';
 			$output .= '<span class="description">' . esc_html( $args['desc'] ) . '</span>';
@@ -1300,16 +1318,16 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders a date picker
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args	Arguments for the text field
-	 * @return	str		Datepicker field
+	 * @param arr $args Arguments for the text field.
+	 * @return str Datepicker field
 	 */
 	public function date_field( $args = array() ) {
 
-		if( empty( $args['class'] ) ) {
+		if ( empty( $args['class'] ) ) {
 			$args['class'] = 'mdjm_datepicker';
-		} elseif( ! strpos( $args['class'], 'mdjm_datepicker' ) ) {
+		} elseif ( ! strpos( $args['class'], 'mdjm_datepicker' ) ) {
 			$args['class'] .= ' mdjm_datepicker';
 		}
 
@@ -1319,10 +1337,10 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an HTML textarea
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args	Arguments for the textarea
-	 * @return	srt		textarea
+	 * @param arr $args Arguments for the textarea.
+	 * @return srt textarea
 	 */
 	public function textarea( $args = array() ) {
 		$defaults = array(
@@ -1332,20 +1350,20 @@ class MDJM_HTML_Elements {
 			'placeholder' => null,
 			'desc'        => null,
 			'class'       => 'large-text',
-			'disabled'    => false
+			'disabled'    => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
 
-		$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
+		$class    = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
 		$disabled = '';
 
-		if( $args['disabled'] ) {
+		if ( $args['disabled'] ) {
 			$disabled = ' disabled="disabled"';
 		}
-		
+
 		$placeholder = '';
-		if( $args['placeholder'] ) {
+		if ( $args['placeholder'] ) {
 			$placeholder = ' placeholder="' . esc_attr( $args['placeholder'] ) . '"';
 		}
 
@@ -1355,47 +1373,47 @@ class MDJM_HTML_Elements {
 
 			$output .= '<textarea name="' . esc_attr( $args['name'] ) . '" id="' . mdjm_sanitize_key( $args['name'] ) . '" class="' . $class . '"' . $disabled . $placeholder . '>' . esc_attr( $args['value'] ) . '</textarea>';
 
-			if ( ! empty( $args['desc'] ) ) {
-				$output .= '<span class="mdjm-description">' . esc_html( $args['desc'] ) . '</span>';
-			}
+		if ( ! empty( $args['desc'] ) ) {
+			$output .= '<span class="mdjm-description">' . esc_html( $args['desc'] ) . '</span>';
+		}
 
 		$output .= '</span>';
 
 		return $output;
 	} // textarea
-	
+
 	/**
 	 * Renders an HTML Number field
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args	Arguments for the text field
-	 * @return	str		Text field
+	 * @param arr $args Arguments for the text field.
+	 * @return str Text field
 	 */
 	public function number( $args = array() ) {
 
 		$defaults = array(
 			'id'           => '',
-			'name'         => isset( $name )  ? $name  : 'text',
+			'name'         => isset( $name ) ? $name : 'text',
 			'value'        => isset( $value ) ? $value : null,
 			'label'        => isset( $label ) ? $label : null,
-			'desc'         => isset( $desc )  ? $desc  : null,
+			'desc'         => isset( $desc ) ? $desc : null,
 			'placeholder'  => '',
 			'class'        => 'small-text',
 			'min'          => null,
 			'max'          => null,
 			'disabled'     => false,
 			'autocomplete' => '',
-			'data'         => false
+			'data'         => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-		
+
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
-		$class = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
+		$class    = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $args['class'] ) ) );
 		$disabled = '';
-		if( $args['disabled'] ) {
+		if ( $args['disabled'] ) {
 			$disabled = ' disabled="disabled"';
 		}
 
@@ -1405,11 +1423,11 @@ class MDJM_HTML_Elements {
 				$data .= 'data-' . mdjm_sanitize_key( $key ) . '="' . esc_attr( $value ) . '" ';
 			}
 		}
-		
+
 		$min = isset( $args['min'] ) ? ' min="' . absint( $args['min'] ) . '"' : '';
 		$max = isset( $args['max'] ) ? ' max="' . absint( $args['max'] ) . '"' : '';
-		
-		if ( $max > 5 )	{
+
+		if ( $max > 5 ) {
 			$max = 5;
 		}
 
@@ -1417,7 +1435,7 @@ class MDJM_HTML_Elements {
 
 			$output .= '<label for="' . mdjm_sanitize_key( $args['id'] ) . '">' . esc_html( $args['label'] ) . '</label>';
 
-			$output .= '<input type="number" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" autocomplete="' . esc_attr( $args['autocomplete'] )  . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $min . '' . $max . '' . $disabled . '/>';
+			$output .= '<input type="number" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] ) . '" autocomplete="' . esc_attr( $args['autocomplete'] ) . '" value="' . esc_attr( $args['value'] ) . '" placeholder="' . esc_attr( $args['placeholder'] ) . '" class="' . $class . '" ' . $data . '' . $min . '' . $max . '' . $disabled . '/>';
 
 		$output .= '</span>';
 
@@ -1428,28 +1446,28 @@ class MDJM_HTML_Elements {
 
 		return $output;
 	} // number
-	
+
 	/**
 	 * Renders an HTML Hidden field
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args	Arguments for the text field
-	 * @return	str		Hidden field
+	 * @param arr $args Arguments for the text field.
+	 * @return str Hidden field
 	 */
 	public function hidden( $args = array() ) {
 
 		$defaults = array(
-			'id'           => '',
-			'name'         => isset( $name )  ? $name  : 'hidden',
-			'value'        => isset( $value ) ? $value : null
+			'id'    => '',
+			'name'  => isset( $name ) ? $name : 'hidden',
+			'value' => isset( $value ) ? $value : null,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-		
+
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
-		$output = '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] )  . '" value="' . esc_attr( $args['value'] ) . '" />';
+		$output = '<input type="hidden" name="' . esc_attr( $args['name'] ) . '" id="' . esc_attr( $args['id'] ) . '" value="' . esc_attr( $args['value'] ) . '" />';
 
 		return $output;
 	} // hidden
@@ -1457,33 +1475,33 @@ class MDJM_HTML_Elements {
 	/**
 	 * Renders an ajax user search field
 	 *
-	 * @since	1.3.7
+	 * @since 1.3.7
 	 *
-	 * @param	arr		$args
-	 * @return	str		Text field with ajax search
+	 * @param arr $args ajax user search field.
+	 * @return str Text field with ajax search
 	 */
 	public function ajax_user_search( $args = array() ) {
 
 		$defaults = array(
-			'name'        => 'user_id',
-			'value'       => null,
-			'placeholder' => __( 'Enter username', 'mobile-dj-manager' ),
-			'label'       => null,
-			'desc'        => null,
-			'class'       => '',
-			'disabled'    => false,
-			'autocomplete'=> 'off',
-			'data'        => false
+			'name'         => 'user_id',
+			'value'        => null,
+			'placeholder'  => __( 'Enter username', 'mobile-dj-manager' ),
+			'label'        => null,
+			'desc'         => null,
+			'class'        => '',
+			'disabled'     => false,
+			'autocomplete' => 'off',
+			'data'         => false,
 		);
 
 		$args = wp_parse_args( $args, $defaults );
 
 		$args['class'] = 'mdjm-ajax-user-search ' . $args['class'];
 
-		$output  = '<span class="mdjm_user_search_wrap">';
+		$output      = '<span class="mdjm_user_search_wrap">';
 			$output .= $this->text( $args );
 			$output .= '<span class="mdjm_user_search_results hidden"><a class="mdjm-ajax-user-cancel" title="' . __( 'Cancel', 'mobile-dj-manager' ) . '" aria-label="' . __( 'Cancel', 'mobile-dj-manager' ) . '" href="#">x</a><span></span></span>';
-		$output .= '</span>';
+		$output     .= '</span>';
 
 		return $output;
 	} // ajax_user_search

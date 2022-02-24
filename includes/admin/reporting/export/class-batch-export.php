@@ -1,5 +1,13 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Batch Export Class
  *
  * This is the base class for all batch export methods. Each data export type (clients, txnss, etc) extend this class
@@ -8,129 +16,131 @@
  * @subpackage  Admin/Export
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.4
+ * @since       1.0.4
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) ) exit;
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
 /**
  * MDJM_Batch_Export Class
  *
- * @since	1.4
+ * @since   1.0.4
  */
 class MDJM_Batch_Export extends MDJM_Export {
 
 	/**
 	 * The file the data is stored in
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	private $file;
 
 	/**
 	 * The name of the file the data is stored in
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $filename;
 
 	/**
 	 * The file type, typically .csv
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $filetype;
 
 	/**
 	 * The current step being processed
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $step;
 
 	/**
 	 * Start date, Y-m-d H:i:s
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $start;
 
 	/**
 	 * End date, Y-m-d H:i:s
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $end;
 
 	/**
 	 * Status to export
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $status;
 
 	/**
 	 * Type to export
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $type;
 
 	/**
 	 * Event to export data for
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $event = null;
 
 	/**
 	 * Event Transaction ID to export data for
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $txn_id = null;
 
 	/**
 	 * Is the export file writable
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $is_writable = true;
 
 	/**
 	 *  Is the export file empty
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public $is_empty = false;
 
 	/**
 	 * Get things started
 	 *
-	 * @param	$_step int The step to process
-	 * @since	1.4
+	 * @param   $_step int The step to process
+	 * @since   1.0.4
 	 */
 	public function __construct( $_step = 1 ) {
 
-		$upload_dir       = wp_upload_dir();
-		$this->filetype   = '.csv';
-		$this->filename   = 'mdjm-' . $this->export_type . $this->filetype;
-		$this->file       = trailingslashit( $upload_dir['basedir'] ) . $this->filename;
+		$upload_dir     = wp_upload_dir();
+		$this->filetype = '.csv';
+		$this->filename = 'mdjm-' . $this->export_type . $this->filetype;
+		$this->file     = trailingslashit( $upload_dir['basedir'] ) . $this->filename;
 
 		if ( ! is_writeable( $upload_dir['basedir'] ) ) {
 			$this->is_writable = false;
 		}
 
-		$this->step       = $_step;
-		$this->done       = false;
+		$this->step = $_step;
+		$this->done = false;
 	} // __construct
 
 	/**
 	 * Process a step
 	 *
-	 * @since	1.4
-	 * @return	bool
+	 * @since   1.0.4
+	 * @return  bool
 	 */
 	public function process_step() {
 
@@ -147,9 +157,9 @@ class MDJM_Batch_Export extends MDJM_Export {
 
 		$rows = $this->print_csv_rows();
 
-		if ( $rows )	{
+		if ( $rows ) {
 			return true;
-		} else	{
+		} else {
 			return false;
 		}
 	} // process_step
@@ -157,17 +167,17 @@ class MDJM_Batch_Export extends MDJM_Export {
 	/**
 	 * Output the CSV columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @uses	MDJM_Export::get_csv_cols()
-	 * @return	str
+	 * @access  public
+	 * @since   1.0.4
+	 * @uses    MDJM_Export::get_csv_cols()
+	 * @return  str
 	 */
 	public function print_csv_cols() {
 
 		$col_data = '';
-		$cols = $this->get_csv_cols();
-		$i = 1;
-		foreach( $cols as $col_id => $column ) {
+		$cols     = $this->get_csv_cols();
+		$i        = 1;
+		foreach ( $cols as $col_id => $column ) {
 			$col_data .= '"' . addslashes( $column ) . '"';
 			$col_data .= $i == count( $cols ) ? '' : ',';
 			$i++;
@@ -183,9 +193,9 @@ class MDJM_Batch_Export extends MDJM_Export {
 	/**
 	 * Print the CSV rows for the current step
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	str|false
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  str|false
 	 */
 	public function print_csv_rows() {
 
@@ -193,18 +203,18 @@ class MDJM_Batch_Export extends MDJM_Export {
 		$data     = $this->get_data();
 		$cols     = $this->get_csv_cols();
 
-		if( $data ) {
+		if ( $data ) {
 
 			// Output each row
 			foreach ( $data as $row ) {
 				$i = 1;
 				foreach ( $row as $col_id => $column ) {
-					if ( is_array( $column ) )	{
+					if ( is_array( $column ) ) {
 						error_log( $col_id . ' - ' . var_export( $column, true ), 0 );
 					}
 					// Make sure the column is valid
 					if ( array_key_exists( $col_id, $cols ) ) {
-						$row_data .= '"' . addslashes( preg_replace( "/\"/","'", $column ) ) . '"';
+						$row_data .= '"' . addslashes( preg_replace( '/"/', "'", $column ) ) . '"';
 						$row_data .= $i == count( $cols ) ? '' : ',';
 						$i++;
 					}
@@ -223,7 +233,7 @@ class MDJM_Batch_Export extends MDJM_Export {
 	/**
 	 * Return the calculated completion percentage
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 * @return int
 	 */
 	public function get_percentage_complete() {
@@ -233,8 +243,8 @@ class MDJM_Batch_Export extends MDJM_Export {
 	/**
 	 * Retrieve the file data is written to
 	 *
-	 * @since	1.4
-	 * @return	str
+	 * @since   1.0.4
+	 * @return  str
 	 */
 	protected function get_file() {
 
@@ -261,18 +271,18 @@ class MDJM_Batch_Export extends MDJM_Export {
 	/**
 	 * Append data to export file
 	 *
-	 * @since	1.4
-	 * @param	str		$data	The data to add to the file
-	 * @return	void
+	 * @since   1.0.4
+	 * @param   str $data   The data to add to the file
+	 * @return  void
 	 */
 	protected function stash_step_data( $data = '' ) {
 
-		$file = $this->get_file();
+		$file  = $this->get_file();
 		$file .= $data;
 		@file_put_contents( $this->file, $file );
 
 		// If we have no rows after this step, mark it as an empty export
-		$file_rows    = file( $this->file, FILE_SKIP_EMPTY_LINES);
+		$file_rows    = file( $this->file, FILE_SKIP_EMPTY_LINES );
 		$default_cols = $this->get_csv_cols();
 		$default_cols = empty( $default_cols ) ? 0 : 1;
 
@@ -283,9 +293,9 @@ class MDJM_Batch_Export extends MDJM_Export {
 	/**
 	 * Perform the export
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  void
 	 */
 	public function export() {
 
@@ -304,7 +314,7 @@ class MDJM_Batch_Export extends MDJM_Export {
 	/*
 	 * Set the properties specific to the export
 	 *
-	 * @since	1.4
+	 * @since	1.0.4
 	 * @param	arr		$request	The Form Data passed into the batch processing
 	 */
 	public function set_properties( $request ) {}
@@ -312,9 +322,9 @@ class MDJM_Batch_Export extends MDJM_Export {
 	/**
 	 * Allow for prefetching of data for the remainder of the exporter
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  void
 	 */
 	public function pre_fetch() {}
 

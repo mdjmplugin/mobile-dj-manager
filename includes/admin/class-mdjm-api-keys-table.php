@@ -1,5 +1,13 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * API Key Table Class
  *
  * @package     MDJM
@@ -9,11 +17,12 @@
  * @since       1.4
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
-// Load WP_List_Table if not loaded
+// Load WP_List_Table if not loaded.
 if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
@@ -23,38 +32,44 @@ if ( ! class_exists( 'WP_List_Table' ) ) {
  *
  * Renders the API Keys table
  *
- * @since	1.4
+ * @since   1.4
  */
 class MDJM_API_Keys_Table extends WP_List_Table {
 
 	/**
-	 * @var		int		Number of items per page
-	 * @since	1.4
+	 * Show the amount of items.
+	 *
+	 * @var     int     Number of items per page
+	 * @since   1.4
 	 */
 	public $per_page = 30;
 
 	/**
-	 * @var		obj		Query results
-	 * @since	1.4
+	 * Keys
+	 *
+	 * @var     obj     Query results
+	 * @since   1.4
 	 */
 	private $keys;
 
 	/**
 	 * Get things started
 	 *
-	 * @since	1.4
+	 * @since   1.4
 	 * @see WP_List_Table::__construct()
 	 */
-	public function __construct()	{
+	public function __construct() {
 
 		global $status, $page;
 
-		// Set parent defaults
-		parent::__construct( array(
-			'singular'  => __( 'API Key', 'mobile-dj-manager' ),
-			'plural'    => __( 'API Keys', 'mobile-dj-manager' ),
-			'ajax'      => false,
-		) );
+		// Set parent defaults.
+		parent::__construct(
+			array(
+				'singular' => __( 'API Key', 'mobile-dj-manager' ),
+				'plural'   => __( 'API Keys', 'mobile-dj-manager' ),
+				'ajax'     => false,
+			)
+		);
 
 		$this->query();
 
@@ -63,10 +78,10 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the primary column.
 	 *
-	 * @since	1.4
-	 * @access	protected
+	 * @since   1.4
+	 * @access  protected
 	 *
-	 * @return	str		Name of the primary column.
+	 * @return  str     Name of the primary column.
 	 */
 	protected function get_primary_column_name() {
 		return 'user';
@@ -75,69 +90,67 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	/**
 	 * This function renders most of the columns in the list table.
 	 *
-	 * @access	public
-	 * @since	1.4
+	 * @access  public
+	 * @since   1.4
 	 *
-	 * @param	arr		$item			Contains all the data of the keys
-	 * @param	str		$column_name	The name of the column
+	 * @param   arr $item           Contains all the data of the keys.
+	 * @param   str $column_name    The name of the column.
 	 *
-	 * @return	str		Column Name
+	 * @return  str     Column Name
 	 */
 	public function column_default( $item, $column_name ) {
 		return $item[ $column_name ];
 	} // column_default
 
 	/**
-	 * Displays the public key rows
+	 * Displays the public key rows.
 	 *
-	 * @access	public
-	 * @since	1.4
+	 * @access  public
+	 * @since   1.4
 	 *
-	 * @param	arr 	$item			Contains all the data of the keys
-	 * @param	str		$column_name	The name of the column
+	 * @param   arr $item           Contains all the data of the keys. str $column_name    The name of the column.
 	 *
 	 * @return string Column Name
 	 */
 	public function column_key( $item ) {
-		return '<input type="text" class="large-text" value="' . esc_attr( $item[ 'key' ] ) . '" readonly="readonly" />';
+		return '<input type="text" class="large-text" value="' . esc_attr( $item['key'] ) . '" readonly="readonly" />';
 	} // column_key
 
 	/**
 	 * Displays the token rows
 	 *
-	 * @access	public
-	 * @since	1.4
+	 * @access  public
+	 * @since   1.4
 	 *
-	 * @param	arr		$item			Contains all the data of the keys
-	 * @param	str		$column_name	The name of the column
+	 * @param   arr $item           Contains all the data of the keys. str $column_name    The name of the column.
 	 *
 	 * @return string Column Name
 	 */
 	public function column_token( $item ) {
-		return '<input type="text" class="large-text" value="' . esc_attr( $item[ 'token' ] ) . '" readonly="readonly" />';
+		return '<input type="text" class="large-text" value="' . esc_attr( $item['token'] ) . '" readonly="readonly" />';
 	} // column_token
 
 	/**
 	 * Displays the secret key rows
 	 *
-	 * @access	public
-	 * @since	1.4
+	 * @access  public
+	 * @since   1.4
 	 *
-	 * @param	arr		$item			Contains all the data of the keys
-	 * @param	str		$column_name	The name of the column
+	 * @param   arr $item Contains all the data of the keys. str $column_name    The name of the column.
 	 *
 	 * @return string Column Name
 	 */
 	public function column_secret( $item ) {
-		return '<input type="text" class="large-text" value="' . esc_attr( $item[ 'secret' ] ) . '" readonly="readonly" />';
+		return '<input type="text" class="large-text" value="' . esc_attr( $item['secret'] ) . '" readonly="readonly" />';
 	} // column_secret
 
 	/**
-	 * Renders the column for the user field
+	 * Renders the column for the user field.
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 *
+	 * @param   arr $item $which Contains all the data of the keys.
 	 */
 	public function column_user( $item ) {
 
@@ -145,13 +158,37 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 
 		$actions['reissue'] = sprintf(
 			'<a href="%s" class="mdjm-regenerate-api-key">%s</a>',
-			esc_url( wp_nonce_url( add_query_arg( array( 'user_id' => $item['id'], 'mdjm-action' => 'process_api_key', 'mdjm_api_process' => 'regenerate' ) ), 'mdjm-api-nonce', 'api_nonce' ) ),
+			esc_url(
+				wp_nonce_url(
+					add_query_arg(
+						array(
+							'user_id'          => $item['id'],
+							'mdjm-action'      => 'process_api_key',
+							'mdjm_api_process' => 'regenerate',
+						)
+					),
+					'mdjm-api-nonce',
+					'api_nonce'
+				)
+			),
 			__( 'Reissue', 'mobile-dj-manager' )
 		);
 
 		$actions['revoke'] = sprintf(
 			'<a href="%s" class="mdjm-revoke-api-key mdjm-delete">%s</a>',
-			esc_url( wp_nonce_url( add_query_arg( array( 'user_id' => $item['id'], 'mdjm-action' => 'process_api_key', 'mdjm_api_process' => 'revoke' ) ), 'mdjm-api-nonce', 'api_nonce' ) ),
+			esc_url(
+				wp_nonce_url(
+					add_query_arg(
+						array(
+							'user_id'          => $item['id'],
+							'mdjm-action'      => 'process_api_key',
+							'mdjm_api_process' => 'revoke',
+						)
+					),
+					'mdjm-api-nonce',
+					'api_nonce'
+				)
+			),
 			__( 'Revoke', 'mobile-dj-manager' )
 		);
 
@@ -164,9 +201,9 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	/**
 	 * Retrieve the table columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$columns	Array of all the list table columns
+	 * @access  public
+	 * @since   1.4
+	 * @return  arr     $columns    Array of all the list table columns.
 	 */
 	public function get_columns() {
 		$columns = array(
@@ -182,13 +219,14 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	/**
 	 * Display the key generation form
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
+	 * @param str $which Display key gen form.
 	 */
 	public function extra_tablenav( $which = '' ) {
 
-		if( 'top' != $which ) {
+		if ( 'top' !== $which ) {
 			return;
 		}
 
@@ -197,12 +235,16 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 			<?php mdjm_admin_action_field( 'process_api_key' ); ?>
 			<input type="hidden" name="mdjm_api_process" value="generate" />
 			<?php wp_nonce_field( 'mdjm-api-nonce', 'api_nonce' ); ?>
-			<?php echo MDJM()->html->users_dropdown( array( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				'name'             => 'user_id',
-				'chosen'           => true,
-				'show_option_all'  => false,
-				'show_option_none' => esc_html_x( 'Select a User', 'no dropdown items', 'mobile-dj-manager' )
-			) ); ?>
+			<?php
+			echo MDJM()->html->users_dropdown( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				array(
+					'name'             => 'user_id',
+					'chosen'           => true,
+					'show_option_all'  => false,
+					'show_option_none' => esc_html_x( 'Select a User', 'no dropdown items', 'mobile-dj-manager' ),
+				)
+			);
+			?>
 			<?php submit_button( __( 'Generate New API Keys', 'mobile-dj-manager' ), 'secondary', 'submit', false ); ?>
 		</form>
 		<?php
@@ -210,13 +252,13 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	} // extra_tablenav
 
 	/**
-	 * Generate the table navigation above or below the table
+	 * Generate the table navigation above or below the table.
 	 *
-	 * @since	1.4
-	 * @access	protected
-	 * @param	str			$which
+	 * @since   1.4
+	 * @access  protected
+	 * @param   str $which which.
 	 */
-	protected function display_tablenav( $which )	{
+	protected function display_tablenav( $which ) {
 
 		if ( 'top' === $which ) {
 			wp_nonce_field( 'bulk-' . $this->_args['plural'] );
@@ -240,36 +282,37 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	/**
 	 * Retrieve the current page number
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	int		Current page number
+	 * @access  public
+	 * @since   1.4
+	 * @return  int     Current page number.
 	 */
 	public function get_paged() {
-		return isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
+		return isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1; // phpcs:ignore WordPress.Security.NonceVerification
 	} // get_paged
 
 	/**
 	 * Performs the key query
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
 	 */
-	public function query()	{
+	public function query() {
 
-		$users    = get_users( array(
-			'meta_value' => 'mdjm_user_secret_key',
-			'number'     => $this->per_page,
-			'offset'     => $this->per_page * ( $this->get_paged() - 1 ),
-		) );
+		$users = get_users(
+			array(
+				'meta_value' => 'mdjm_user_secret_key',
+				'number'     => $this->per_page,
+				'offset'     => $this->per_page * ( $this->get_paged() - 1 ),
+			)
+		);
 
-		$keys     = array();
+		$keys = array();
 
-		foreach( $users as $user ) {
+		foreach ( $users as $user ) {
 
-			$keys[ $user->ID ]['id']     = $user->ID;
-			$keys[ $user->ID ]['email']  = $user->user_email;
-			$keys[ $user->ID ]['user']   = '<a href="' . add_query_arg( 'user_id', $user->ID, 'user-edit.php' ) . '"><strong>' . $user->user_login . '</strong></a>';
+			$keys[ $user->ID ]['id']    = $user->ID;
+			$keys[ $user->ID ]['email'] = $user->user_email;
+			$keys[ $user->ID ]['user']  = '<a href="' . add_query_arg( 'user_id', $user->ID, 'user-edit.php' ) . '"><strong>' . $user->user_login . '</strong></a>';
 
 			$keys[ $user->ID ]['key']    = MDJM()->api->get_user_public_key( $user->ID );
 			$keys[ $user->ID ]['secret'] = MDJM()->api->get_user_secret_key( $user->ID );
@@ -284,14 +327,14 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	/**
 	 * Retrieve count of total users with keys
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	int
+	 * @access  public
+	 * @since   1.4
+	 * @return  int
 	 */
 	public function total_items() {
 		global $wpdb;
 
-		if( ! get_transient( 'mdjm-total-api-keys' ) ) {
+		if ( ! get_transient( 'mdjm-total-api-keys' ) ) {
 			$total_items = $wpdb->get_var( "SELECT count(user_id) FROM $wpdb->usermeta WHERE meta_key = 'mdjm_user_secret_key'" );
 
 			set_transient( 'mdjm-total-api-keys', $total_items, 60 * 60 );
@@ -303,20 +346,19 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 	/**
 	 * Message displayed when no API keys are defined.
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	str
+	 * @access  public
+	 * @since   1.4
 	 */
-	function no_items()	{
+	public function no_items() {
 		esc_html_e( 'No API keys have been generated.', 'mobile-dj-manager' );
 	} // no_items
 
 	/**
-	 * Setup the final data for the table
+	 * Setup the final data for the table.
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.4
+	 * @return  void
 	 */
 	public function prepare_items() {
 		$columns = $this->get_columns();
@@ -332,11 +374,13 @@ class MDJM_API_Keys_Table extends WP_List_Table {
 
 		$this->items = $data;
 
-		$this->set_pagination_args( array(
-			'total_items' => $total_items,
-			'per_page'    => $this->per_page,
-			'total_pages' => ceil( $total_items / $this->per_page ),
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,
+				'per_page'    => $this->per_page,
+				'total_pages' => ceil( $total_items / $this->per_page ),
+			)
+		);
 	} // prepare_items
 
 } // MDJM_API_Keys_Table

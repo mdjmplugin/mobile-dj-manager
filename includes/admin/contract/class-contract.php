@@ -6,14 +6,22 @@
  * @subpackage  Admin\Contract
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @author      MDJM <info@mdjm.co.uk>
+ * @author      MDJM
  * @since       1.5.9
  */
 
-defined( 'ABSPATH' ) || exit;
-
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+	/**
+	 * Contract View
+	 */
 class Contract_View {
-
+	/**
+	 * Contract View
+	 *
+	 * @var str $slug Contract view.
+	 */
 	protected $slug = 'mdjm-view-contract';
 
 	/**
@@ -82,6 +90,7 @@ class Contract_View {
 		}
 
 		if ( ! $mdjm_event->get_contract_status() ) {
+			/* translators: % event style */
 			printf( esc_html__( 'The contract for this %s is not signed', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) );
 			exit;
 		}
@@ -110,7 +119,10 @@ class Contract_View {
 	/**
 	 * Get field from query string.
 	 *
-	 * @return mixed
+	 * @param str $id ID.
+	 * @param str $default Default.
+	 * @param str $filter Filter.
+	 * @param str $flag Flag.
 	 */
 	public static function get( $id, $default = false, $filter = FILTER_DEFAULT, $flag = array() ) {
 		return filter_has_var( INPUT_GET, $id ) ? filter_input( INPUT_GET, $id, $filter, $flag ) : $default;

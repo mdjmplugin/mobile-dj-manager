@@ -1,26 +1,34 @@
 <?php
-
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Contains all metabox functions for the mdjm-transaction post type
  *
- * @package		MDJM
- * @subpackage	Transactions
- * @since		1.3
+ * @package     MDJM
+ * @subpackage  Transactions
+ * @since       1.3
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Remove unwanted metaboxes to for the mdjm-transaction post type.
  * Apply the `mdjm_transaction_remove_metaboxes` filter to allow for filtering of metaboxes to be removed.
  *
- * @since	1.3
+ * @since   1.3
  * @param
  * @return
  */
-function mdjm_remove_transaction_meta_boxes()	{
+function mdjm_remove_transaction_meta_boxes() {
 	$metaboxes = apply_filters(
 		'mdjm_transaction_remove_metaboxes',
 		array(
@@ -29,7 +37,7 @@ function mdjm_remove_transaction_meta_boxes()	{
 		)
 	);
 
-	foreach( $metaboxes as $metabox )	{
+	foreach ( $metaboxes as $metabox ) {
 		remove_meta_box( $metabox[0], $metabox[1], $metabox[2] );
 	}
 } // mdjm_remove_transaction_meta_boxes
@@ -40,53 +48,53 @@ add_action( 'admin_head', 'mdjm_remove_transaction_meta_boxes' );
  * Apply the `mdjm_transaction_add_metaboxes` filter to allow for filtering of metaboxes and settings.
  * Uses function_exists to verify the callback function exists.
  *
- * @since	1.3
+ * @since   1.3
  * @param
  * @return
  */
-function mdjm_add_transaction_meta_boxes( $post )	{
+function mdjm_add_transaction_meta_boxes( $post ) {
 	$metaboxes = apply_filters(
 		'mdjm_transaction_add_metaboxes',
 		array(
 			array(
-				'id'		  => 'mdjm-txn-save',
-				'title'	   => __( 'Save Transaction', 'mobile-dj-manager' ),
-				'callback'	=> 'mdjm_transaction_metabox_save_txn',
-				'context'	 => 'side',
-				'priority'	=> 'high',
-				'args'		=> array(),
-				'dependancy'  => '',
-				'permission'  => ''
+				'id'         => 'mdjm-txn-save',
+				'title'      => __( 'Save Transaction', 'mobile-dj-manager' ),
+				'callback'   => 'mdjm_transaction_metabox_save_txn',
+				'context'    => 'side',
+				'priority'   => 'high',
+				'args'       => array(),
+				'dependancy' => '',
+				'permission' => '',
 			),
 			array(
-				'id'		  => 'mdjm-txn-details',
-				'title'	   => __( 'Transaction Details', 'mobile-dj-manager' ),
-				'callback'	=> 'mdjm_transaction_metabox_txn_details',
-				'context'	 => 'normal',
-				'priority'	=> 'high',
-				'args'		=> array(),
-				'dependancy'  => '',
-				'permission'  => ''
-			)
+				'id'         => 'mdjm-txn-details',
+				'title'      => __( 'Transaction Details', 'mobile-dj-manager' ),
+				'callback'   => 'mdjm_transaction_metabox_txn_details',
+				'context'    => 'normal',
+				'priority'   => 'high',
+				'args'       => array(),
+				'dependancy' => '',
+				'permission' => '',
+			),
 		)
 	);
 	// Runs before metabox output
 	do_action( 'mdjm_transaction_before_metaboxes' );
 
 	// Begin metaboxes
-	foreach( $metaboxes as $metabox )	{
+	foreach ( $metaboxes as $metabox ) {
 		// Dependancy check
-		if( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false )	{
+		if ( ! empty( $metabox['dependancy'] ) && $metabox['dependancy'] === false ) {
 			continue;
 		}
 
 		// Permission check
-		if( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) )	{
+		if ( ! empty( $metabox['permission'] ) && ! mdjm_employee_can( $metabox['permission'] ) ) {
 			continue;
 		}
 
 		// Callback check
-		if( ! is_callable( $metabox['callback'] ) )	{
+		if ( ! is_callable( $metabox['callback'] ) ) {
 			continue;
 		}
 
@@ -109,40 +117,41 @@ add_action( 'add_meta_boxes_mdjm-transaction', 'mdjm_add_transaction_meta_boxes'
 /**
  * Output for the Client Details meta box.
  *
- * @since	1.3
- * @param	obj		$post		Required: The post object (WP_Post).
+ * @since   1.3
+ * @param   obj $post       Required: The post object (WP_Post).
  * @return
  */
-function mdjm_transaction_metabox_save_txn( $post )	{
+function mdjm_transaction_metabox_save_txn( $post ) {
 
 	do_action( 'mdjm_pre_txn_save_metabox', $post );
 
 	wp_nonce_field( basename( __FILE__ ), 'mdjm-transaction' . '_nonce' );
 
 	?>
-    <div id="new_transaction_type_div">
-        <div class="mdjm-meta-row" style="height: 60px !important">
-            <div class="mdjm-left-col">
-                    <label class="mdjm-label" for="transaction_type_name">New Transaction Type:</label><br />
-                    <input type="text" name="transaction_type_name" id="transaction_type_name" class="mdjm-meta" placeholder="Transaction Type Name" />&nbsp;
-                        <a href="#" id="add_transaction_type" class="button button-primary button-small">Add</a>
-            </div>
-        </div>
-    </div>
+	<div id="new_transaction_type_div">
+		<div class="mdjm-meta-row" style="height: 60px !important">
+			<div class="mdjm-left-col">
+					<label class="mdjm-label" for="transaction_type_name">New Transaction Type:</label><br />
+					<input type="text" name="transaction_type_name" id="transaction_type_name" class="mdjm-meta" placeholder="Transaction Type Name" />&nbsp;
+						<a href="#" id="add_transaction_type" class="button button-primary button-small">Add</a>
+			</div>
+		</div>
+	</div>
 
-    <div class="mdjm-meta-row">
-        <div class="mdjm-left-col">
-         <?php
-        submit_button(
-                    ( $post->post_status == 'auto-draft' ? 'Add Transaction' : 'Update Transaction' ),
-                    'primary',
-                    'save',
-                    false,
-                    array( 'id' => 'save-post' ) );
-        ?>
-        </div>
-    </div>
-    <?php
+	<div class="mdjm-meta-row">
+		<div class="mdjm-left-col">
+		 <?php
+			submit_button(
+				( $post->post_status == 'auto-draft' ? 'Add Transaction' : 'Update Transaction' ),
+				'primary',
+				'save',
+				false,
+				array( 'id' => 'save-post' )
+			);
+			?>
+		</div>
+	</div>
+	<?php
 
 	do_action( 'mdjm_post_txn_save_metabox', $post );
 
@@ -151,28 +160,31 @@ function mdjm_transaction_metabox_save_txn( $post )	{
 /**
  * Output for the Transaction Details meta box.
  *
- * @since	1.3
- * @param	obj		$post		The post object (WP_Post).
+ * @since   1.3
+ * @param   obj $post       The post object (WP_Post).
  * @return
  */
-function mdjm_transaction_metabox_txn_details( $post )	{
+function mdjm_transaction_metabox_txn_details( $post ) {
 
 	$event_singular = mdjm_get_label_singular();
 
 	$message = sprintf(
-		__( 'Go to the <a href="%s">%s Management Interface</a> to add a transaction associated to an %s.', 'mobile-dj-manager' ),
+		__( 'Go to the <a href="%1$s">%2$s Management Interface</a> to add a transaction associated to an %3$s.', 'mobile-dj-manager' ),
 		admin_url( 'edit.php?post_type=mdjm-event' ),
 		$event_singular,
 		strtolower( $event_singular )
 	);
 
-	if ( ! empty( $post->post_parent ) && 'mdjm-event' == get_post_type( $post->post_parent ) )	{
-		$event_url = add_query_arg( array(
-			'post'   => $post->post_parent,
-			'action' => 'edit'
-		), admin_url( 'post.php' ) );
+	if ( ! empty( $post->post_parent ) && 'mdjm-event' == get_post_type( $post->post_parent ) ) {
+		$event_url = add_query_arg(
+			array(
+				'post'   => $post->post_parent,
+				'action' => 'edit',
+			),
+			admin_url( 'post.php' )
+		);
 		$message   = sprintf(
-			__( '<a class="page-title-action" href="%s">Edit %s</a>', 'mobile-dj-manager' ),
+			__( '<a class="page-title-action" href="%1$s">Edit %2$s</a>', 'mobile-dj-manager' ),
 			$event_url,
 			$event_singular
 		);
@@ -191,11 +203,13 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 	</div>
 
 	<?php
-	mdjm_insert_datepicker( array(
-		'class'    => 'trans_date',
-		'altfield' => 'transaction_date',
-		'maxdate'  => 'today'
-	) );
+	mdjm_insert_datepicker(
+		array(
+			'class'    => 'trans_date',
+			'altfield' => 'transaction_date',
+			'maxdate'  => 'today',
+		)
+	);
 
 	echo '<div class="mdjm-post-row">' . "\r\n";
 		echo '<div class="mdjm-post-3column">' . "\r\n";
@@ -255,9 +269,11 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 				echo '<label class="mdjm-label" for="transaction_to">Paid To:</label><br />';
 			echo '</div>' . "\r\n";
 			echo '<input type="text" name="transaction_payee" id="transaction_payee" class="regular_text" value="'
-				. esc_attr( ( $post->post_status == 'mdjm-income' ?
-				get_post_meta( $post->ID, '_mdjm_payment_from', true ) :
-				get_post_meta( $post->ID, '_mdjm_payment_to', true ) ) )
+				. esc_attr(
+					( $post->post_status == 'mdjm-income' ?
+					get_post_meta( $post->ID, '_mdjm_payment_from', true ) :
+					get_post_meta( $post->ID, '_mdjm_payment_to', true ) )
+				)
 				. '" />';
 		echo '</div>' . "\r\n";
 
@@ -267,16 +283,19 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 			echo '<label class="mdjm-label" for="transaction_for">Type:</label><br />';
 				echo '<div id="transaction_types">' . "\r\n";
 					/* -- Display the drop down selection -- */
-					wp_dropdown_categories( array( 'taxonomy' 			=> 'transaction-types',
-												   'hide_empty' 		=> 0,
-												   'name' 				=> 'mdjm_transaction_type',
-												   'id' 				=> 'mdjm_transaction_type',
-												   'selected' 			=> ( isset( $existing_transaction_type[0]->term_id ) ? $existing_transaction_type[0]->term_id : '' ),
-												   'orderby' 			=> 'name',
-												   'hierarchical' 		=> 0,
-												   'show_option_none' 	=> __( 'Select Transaction Type', 'mobile-dj-manager' ),
-												   'class'				=> 'required',
-													) );
+					wp_dropdown_categories(
+						array(
+							'taxonomy'         => 'transaction-types',
+							'hide_empty'       => 0,
+							'name'             => 'mdjm_transaction_type',
+							'id'               => 'mdjm_transaction_type',
+							'selected'         => ( isset( $existing_transaction_type[0]->term_id ) ? $existing_transaction_type[0]->term_id : '' ),
+							'orderby'          => 'name',
+							'hierarchical'     => 0,
+							'show_option_none' => __( 'Select Transaction Type', 'mobile-dj-manager' ),
+							'class'            => 'required',
+						)
+					);
 						echo '<a id="new_transaction_type" class="side-meta" href="#">Add New</a>' . "\r\n";
 				echo '</div>' . "\r\n";
 		echo '</div>' . "\r\n";
@@ -288,9 +307,9 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 			echo '<label class="mdjm-label" for="transaction_src">Source:</label><br />' . "\r\n" .
 				'<select name="transaction_src" id="transaction_src" class="required">' . "\r\n" .
 				'<option value="">--- Select ---</option>' . "\r\n";
-				foreach( $sources as $source )	{
-					echo '<option value="' . esc_attr( $source ) . '"' . selected( $source, get_post_meta( $post->ID, '_mdjm_txn_source', true ) ) . '>' . esc_attr( $source ) . '</option>' . "\r\n";
-				}
+	foreach ( $sources as $source ) {
+		echo '<option value="' . esc_attr( $source ) . '"' . selected( $source, get_post_meta( $post->ID, '_mdjm_txn_source', true ) ) . '>' . esc_attr( $source ) . '</option>' . "\r\n";
+	}
 				echo '</select>' . "\r\n";
 		echo '</div>' . "\r\n";
 
@@ -308,7 +327,7 @@ function mdjm_transaction_metabox_txn_details( $post )	{
 			<option value="Pending"<?php selected( 'Pending', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Pending</option>
 			<option value="Refunded"<?php selected( 'Refunded', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Refunded</option>
 			<option value="Cancelled"<?php selected( 'Cancelled', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Cancelled</option>
-            <option value="Failed"<?php selected( 'Failed', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Completed</option>
+			<option value="Failed"<?php selected( 'Failed', get_post_meta( $post->ID, '_mdjm_txn_status', true ) ); ?>>Completed</option>
 			</select>
 		</div>
 	</div>

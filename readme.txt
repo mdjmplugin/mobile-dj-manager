@@ -2,12 +2,12 @@
 Contributors: mdjm
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 5.3
-Tested up to: 5.8
+Tested up to: 5.9
 Requires PHP: 7.3
-Stable tag: 1.5.9.1
+Stable tag: 1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://mdjm.co.uk/donate/?mtm_campaign=donate&mtm_kwd=mobile-dj-manager
+Donate link: https://mobileeventsmanager.co.uk
 
 The most efficient and versatile event management solution for WordPress.
 
@@ -86,6 +86,33 @@ Extensions are available to enhance the plugin via our [Extension Store](https:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.6 =
+
+Enhancements:
+ - Added End Time and Guest Playlist URL to the Event Details page
+ - Added the option of inputting BACS details and displaying them front end on the payments page.
+ - Show an error if end time is set before the start time.
+ - Changed the CSS for the Print/Email Event button
+ - Made Event Status a sortable column.
+ - Add Venue name to the main events listing page.
+ - Added 7 new colours to the Action Button in the client zone - Black, White, Purple, Pink, Yellow, Light Grey and Dark Grey.
+ - Added client phone number to the event details printout.
+ - Changed the playlist page to print full event details to hand out to staff
+ - Allow the support of the new Stripe and 
+Reporting
+ - Added a "next year" filter option.
+ - Added a 5 year buffer to the current year on filtering.
+ - Changed past date to -7 years.
+Fixes:
+ - Deleting clients in bulk was throwing a fatal error. Fix applied.
+ - Force jQuery Datepicker to override Bootstrap Datepicker
+ - Employee Availability Calendar on the back end.
+ - jQuery for the front-end Availability Checker.
+ - Option to unload Font Awesome from plugin settings, if needed.
+ - Fixed bug in playlist manager which caused playlists to close.
+ - Fixed missed icons
+ - Fixed addons calculation
 
 = 1.5.9.1 =
 

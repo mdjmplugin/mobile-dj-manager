@@ -1,5 +1,5 @@
 @charset "UTF-8";
-/*
+/**
 * mdjm-styles.css
 * 16/01/2015
 * @since 0.9.9.6
@@ -12,7 +12,7 @@
 }
 .success	{
 	font-weight: bold;
-	font-size: 11px;	
+	font-size: 11px;
 }
 .signed	{
 	font-weight: bold;
@@ -45,7 +45,7 @@ input.mdjm-form-error {
 	padding:15px 10px 15px 50px;
 	background-repeat: no-repeat;
 	background-position: 10px center;
-	font-size: 11px;	
+	font-size: 11px;
 }
 
 .mdjm-info {
@@ -80,5 +80,5 @@ input.mdjm-form-error {
 
 .mdjm-updating	{
 	border: solid 1px #F90 !important;
-	color: #F90 !important;	
-}		
+	color: #F90 !important;
+}

@@ -1,5 +1,13 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Graphs
  *
  * This class handles building pretty report graphs
@@ -8,22 +16,22 @@
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since		1.4
+ * @since       1.0.4
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_Graph Class
  *
- * @since	1.4
+ * @since   1.0.4
  */
 class MDJM_Pie_Graph extends MDJM_Graph {
 
 	/*
-
 	Simple example:
 
 	data format for each point: array( location on x, location on y )
@@ -41,31 +49,31 @@ class MDJM_Pie_Graph extends MDJM_Graph {
 	/**
 	 * Data to graph
 	 *
-	 * @var		arr
-	 * @since	1.4
+	 * @var     arr
+	 * @since   1.0.4
 	 */
 	private $data;
 
 	/**
 	 * Unique ID for the graph
 	 *
-	 * @var		str
-	 * @since	1.4
+	 * @var     str
+	 * @since   1.0.4
 	 */
 	private $id = '';
 
 	/**
 	 * Graph options
 	 *
-	 * @var		arr
-	 * @since	1.4
+	 * @var     arr
+	 * @since   1.0.4
 	 */
 	private $options = array();
 
 	/**
 	 * Get things started
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public function __construct( $_data, $options = array() ) {
 
@@ -78,20 +86,20 @@ class MDJM_Pie_Graph extends MDJM_Graph {
 
 		// Setup default options;
 		$defaults = array(
-			'radius'            => 1,
-			'legend'            => true,
-			'legend_formatter'  => false,
-			'legend_columns'    => 3,
-			'legend_position'   => 's',
-			'show_labels'       => false,
-			'label_threshold'   => 0.01,
-			'label_formatter'   => 'mdjmLabelFormatter',
-			'label_bg_opacity'  => 0.75,
-			'label_radius'      => 1,
-			'height'            => '300',
-			'hoverable'         => true,
-			'clickable'         => false,
-			'threshold'         => false,
+			'radius'           => 1,
+			'legend'           => true,
+			'legend_formatter' => false,
+			'legend_columns'   => 3,
+			'legend_position'  => 's',
+			'show_labels'      => false,
+			'label_threshold'  => 0.01,
+			'label_formatter'  => 'mdjmLabelFormatter',
+			'label_bg_opacity' => 0.75,
+			'label_radius'     => 1,
+			'height'           => '300',
+			'hoverable'        => true,
+			'clickable'        => false,
+			'threshold'        => false,
 		);
 
 		$this->options = wp_parse_args( $options, $defaults );
@@ -103,7 +111,7 @@ class MDJM_Pie_Graph extends MDJM_Graph {
 	/**
 	 * Load the graphing library script
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public function load_additional_scripts() {
 		// Use minified libraries if SCRIPT_DEBUG is turned off
@@ -114,9 +122,9 @@ class MDJM_Pie_Graph extends MDJM_Graph {
 	/**
 	 * Build the graph and return it as a string
 	 *
-	 * @var		arr
-	 * @since	1.4
-	 * @return	str
+	 * @var     arr
+	 * @since   1.0.4
+	 * @return  str
 	 */
 	public function build_graph() {
 

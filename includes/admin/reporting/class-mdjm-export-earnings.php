@@ -1,5 +1,13 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Earnings Export Class
  *
  * This class handles earnings export
@@ -8,35 +16,37 @@
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.4
+ * @since       1.0.4
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_Earnings_Export Class
  *
- * @since	1.4
+ * @since   1.0.4
  */
 class MDJM_Earnings_Export extends MDJM_Export {
 
 	/**
 	 * Our export type. Used for export-type specific filters/actions
-	 * @var		str
-	 * @since	1.4
+	 *
+	 * @var     str
+	 * @since   1.0.4
 	 */
 	public $export_type = 'earnings';
 
 	/**
 	 * Set the export headers
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  void
 	 */
-	public function headers()	{
+	public function headers() {
 
 		ignore_user_abort( true );
 
@@ -45,23 +55,23 @@ class MDJM_Earnings_Export extends MDJM_Export {
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename=' . apply_filters( 'mdjm_earnings_export_filename', 'mdjm-export-' . $this->export_type . '-' . date( 'n' ) . '-' . date( 'Y' ) ) . '.csv' );
-		header( "Expires: 0" );
+		header( 'Expires: 0' );
 
 	} // headers
 
 	/**
 	 * Set the CSV columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	srr		$cols	All the columns
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  srr     $cols   All the columns
 	 */
 	public function csv_cols() {
 
 		$cols = array(
-			'date'     => __( 'Date',   'mobile-dj-manager' ),
-			//'events'   => mdjm_get_label_plural(),
-			'earnings' => __( 'Earnings', 'mobile-dj-manager' ) . ' (' . html_entity_decode( mdjm_currency_filter( '' ) ) . ')'
+			'date'     => __( 'Date', 'mobile-dj-manager' ),
+			// 'events'   => mdjm_get_label_plural(),
+			'earnings' => __( 'Earnings', 'mobile-dj-manager' ) . ' (' . html_entity_decode( mdjm_currency_filter( '' ) ) . ')',
 		);
 
 		return $cols;
@@ -71,46 +81,46 @@ class MDJM_Earnings_Export extends MDJM_Export {
 	/**
 	 * Get the Export Data
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$data	The data for the CSV file
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  arr     $data   The data for the CSV file
 	 */
 	public function get_data() {
 
-		$start_year  = isset( $_POST['start_year'] )   ? absint( $_POST['start_year'] )   : date( 'Y' );
-		$end_year    = isset( $_POST['end_year'] )     ? absint( $_POST['end_year'] )     : date( 'Y' );
-		$start_month = isset( $_POST['start_month'] )  ? absint( $_POST['start_month'] )  : date( 'n' );
-		$end_month   = isset( $_POST['end_month'] )    ? absint( $_POST['end_month'] )    : date( 'n' );
+		$start_year  = isset( $_POST['start_year'] ) ? absint( $_POST['start_year'] ) : date( 'Y' );
+		$end_year    = isset( $_POST['end_year'] ) ? absint( $_POST['end_year'] ) : date( 'Y' );
+		$start_month = isset( $_POST['start_month'] ) ? absint( $_POST['start_month'] ) : date( 'n' );
+		$end_month   = isset( $_POST['end_month'] ) ? absint( $_POST['end_month'] ) : date( 'n' );
 
 		$data  = array();
 		$year  = $start_year;
-		$stats = new MDJM_Stats;
+		$stats = new MDJM_Stats();
 
-		while( $year <= $end_year ) {
+		while ( $year <= $end_year ) {
 
-			if ( $year == $start_year && $year == $end_year )	{
+			if ( $year == $start_year && $year == $end_year ) {
 
 				$m1 = $start_month;
 				$m2 = $end_month;
 
-			} elseif ( $year == $start_year )	{
+			} elseif ( $year == $start_year ) {
 
 				$m1 = $start_month;
 				$m2 = 12;
 
-			} elseif ( $year == $end_year )	{
+			} elseif ( $year == $end_year ) {
 
 				$m1 = 1;
 				$m2 = $end_month;
 
-			} else	{
+			} else {
 
 				$m1 = 1;
 				$m2 = 12;
 
 			}
 
-			while( $m1 <= $m2 )	{
+			while ( $m1 <= $m2 ) {
 
 				$date1 = mktime( 0, 0, 0, $m1, 1, $year );
 				$date2 = mktime( 0, 0, 0, $m1, cal_days_in_month( CAL_GREGORIAN, $m1, $year ), $year );
@@ -119,14 +129,13 @@ class MDJM_Earnings_Export extends MDJM_Export {
 
 				$data[] = array(
 					'date'     => date_i18n( 'F Y', $date1 ),
-					//'events'   => $stats->get_events_by_date( null, $m1, $year ),
-					'earnings' => mdjm_format_amount( $stats->get_earnings( $m1, $year ) )
+					// 'events'   => $stats->get_events_by_date( null, $m1, $year ),
+					'earnings' => mdjm_format_amount( $stats->get_earnings( $m1, $year ) ),
 				);
 
 				$m1++;
 
 			}
-
 
 			$year++;
 

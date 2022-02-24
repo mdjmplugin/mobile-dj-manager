@@ -1,4 +1,6 @@
 <?php
+
+
 /**
  * Playlists DB class
  *
@@ -6,29 +8,30 @@
  *
  * Largely taken from Easy Digital Downloads.
  *
- * @package     MDJM
- * @subpackage  Classes/DB Playlists
- * @copyright   Copyright (c) 2017, Mike Howard
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.5
+ * @package MDJM
+ * @subpackage Classes/DB Playlists
+ * @copyright Copyright (c) 2017, Mike Howard
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since 1.5
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_DB_Playlists Class
  *
- * @since	1.5
+ * @since 1.5
  */
-class MDJM_DB_Playlists extends MDJM_DB  {
+class MDJM_DB_Playlists extends MDJM_DB {
 
 	/**
 	 * Get things started
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access public
+	 * @since 1.5
 	 */
 	public function __construct() {
 
@@ -40,36 +43,38 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 
 		$db_version = get_option( $this->table_name . '_db_version' );
 
-		/*if ( ! $this->table_exists( $this->table_name ) || version_compare( $db_version, $this->version, '<' ) ) {
+		/*
+		If ( ! $this->table_exists( $this->table_name ) || version_compare( $db_version, $this->version, '<' ) ) {
 			$this->create_table();
-		}*/
+		}
+		*/
 
 	} // __construct
 
 	/**
 	 * Get columns and formats
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access public
+	 * @since 1.5
 	 */
 	public function get_columns() {
 		return array(
-			'id'           => '%d',
-			'event_id'     => '%d',
-			'artist'       => '%s',
-			'song'         => '%s',
-			'added_by'     => '%s',
-			'category'     => '%s',
-			'notes'        => '%s',
-			'date_added'   => '%s'
+			'id'         => '%d',
+			'event_id'   => '%d',
+			'artist'     => '%s',
+			'song'       => '%s',
+			'added_by'   => '%s',
+			'category'   => '%s',
+			'notes'      => '%s',
+			'date_added' => '%s',
 		);
 	} // get_columns
 
 	/**
 	 * Get default column values
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access public
+	 * @since 1.5
 	 */
 	public function get_column_defaults() {
 		return array(
@@ -80,31 +85,34 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 			'added_by'      => get_current_user_id(),
 			'category'      => '',
 			'notes'         => '',
-			'date_added'    => date( 'Y-m-d H:i:s' ),
+			'date_added'    => gmdate( 'Y-m-d H:i:s' ),
 			'_uploaded'     => 0,
-			'date_uploaded' => ''
+			'date_uploaded' => '',
 		);
 	} // get_column_defaults
 
 	/**
 	 * Get required columns
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access public
+	 * @since 1.5
 	 */
-	public function get_required_fields()	{
-		return apply_filters( 'mdjm_db_playlist_required_fields', array(
-			'event_id',
-			'artist',
-			'song'
-		) );
+	public function get_required_fields() {
+		return apply_filters(
+			'mdjm_db_playlist_required_fields',
+			array(
+				'event_id',
+				'artist',
+				'song',
+			)
+		);
 	} // get_required_fields
 
 	/**
 	 * Add a playlist entry
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access public
+	 * @since 1.5
 	 */
 	public function add( $data = array() ) {
 
@@ -113,15 +121,15 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 		$args = wp_parse_args( $data, $defaults );
 		$meta = array();
 
-		foreach( $this->get_required_fields() as $required_field )	{
+		foreach ( $this->get_required_fields() as $required_field ) {
 			if ( empty( $args[ $required_field ] ) ) {
 				return false;
 			}
 		}
 
 		// Check for data that needs to be stored as meta.
-		foreach ( $args as $key => $value )	{
-			if ( ! array_key_exists( $key, $this->get_columns() ) )	{
+		foreach ( $args as $key => $value ) {
+			if ( ! array_key_exists( $key, $this->get_columns() ) ) {
 				$meta[ $key ] = $value;
 				unset( $args[ $key ] );
 			}
@@ -129,8 +137,8 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 
 		$return = $this->insert( $args, 'playlist' );
 
-		if ( $return )	{
-			foreach( $meta as $key => $value )	{
+		if ( $return ) {
+			foreach ( $meta as $key => $value ) {
 				MDJM()->playlist_meta->update_meta( $return, $key, $value );
 			}
 		}
@@ -142,9 +150,9 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 	/**
 	 * Delete a playlist entry
 	 *
-	 * @access	public
-	 * @since	1.5
-	 * @param	int		$id		The entry ID
+	 * @access public
+	 * @since 1.5
+	 * @param int $id The entry ID.
 	 */
 	public function delete( $id = 0 ) {
 
@@ -168,11 +176,11 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 	/**
 	 * Checks if an entry exists
 	 *
-	 * @access	public
-	 * @since	1.5
-	 * @param	int		$event_id	The event ID to which the entry is associated
-	 * @param	mixed	$value		The value to search for
-	 * @param	string	$field		The field to search within
+	 * @access public
+	 * @since 1.5
+	 * @param int    $event_id The event ID to which the entry is associated.
+	 * @param mixed  $value The value to search for.
+	 * @param string $field The field to search within.
 	 */
 	public function exists( $event_id, $value = '', $field = 'email' ) {
 
@@ -189,15 +197,14 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 	/**
 	 * Retrieves a single entry from the database
 	 *
-	 * @access 	public
-	 * @since	1.5
-	 * @param	string	$id		The entry ID
-	 * @return	mixed	Upon success, an object of the playlist entry. Upon failure, NULL
+	 * @access public
+	 * @since 1.5
+	 * @param string $id The entry ID.
+	 * @return mixed Upon success, an object of the playlist entry. Upon failure, NULL
 	 */
 	public function get_entry_by( $id ) {
 		global $wpdb;
 
-		
 		if ( ! is_numeric( $id ) ) {
 			return false;
 		}
@@ -218,28 +225,28 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 	/**
 	 * Retrieve entries from the database
 	 *
-	 * @access	public
-	 * @since	1.5
-	 * @param	array	$args	Array of arguments to pass the query
+	 * @access public
+	 * @since 1.5
+	 * @param array $args Array of arguments to pass the query
 	 */
 	public function get_entries( $args = array() ) {
 
 		global $wpdb;
 
 		$defaults = array(
-			'number'       => 20,
-			'offset'       => 0,
-			'id'           => 0,
-			'event_id'     => 0,
-			'added_by'     => 0,
-			'song'         => false,
-			'category'     => 0,
-			'date'         => false,
-			'orderby'      => 'song',
-			'order'        => 'DESC'
+			'number'   => 20,
+			'offset'   => 0,
+			'id'       => 0,
+			'event_id' => 0,
+			'added_by' => 0,
+			'song'     => false,
+			'category' => 0,
+			'date'     => false,
+			'orderby'  => 'song',
+			'order'    => 'DESC',
 		);
 
-		$args  = wp_parse_args( $args, $defaults );
+		$args = wp_parse_args( $args, $defaults );
 
 		if ( $args['number'] < 1 ) {
 			$args['number'] = 999999999999;
@@ -248,11 +255,11 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 		$join  = '';
 		$where = ' WHERE 1=1 ';
 
-		// Specific entries
+		// Specific entries.
 		if ( ! empty( $args['id'] ) ) {
 
 			if ( is_array( $args['id'] ) ) {
-				$ids = implode( ',', array_map('intval', $args['id'] ) );
+				$ids = implode( ',', array_map( 'intval', $args['id'] ) );
 			} else {
 				$ids = intval( $args['id'] );
 			}
@@ -261,11 +268,11 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 
 		}
 
-		// Entries for specific events
+		// Entries for specific events.
 		if ( ! empty( $args['event_id'] ) ) {
 
 			if ( is_array( $args['event_id'] ) ) {
-				$event_ids = implode( ',', array_map('intval', $args['event_id'] ) );
+				$event_ids = implode( ',', array_map( 'intval', $args['event_id'] ) );
 			} else {
 				$event_ids = intval( $args['event_id'] );
 			}
@@ -274,11 +281,11 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 
 		}
 
-		// Entries from specific users
+		// Entries from specific users.
 		if ( ! empty( $args['added_by'] ) ) {
 
 			if ( is_array( $args['added_by'] ) ) {
-				$users = implode( ',', array_map('intval', $args['added_by'] ) );
+				$users = implode( ',', array_map( 'intval', $args['added_by'] ) );
 			} else {
 				$users = intval( $args['added_by'] );
 			}
@@ -287,24 +294,24 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 
 		}
 
-		// Specific entries by song name
+		// Specific entries by song name.
 		if ( ! empty( $args['song'] ) ) {
-			$song = sanitize_text_field( $args['song'] );
-			$song = trim( $song );
-			$where .= $wpdb->prepare( " AND `song` LIKE '%%%%" . '%s' . "%%%%' ", $song ) ;
+			$song   = sanitize_text_field( $args['song'] );
+			$song   = trim( $song );
+			$where .= $wpdb->prepare( " AND `song` LIKE '%%%%" . '%s' . "%%%%' ", $song );
 		}
 
-		// Specific entries by artist
+		// Specific entries by artist.
 		if ( ! empty( $args['artist'] ) ) {
 			$artist = sanitize_text_field( $args['artist'] );
 			$artist = trim( $artist );
-			$where .= $wpdb->prepare( " AND `artist` LIKE '%%%%" . '%s' . "%%%%' ", $artist ) ;
+			$where .= $wpdb->prepare( " AND `artist` LIKE '%%%%" . '%s' . "%%%%' ", $artist );
 		}
 
-		// Specific entries by category
+		// Specific entries by category.
 		if ( ! empty( $args['category'] ) ) {
 			if ( is_array( $args['category'] ) ) {
-				$categories = implode( ',', array_map('intval', $args['category'] ) );
+				$categories = implode( ',', array_map( 'intval', $args['category'] ) );
 			} else {
 				$categories = intval( $args['category'] );
 			}
@@ -312,34 +319,32 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 			$where .= " AND `category` IN( {$categories} ) ";
 		}
 
-		// Entries created on a specific date or in a date range
+		// Entries created on a specific date or in a date range.
 		if ( ! empty( $args['date'] ) ) {
 
 			if ( is_array( $args['date'] ) ) {
 
 				if ( ! empty( $args['date']['start'] ) ) {
 
-					$start = date( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
+					$start  = gmdate( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
 					$where .= " AND `date_created` >= '{$start}'";
 
 				}
 
 				if ( ! empty( $args['date']['end'] ) ) {
 
-					$end = date( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
+					$end    = gmdate( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
 					$where .= " AND `date_created` <= '{$end}'";
 
 				}
-
 			} else {
 
-				$year  = date( 'Y', strtotime( $args['date'] ) );
-				$month = date( 'm', strtotime( $args['date'] ) );
-				$day   = date( 'd', strtotime( $args['date'] ) );
+				$year  = gmdate( 'Y', strtotime( $args['date'] ) );
+				$month = gmdate( 'm', strtotime( $args['date'] ) );
+				$day   = gmdate( 'd', strtotime( $args['date'] ) );
 
 				$where .= " AND $year = YEAR ( date_added ) AND $month = MONTH ( date_added ) AND $day = DAY ( date_added )";
 			}
-
 		}
 
 		$args['orderby'] = ! array_key_exists( $args['orderby'], $this->get_columns() ) ? 'id' : $args['orderby'];
@@ -352,7 +357,7 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 		$args['order']   = esc_sql( $args['order'] );
 
 		if ( false === $entries ) {
-			$query = $wpdb->prepare(
+			$query   = $wpdb->prepare(
 				"
 					SELECT * FROM
 					$this->table_name
@@ -378,9 +383,9 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 	/**
 	 * Count the total number of playlist entries in the database
 	 *
-	 * @access	public
-	 * @since	1.5
-	 * @param	array	$args	Array of arguments to pass the query
+	 * @access public
+	 * @since 1.5
+	 * @param array $args Array of arguments to pass the query.
 	 */
 	public function count( $args = array() ) {
 
@@ -389,11 +394,11 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 		$join  = '';
 		$where = ' WHERE 1=1 ';
 
-		// Specific entries
+		// Specific entries.
 		if ( ! empty( $args['id'] ) ) {
 
 			if ( is_array( $args['id'] ) ) {
-				$ids = implode( ',', array_map('intval', $args['id'] ) );
+				$ids = implode( ',', array_map( 'intval', $args['id'] ) );
 			} else {
 				$ids = intval( $args['id'] );
 			}
@@ -402,11 +407,11 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 
 		}
 
-		// Entries for specific events
+		// Entries for specific events.
 		if ( ! empty( $args['event_id'] ) ) {
 
 			if ( is_array( $args['event_id'] ) ) {
-				$event_ids = implode( ',', array_map('intval', $args['event_id'] ) );
+				$event_ids = implode( ',', array_map( 'intval', $args['event_id'] ) );
 			} else {
 				$event_ids = intval( $args['event_id'] );
 			}
@@ -415,11 +420,11 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 
 		}
 
-		// Entries from specific users
+		// Entries from specific users.
 		if ( ! empty( $args['added_by'] ) ) {
 
 			if ( is_array( $args['added_by'] ) ) {
-				$users = implode( ',', array_map('intval', $args['added_by'] ) );
+				$users = implode( ',', array_map( 'intval', $args['added_by'] ) );
 			} else {
 				$users = intval( $args['added_by'] );
 			}
@@ -428,24 +433,24 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 
 		}
 
-		// Specific entries by song name
+		// Specific entries by song name.
 		if ( ! empty( $args['song'] ) ) {
-			$song = sanitize_text_field( $args['song'] );
-			$song = trim( $song );
-			$where .= $wpdb->prepare( " AND `song` LIKE '%%%%" . '%s' . "%%%%' ", $song ) ;
+			$song   = sanitize_text_field( $args['song'] );
+			$song   = trim( $song );
+			$where .= $wpdb->prepare( " AND `song` LIKE '%%%%" . '%s' . "%%%%' ", $song );
 		}
 
-		// Specific entries by artist
+		// Specific entries by artist.
 		if ( ! empty( $args['artist'] ) ) {
 			$artist = sanitize_text_field( $args['artist'] );
 			$artist = trim( $artist );
-			$where .= $wpdb->prepare( " AND `artist` LIKE '%%%%" . '%s' . "%%%%' ", $artist ) ;
+			$where .= $wpdb->prepare( " AND `artist` LIKE '%%%%" . '%s' . "%%%%' ", $artist );
 		}
 
-		// Specific entries by category
+		// Specific entries by category.
 		if ( ! empty( $args['category'] ) ) {
 			if ( is_array( $args['category'] ) ) {
-				$categories = implode( ',', array_map('intval', $args['category'] ) );
+				$categories = implode( ',', array_map( 'intval', $args['category'] ) );
 			} else {
 				$categories = intval( $args['category'] );
 			}
@@ -453,34 +458,32 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 			$where .= " AND `category` IN( {$categories} ) ";
 		}
 
-		// Entries created on a specific date or in a date range
+		// Entries created on a specific date or in a date range.
 		if ( ! empty( $args['date'] ) ) {
 
 			if ( is_array( $args['date'] ) ) {
 
 				if ( ! empty( $args['date']['start'] ) ) {
 
-					$start = date( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
+					$start  = gmdate( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
 					$where .= " AND `date_created` >= '{$start}'";
 
 				}
 
 				if ( ! empty( $args['date']['end'] ) ) {
 
-					$end = date( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
+					$end    = gmdate( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
 					$where .= " AND `date_created` <= '{$end}'";
 
 				}
-
 			} else {
 
-				$year  = date( 'Y', strtotime( $args['date'] ) );
-				$month = date( 'm', strtotime( $args['date'] ) );
-				$day   = date( 'd', strtotime( $args['date'] ) );
+				$year  = gmdate( 'Y', strtotime( $args['date'] ) );
+				$month = gmdate( 'm', strtotime( $args['date'] ) );
+				$day   = gmdate( 'd', strtotime( $args['date'] ) );
 
 				$where .= " AND $year = YEAR ( date_added ) AND $month = MONTH ( date_added ) AND $day = DAY ( date_added )";
 			}
-
 		}
 
 		$cache_key = md5( 'mdjm_playlist_count' . serialize( $args ) );
@@ -500,15 +503,15 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 	/**
 	 * Create the table
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access public
+	 * @since 1.5
 	 */
 	public function create_table() {
 		global $wpdb;
 
 		$charset_collate = $wpdb->get_charset_collate();
 
-		$sql = "CREATE TABLE " . $this->table_name . " (
+		$sql = 'CREATE TABLE ' . $this->table_name . " (
 		id bigint(20) NOT NULL AUTO_INCREMENT,
 		event_id bigint(20) NOT NULL,
 		artist mediumtext NOT NULL,
@@ -517,10 +520,8 @@ class MDJM_DB_Playlists extends MDJM_DB  {
 		category bigint(20) NOT NULL,
 		notes longtext NOT NULL,
 		date_added datetime NOT NULL,
-		PRIMARY KEY  (id)
+		PRIMARY KEY (id)
 		) $charset_collate;";
-
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 		dbDelta( $sql );
 

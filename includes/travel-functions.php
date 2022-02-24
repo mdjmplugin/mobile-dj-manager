@@ -1,30 +1,34 @@
 <?php
+
+
 /**
  * Contains all travel related functions
  *
- * @package		MDJM
- * @subpackage	Venues
- * @since		1.3.8
+ * @package     MDJM
+ * @subpackage  Venues
+ * @since       1.3.8
  */
+require( MDJM_PLUGIN_DIR . '/includes/venue-functions.php');
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Calculate the travel distance
  *
- * @since	1.3.8
- * @param	int|obj		$event		The event ID or the event MDJM_Event class object.
- * @param	int			$venue_id	The venue ID
- * @return	str			The distance to the event venue or an empty string
+ * @since   1.3.8
+ * @param   int|obj $event      The event ID or the event MDJM_Event class object.
+ * @param   int     $venue_id   The venue ID
+ * @return  str         The distance to the event venue or an empty string
  */
-function mdjm_travel_get_distance( $event = '', $venue_id = '' )	{
+function mdjm_travel_get_distance( $event = '', $venue_id = '' ) {
 
-	if ( ! empty( $event ) )	{
-		if ( ! is_object( $event ) )	{
+	if ( ! empty( $event ) ) {
+		if ( ! is_object( $event ) ) {
 			$mdjm_event = new MDJM_Event( $event );
-		} else	{
+		} else {
 			$mdjm_event = $event;
 		}
 	}
@@ -32,7 +36,7 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' )	{
 	$start       = mdjm_travel_get_start( $mdjm_event );
 	$destination = mdjm_travel_get_destination( $mdjm_event, $venue_id );
 
-	if ( empty( $start ) || empty( $destination ) )	{
+	if ( empty( $start ) || empty( $destination ) ) {
 		return false;
 	}
 
@@ -46,19 +50,19 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' )	{
 
 	$travel_data = json_decode( wp_remote_retrieve_body( $response ) );
 
-	if ( empty( $travel_data ) || $travel_data->status != 'OK' )	{
+	if ( empty( $travel_data ) || $travel_data->status != 'OK' ) {
 		return false;
 	}
 
-	if ( empty( $travel_data->rows ) )	{
+	if ( empty( $travel_data->rows ) ) {
 		return false;
 	}
 
-	if ( empty( $travel_data->origin_addresses[0] ) || empty( $travel_data->destination_addresses[0] ) )	{
+	if ( empty( $travel_data->origin_addresses[0] ) || empty( $travel_data->destination_addresses[0] ) ) {
 		return false;
 	}
 
-	if ( empty( $travel_data->rows[0]->elements[0]->distance->value ) || empty( $travel_data->rows[0]->elements[0]->duration->value ) )	{
+	if ( empty( $travel_data->rows[0]->elements[0]->distance->value ) || empty( $travel_data->rows[0]->elements[0]->duration->value ) ) {
 		return false;
 	}
 
@@ -80,12 +84,12 @@ function mdjm_travel_get_distance( $event = '', $venue_id = '' )	{
 /**
  * Calculate the travel cost.
  *
- * @since	1.3.8
- * @param	str			$distance		The distance of travel.
- * @return	str|int		The cost of travel.
+ * @since   1.3.8
+ * @param   str $distance       The distance of travel.
+ * @return  str|int     The cost of travel.
  */
-function mdjm_get_travel_cost( $distance )	{
-	$mdjm_travel = new MDJM_Travel;
+function mdjm_get_travel_cost( $distance ) {
+	$mdjm_travel = new MDJM_Travel();
 	$mdjm_travel->__set( 'distance', $distance );
 
 	return $mdjm_travel->get_cost();
@@ -94,23 +98,24 @@ function mdjm_get_travel_cost( $distance )	{
 /**
  * Build the URL to retrieve the distance.
  *
- * @since	1.3.8
- * @param	str			$start			The travel start address.
- * @return	str			$destination	The travel destination address.
+ * @since   1.3.8
+ * @param   str $start          The travel start address.
+ * @return  str         $destination    The travel destination address.
  */
-function mdjm_travel_build_url( $start, $destination )	{
+function mdjm_travel_build_url( $start, $destination ) {
 
 	$api_key = mdjm_travel_get_api_key();
 	$prefix  = 'https://maps.googleapis.com/maps/api/distancematrix/json';
 	$mode    = 'driving';
 	$units   = mdjm_get_option( 'travel_units' );
 
-	$url = add_query_arg( array(
-		'units'        => $units,
-		'origins'      => str_replace( '%2C', ',', urlencode( $start ) ),
-		'destinations' => str_replace( '%2C', ',', urlencode( $destination ) ),
-		'mode'         => $mode,
-		//'key'          => $api_key
+	$url = add_query_arg(
+		array(
+			'units'        => $units,
+			'origins'      => str_replace( '%2C', ',', urlencode( $start ) ),
+			'destinations' => str_replace( '%2C', ',', urlencode( $destination ) ),
+			'mode'         => $mode,
+		// 'key'          => $api_key
 		),
 		$prefix
 	);
@@ -122,46 +127,46 @@ function mdjm_travel_build_url( $start, $destination )	{
 /**
  * Retrieve the Google API key.
  *
- * @since	1.3.8
+ * @since   1.3.8
  * @param
- * @return	str			The API key.
+ * @return  str         The API key.
  */
-function mdjm_travel_get_api_key()	{
-	return '617372114575-g846rsgcm715pkmhkokrho9c75ii3cne.apps.googleusercontent.com';
+function mdjm_travel_get_api_key() {
+	return 'AIzaSyD48M90eaVk7D_ooFn8FwsWWI-ZDO7UvVw.apps.googleusercontent.com';
 } // mdjm_travel_get_api_key
 
 /**
  * Retrieves the travel starting point.
  *
- * @since	1.3.8
- * @param	int|obj		$event	The event ID or the event MDJM_Event class object.
- * @return	str
+ * @since   1.3.8
+ * @param   int|obj $event  The event ID or the event MDJM_Event class object.
+ * @return  str
  */
-function mdjm_travel_get_start( $event = '' )	{
+function mdjm_travel_get_start( $event = '' ) {
 
-	if ( ! empty( $event ) )	{
-		if ( ! is_object( $event ) )	{
+	if ( ! empty( $event ) ) {
+		if ( ! is_object( $event ) ) {
 			$mdjm_event = new MDJM_Event( $event );
-		} else	{
+		} else {
 			$mdjm_event = $event;
 		}
 	}
 
 	$employee = $mdjm_event->get_employee();
 
-	if ( $employee )	{
+	if ( $employee ) {
 		$address = mdjm_get_employee_address( $employee );
-	} else	{
+	} else {
 		$address = mdjm_get_option( 'travel_primary' );
 	}
 
 	$start = $address;
 
-	if ( empty( $start ) )	{
+	if ( empty( $start ) ) {
 		return;
 	}
 
-	if ( is_array( $start ) )	{
+	if ( is_array( $start ) ) {
 		$start = implode( ',', $start );
 	}
 
@@ -172,15 +177,15 @@ function mdjm_travel_get_start( $event = '' )	{
 /**
  * Retrieves the travel destination address.
  *
- * @since	1.3.8
- * @param	int|obj		$event	The event ID or the event MDJM_Event class object.
- * @return	str
+ * @since   1.3.8
+ * @param   int|obj $event  The event ID or the event MDJM_Event class object.
+ * @return  str
  */
-function mdjm_travel_get_destination( $event, $venue_id = '' )	{
+function mdjm_travel_get_destination( $event, $venue_id = '' ) {
 
-	if ( ! is_object( $event ) )	{
+	if ( ! is_object( $event ) ) {
 		$mdjm_event = new MDJM_Event( $event );
-	} else	{
+	} else {
 		$mdjm_event = $event;
 	}
 
@@ -188,11 +193,11 @@ function mdjm_travel_get_destination( $event, $venue_id = '' )	{
 
 	$destination = mdjm_get_event_venue_meta( $venue, 'address' );
 
-	if ( ! $destination )	{
+	if ( ! $destination ) {
 		return;
 	}
 
-	if ( is_array( $destination ) )	{
+	if ( is_array( $destination ) ) {
 		$destination = implode( ',', $destination );
 	}
 
@@ -203,32 +208,32 @@ function mdjm_travel_get_destination( $event, $venue_id = '' )	{
 /**
  * Returns the label for the selected measurement unit.
  *
- * @since	1.3.8
- * @param	bool	$singular	Whether to return a singular (true) or plural (false) value.
- * @param	bool	$lowercase	True to return a lowercase label, otherwise false.
- * @return	str
+ * @since   1.3.8
+ * @param   bool $singular   Whether to return a singular (true) or plural (false) value.
+ * @param   bool $lowercase  True to return a lowercase label, otherwise false.
+ * @return  str
  */
-function mdjm_travel_unit_label( $singular = false, $lowercase = true )	{
+function mdjm_travel_unit_label( $singular = false, $lowercase = true ) {
 	$units = array(
 		'singular' => array(
 			'imperial' => 'Mile',
-			'metric'   => 'Kilometer'
+			'metric'   => 'Kilometer',
 		),
 		'plural'   => array(
 			'imperial' => 'Miles',
-			'metric'   => 'Kilometers'
-		)
+			'metric'   => 'Kilometers',
+		),
 	);
 
 	$type = 'singular';
 
-	if ( ! $singular )	{
+	if ( ! $singular ) {
 		$type = 'plural';
 	}
 
 	$return = $units[ $type ][ mdjm_get_option( 'travel_units', 'imperial' ) ];
 
-	if ( $lowercase )	{
+	if ( $lowercase ) {
 		$return = strtolower( $return );
 	}
 
@@ -242,16 +247,16 @@ function mdjm_travel_unit_label( $singular = false, $lowercase = true )	{
  * These fields are used to generate hidden fields on the event admin page
  * and store data relating to event travel.
  *
- * @since	1.4
- * @return	arr
+ * @since   1.4
+ * @return  arr
  */
-function mdjm_get_event_travel_fields()	{
+function mdjm_get_event_travel_fields() {
 	$travel_fields = array( 'cost', 'distance', 'time', 'directions_url' );
 
 	/**
 	 * Allow filtering of the travel fields for developers.
 	 *
-	 * @since	1.4
+	 * @since   1.4
 	 */
 	return apply_filters( 'mdjm_event_travel_fields', $travel_fields );
 } // mdjm_get_event_travel_fields
@@ -259,16 +264,16 @@ function mdjm_get_event_travel_fields()	{
 /**
  * Retrieve event travel data.
  *
- * @since	1.4
- * @param	int		$event_id	Event ID.
- * @param	str		$field		The travel field to retrieve.
- * @return	str
+ * @since   1.4
+ * @param   int $event_id   Event ID.
+ * @param   str $field      The travel field to retrieve.
+ * @return  str
  */
-function mdjm_get_event_travel_data( $event_id, $field = 'cost' )	{
+function mdjm_get_event_travel_data( $event_id, $field = 'cost' ) {
 	$travel_data = get_post_meta( $event_id, '_mdjm_event_travel_data', true );
 
-	if ( $travel_data )	{
-		if ( ! empty( $travel_data[ $field ] ) )	{
+	if ( $travel_data ) {
+		if ( ! empty( $travel_data[ $field ] ) ) {
 			return apply_filters( 'mdjm_event_travel_' . $field, $travel_data[ $field ], $event_id );
 		}
 	}
@@ -279,26 +284,26 @@ function mdjm_get_event_travel_data( $event_id, $field = 'cost' )	{
 /**
  * Adds the travel data row to the venue details metabox on the event screen.
  *
- * @since	1.4
- * @param	int|arr|obj	$dest			An address array, event ID, event object or venue ID.
- * @param	int			$employee_id	An employee user ID.
- * @return	void
+ * @since   1.4
+ * @param   int|arr|obj $dest           An address array, event ID, event object or venue ID.
+ * @param   int         $employee_id    An employee user ID.
+ * @return  void
  */
-function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
+function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 
-	$mdjm_travel = new MDJM_Travel;
+	$mdjm_travel = new MDJM_Travel();
 
-	if ( ! empty( $employee_id ) )	{
+	if ( ! empty( $employee_id ) ) {
 		$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $employee_id ) );
 	}
 
 	$mdjm_travel->set_destination( $dest );
 
-	if ( empty( $employee_id ) )	{
-		if ( is_object( $dest ) )	{
+	if ( empty( $employee_id ) ) {
+		if ( is_object( $dest ) ) {
 			$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( $dest->employee_id ) );
-		} elseif ( is_numeric( $dest ) )	{
-			if ( 'mdjm-event' == get_post_type( $dest ) )	{
+		} elseif ( is_numeric( $dest ) ) {
+			if ( 'mdjm-event' == get_post_type( $dest ) ) {
 				$mdjm_travel->__set( 'start_address', $mdjm_travel->get_employee_address( mdjm_get_event_primary_employee_id( $dest ) ) );
 			}
 		}
@@ -308,11 +313,11 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
 	$distance       = '';
 	$duration       = '';
 	$cost           = '';
-	$directions_url = '';
+	$directions_url = 'https://google.com/maps/dir/';
 	$directions     = $mdjm_travel->get_directions_url();
 	$class          = 'mdjm-hidden';
 
-    if ( ! empty( $mdjm_travel->data ) )	{
+	if ( ! empty( $mdjm_travel->data ) ) {
 		$distance       = mdjm_format_distance( $mdjm_travel->data['distance'], false, true );
 		$duration       = mdjm_seconds_to_time( $mdjm_travel->data['duration'] );
 		$cost           = mdjm_currency_filter( mdjm_format_amount( $mdjm_travel->get_cost() ) );
@@ -322,30 +327,31 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' )	{
 
 	ob_start(); ?>
 
-    <div id="mdjm-travel-data" class="<?php echo esc_attr( $class ); ?>">
-        <span class="mdjm-travel-unit">
-            <i class="fa fa-car" aria-hidden="true" title="<?php esc_attr_e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
-            <span class="mdjm-travel-distance"><?php echo esc_html( $distance ); ?></span>
-        </span>
-        <span class="mdjm-travel-unit">
-            <i class="fa fa-clock-o" aria-hidden="true" title="<?php esc_attr_e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
-            <span class="mdjm-travel-time"><?php echo esc_html( $duration ); ?></span>
-        </span>
-        <span class="mdjm-travel-unit">
-            <i class="fa fa-money" aria-hidden="true" title="<?php esc_attr_e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
-            <span class="mdjm-travel-cost"><?php echo esc_html( $cost ); ?></span>
-        </span>
-        <span class="mdjm-travel-unit">
-            <i class="fa fa-map-signs" aria-hidden="true" title="<?php esc_attr_e( 'Directions', 'mobile-dj-manager' ); ?>"></i>
-            <span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo esc_url( $directions_url ); ?>" target="_blank"><?php esc_html_e( 'Directions', 'mobile-dj-manager' ); ?></a></span>
-        </span>
-        </div>
+	<div id="mdjm-travel-data" class="<?php echo esc_attr( $class ); ?>">
+		<span class="mdjm-travel-unit">
+			<i class="fas fa-car" aria-hidden="true" title="<?php esc_attr_e( 'Distance', 'mobile-dj-manager' ); ?>"></i>
+			<span class="mdjm-travel-distance"><?php echo esc_html( $distance ); ?></span>
+		</span>
+		<span class="mdjm-travel-unit">
+			<i class="fas fa-clock" aria-hidden="true" title="<?php esc_attr_e( 'Travel Time', 'mobile-dj-manager' ); ?>"></i>
+			<span class="mdjm-travel-time"><?php echo esc_html( $duration ); ?></span>
+		</span>
+		<span class="mdjm-travel-unit">
+			<i class="fas fa-pound-sign" aria-hidden="true" title="<?php esc_attr_e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
+			<span class="mdjm-travel-cost"><?php echo esc_html( $cost ); ?></span>
+		</span>
+		<span class="mdjm-travel-unit">
+			<i class="fas fa-map-signs" aria-hidden="true" title="<?php esc_attr_e( 'Directions', 'mobile-dj-manager' ); ?>"></i>
+			<span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo $directions_url, $venue_postcode ?> " target="_blank"><?php esc_html_e( 'Directions', 'mobile-dj-manager' ); ?></a></span>
+		</span>
+		</div>
 
-	<?php $travel_data_row = ob_get_contents();
+	<?php
+	$travel_data_row = ob_get_contents();
 	ob_end_clean();
 
 	echo $travel_data_row; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 } // mdjm_show_travel_data_row
-add_action( 'mdjm_after_venue_notes', 'mdjm_show_travel_data_row', 10, 2         );
+add_action( 'mdjm_after_venue_notes', 'mdjm_show_travel_data_row', 10, 2 );
 add_action( 'mdjm_venue_details_travel_data', 'mdjm_show_travel_data_row', 10, 2 );

@@ -1,20 +1,28 @@
 <?php
-
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Conversions by Enquiry Source Reports Table Class
  *
  * @package     MDJM
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.4
+ * @since       1.0.4
  */
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 // Load WP_List_Table if not loaded
-if ( !class_exists( 'WP_List_Table' ) ) {
+if ( ! class_exists( 'WP_List_Table' ) ) {
 	require_once ABSPATH . 'wp-admin/includes/class-wp-list-table.php';
 }
 
@@ -23,30 +31,32 @@ if ( !class_exists( 'WP_List_Table' ) ) {
  *
  * Renders the Conversions Reports table
  *
- * @since	1.4
+ * @since   1.0.4
  */
 class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 
 	private $label_single;
 	private $label_plural;
 	private $total_txn_count   = 0;
-	private	$total_txn_income  = 0;
-	private	$total_txn_expense = 0;
+	private $total_txn_income  = 0;
+	private $total_txn_expense = 0;
 	/**
 	 * Get things started
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 * @see WP_List_Table::__construct()
 	 */
 	public function __construct() {
 		global $status, $page;
 
 		// Set parent defaults
-		parent::__construct( array(
-			'singular'  => __( 'Transaction', 'mobile-dj-manager' ),  // Singular name of the listed records
-			'plural'    => __( 'Transactions', 'mobile-dj-manager' ), // Plural name of the listed records
-			'ajax'      => false             			              // Does this table support ajax?
-		) );
+		parent::__construct(
+			array(
+				'singular' => __( 'Transaction', 'mobile-dj-manager' ),  // Singular name of the listed records
+				'plural'   => __( 'Transactions', 'mobile-dj-manager' ), // Plural name of the listed records
+				'ajax'     => false,                                      // Does this table support ajax?
+			)
+		);
 		$this->label_single = mdjm_get_label_singular();
 		$this->label_plural = mdjm_get_label_plural();
 
@@ -56,10 +66,10 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * Gets the name of the primary column.
 	 *
-	 * @since	1.4
-	 * @access	protected
+	 * @since   1.0.4
+	 * @access  protected
 	 *
-	 * @return	str		Name of the primary column.
+	 * @return  str     Name of the primary column.
 	 */
 	protected function get_primary_column_name() {
 		return 'type';
@@ -68,13 +78,13 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * This function renders most of the columns in the list table.
 	 *
-	 * @access	public
-	 * @since	1.4
+	 * @access  public
+	 * @since   1.0.4
 	 *
-	 * @param	arr		$item			Contains all the data of the downloads
-	 * @param	str		$column_name	The name of the column
+	 * @param   arr $item           Contains all the data of the downloads
+	 * @param   str $column_name    The name of the column
 	 *
-	 * @return	str		Column Name
+	 * @return  str     Column Name
 	 */
 	public function column_default( $item, $column_name ) {
 		return $item[ $column_name ];
@@ -83,9 +93,9 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * Retrieve the table columns
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$columns	Array of all the list table columns
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  arr     $columns    Array of all the list table columns
 	 */
 	public function get_columns() {
 		$columns = array(
@@ -93,7 +103,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 			'total_transactions' => __( 'Transactions', 'mobile-dj-manager' ),
 			'total_value'        => __( 'Total Value', 'mobile-dj-manager' ),
 			'total_income'       => __( 'Total Income', 'mobile-dj-manager' ),
-			'total_expense'      => __( 'Total Expenses', 'mobile-dj-manager' )
+			'total_expense'      => __( 'Total Expenses', 'mobile-dj-manager' ),
 		);
 
 		return $columns;
@@ -102,26 +112,25 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * Retrieve the current page number
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	int		Current page number
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  int     Current page number
 	 */
 	public function get_paged() {
-		return isset( $_GET[ 'paged' ] ) ? absint( $_GET[ 'paged' ] ) : 1;
+		return isset( $_GET['paged'] ) ? absint( $_GET['paged'] ) : 1;
 	} // get_paged
 
 	/**
 	 * Outputs the reporting views
 	 *
-	 * @access 	public
-	 * @since	1.4
-	 * @return	void
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  void
 	 */
 	public function extra_tablenav( $which = '' ) {
 		if ( 'bottom' === $which ) {
 			return;
 		}
-
 
 		mdjm_report_views();
 		mdjm_reports_graph_controls();
@@ -130,9 +139,9 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * Build all the reports data
 	 *
-	 * @access	public
-	 * @since	1.4
-	 * @return	arr		$reports_data	All the data for customer reports
+	 * @access  public
+	 * @since   1.0.4
+	 * @return  arr     $reports_data   All the data for customer reports
 	 */
 	public function reports_data() {
 		$stats = new MDJM_Stats();
@@ -151,55 +160,54 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 
 			$categories = get_terms( 'transaction-types', $term_args );
 
-			foreach ( $categories as $category_id => $category )	{
+			foreach ( $categories as $category_id => $category ) {
 
 				$category_slugs = array( $category->slug );
 
 				$txn_args = array(
-					'post_status'    => array( 'mdjm-income', 'mdjm-expenditure' ),
-					'fields'         => 'ids',
-					'meta_key'       => '_mdjm_txn_status',
-					'meta_value'     => 'Completed',
-					'tax_query'      => array(
+					'post_status' => array( 'mdjm-income', 'mdjm-expenditure' ),
+					'fields'      => 'ids',
+					'meta_key'    => '_mdjm_txn_status',
+					'meta_value'  => 'Completed',
+					'tax_query'   => array(
 						array(
 							'taxonomy' => 'transaction-types',
 							'field'    => 'slug',
 							'terms'    => $category_slugs,
-						)
+						),
 					),
-					'date_query'             => array(
+					'date_query'  => array(
 						array(
-							'after'        => date( 'Y-m-d', $stats->start_date ),
-							'before'       => date( 'Y-m-d', $stats->end_date ),
-							'inclusive'    => true
-						)
+							'after'     => date( 'Y-m-d', $stats->start_date ),
+							'before'    => date( 'Y-m-d', $stats->end_date ),
+							'inclusive' => true,
+						),
 					),
 				);
 
-				$txn_count       = 0;
-				$total_value     = 0;
-				$total_income    = 0;
-				$total_expense   = 0;
+				$txn_count     = 0;
+				$total_value   = 0;
+				$total_income  = 0;
+				$total_expense = 0;
 
 				$txns = mdjm_get_txns( $txn_args );
 
-				if ( $txns )	{
+				if ( $txns ) {
 					foreach ( $txns as $txn ) {
 						$txn_count++;
 
 						$mdjm_txn = new MDJM_Txn( $txn );
 
-						if ( 'mdjm-income' == $mdjm_txn->post_status )	{
-							$total_income  += $mdjm_txn->price;
-						} else	{
+						if ( 'mdjm-income' == $mdjm_txn->post_status ) {
+							$total_income += $mdjm_txn->price;
+						} else {
 							$total_expense += $mdjm_txn->price;
 						}
 
 						$total_value += $mdjm_txn->price;
 
-
 					}
-				} else	{
+				} else {
 					continue;
 				}
 
@@ -213,7 +221,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 					'total_expense_raw'  => $total_expense,
 					'total_value'        => mdjm_currency_filter( mdjm_format_amount( $total_value ) ),
 					'total_value_raw'    => $total_value,
-					'is_child'           => false
+					'is_child'           => false,
 				);
 
 				$this->total_txn_count   += $txn_count;
@@ -229,8 +237,8 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * Output the Transaction Types Mix Pie Chart
 	 *
-	 * @since	1.4
-	 * @return	str		The HTML for the outputted graph
+	 * @since   1.0.4
+	 * @return  str     The HTML for the outputted graph
 	 */
 	public function output_types_graph() {
 		if ( empty( $this->items ) ) {
@@ -241,11 +249,10 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 		$total_txns = 0;
 
 		foreach ( $this->items as $item ) {
-			$total_txns += $item[ 'total_transactions' ];
+			$total_txns += $item['total_transactions'];
 
-			$data[ $item[ 'type' ] ] = $item[ 'total_transactions' ];
+			$data[ $item['type'] ] = $item['total_transactions'];
 		}
-
 
 		if ( empty( $total_txns ) ) {
 			echo '<p><em>' . esc_html__( 'No transactions for dates provided.', 'mobile-dj-manager' ) . '</em></p>';
@@ -255,9 +262,13 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 		arsort( $data );
 		$data = apply_filters( 'mdjm_txn_types_graph_data', $data );
 
-		$options = apply_filters( 'mdjm_txn_types_graph_options', array(
-			'legend_formatter' => 'mdjmLegendFormatterSources',
-		), $data );
+		$options = apply_filters(
+			'mdjm_txn_types_graph_options',
+			array(
+				'legend_formatter' => 'mdjmLegendFormatterSources',
+			),
+			$data
+		);
 
 		$pie_graph = new MDJM_Pie_Graph( $data, $options );
 		$pie_graph->display();
@@ -266,21 +277,21 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * Output the Sources Earnings Mix Pie Chart
 	 *
-	 * @since	1.4
-	 * @return	str		The HTML for the outputted graph
+	 * @since   1.0.4
+	 * @return  str     The HTML for the outputted graph
 	 */
 	public function output_values_graph() {
 		if ( empty( $this->items ) ) {
 			return;
 		}
 
-		$data           = array();
+		$data        = array();
 		$total_value = 0;
 
 		foreach ( $this->items as $item ) {
-			$total_value += $item[ 'total_value_raw' ];
+			$total_value += $item['total_value_raw'];
 
-			$data[ $item[ 'type' ] ] = $item[ 'total_value_raw' ];
+			$data[ $item['type'] ] = $item['total_value_raw'];
 
 		}
 
@@ -292,9 +303,13 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 		arsort( $data );
 		$data = apply_filters( 'mdjm_txn_value_graph_data', $data );
 
-		$options = apply_filters( 'mdjm_txn_value_graph_options', array(
-			'legend_formatter' => 'mdjmLegendFormatterEarnings',
-		), $data );
+		$options = apply_filters(
+			'mdjm_txn_value_graph_options',
+			array(
+				'legend_formatter' => 'mdjmLegendFormatterEarnings',
+			),
+			$data
+		);
 
 		$pie_graph = new MDJM_Pie_Graph( $data, $options );
 		$pie_graph->display();
@@ -303,7 +318,7 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * The output when no records are found.
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
 	public function no_items() {
 		esc_html_e( 'No data to display for this period.', 'mobile-dj-manager' );
@@ -312,62 +327,62 @@ class MDJM_Transaction_Types_Reports_Table extends WP_List_Table {
 	/**
 	 * Display graph totals.
 	 *
-	 * @since	1.4
+	 * @since   1.0.4
 	 */
-	public function graph_totals()	{
+	public function graph_totals() {
 		?>
-        <p class="mdjm_graph_totals">
-            <strong>
-                <?php
+		<p class="mdjm_graph_totals">
+			<strong>
+				<?php
 					esc_html_e( 'Total transactions for period shown: ', 'mobile-dj-manager' );
-                    echo esc_html( $this->total_txn_count );
-                ?>
-            </strong>
-        </p>
-        <p class="mdjm_graph_totals">
-            <strong>
-                <?php
+					echo esc_html( $this->total_txn_count );
+				?>
+			</strong>
+		</p>
+		<p class="mdjm_graph_totals">
+			<strong>
+				<?php
 					esc_html_e( 'Income for period shown: ', 'mobile-dj-manager' );
-                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income ) ) );
-                ?>
-            </strong>
-        </p>
-        <p class="mdjm_graph_totals">
-            <strong>
-                <?php
+					echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income ) ) );
+				?>
+			</strong>
+		</p>
+		<p class="mdjm_graph_totals">
+			<strong>
+				<?php
 					esc_html_e( 'Expenses for period shown: ', 'mobile-dj-manager' );
-                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_expense ) ) );
-                ?>
-            </strong>
-        </p>
-        <p class="mdjm_graph_totals">
-            <strong>
-                <?php
+					echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_expense ) ) );
+				?>
+			</strong>
+		</p>
+		<p class="mdjm_graph_totals">
+			<strong>
+				<?php
 					esc_html_e( 'Earnings for period shown: ', 'mobile-dj-manager' );
-                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income - $this->total_txn_expense ) ) );
-                ?>
-            </strong>
-        </p>
-        <p class="mdjm_graph_totals">
-            <strong>
-                <?php
+					echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income - $this->total_txn_expense ) ) );
+				?>
+			</strong>
+		</p>
+		<p class="mdjm_graph_totals">
+			<strong>
+				<?php
 					esc_html_e( 'Total turnover for period shown: ', 'mobile-dj-manager' );
-                    echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income + $this->total_txn_expense ) ) );
-                ?>
-            </strong>
-        </p>
-        <?php
+					echo esc_html( mdjm_currency_filter( mdjm_format_amount( $this->total_txn_income + $this->total_txn_expense ) ) );
+				?>
+			</strong>
+		</p>
+		<?php
 	} // graph_totals
 
 	/**
 	 * Setup the final data for the table
 	 *
-	 * @access	public
-	 * @since 	1.4
-	 * @uses	MDJM_Conversions_Reports_Table::get_columns()
-	 * @uses	MDJM_Conversions_Reports_Table::get_sortable_columns()
-	 * @uses	MDJM_Conversions_Reports_Table::reports_data()
-	 * @return	void
+	 * @access  public
+	 * @since   1.0.4
+	 * @uses    MDJM_Conversions_Reports_Table::get_columns()
+	 * @uses    MDJM_Conversions_Reports_Table::get_sortable_columns()
+	 * @uses    MDJM_Conversions_Reports_Table::reports_data()
+	 * @return  void
 	 */
 	public function prepare_items() {
 		$columns               = $this->get_columns();

@@ -1,5 +1,13 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Graphs
  *
  * This class handles building pretty report graphs
@@ -8,23 +16,23 @@
  * @subpackage  Admin/Reports
  * @copyright   Copyright (c) 2016, Mike Howard
  * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.4
- * @taken from	Easy Digital Downloads
+ * @since       1.0.4
+ * @taken from  Easy Digital Downloads
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * MDJM_Graph Class
  *
- * @since	1.4
+ * @since   1.0.4
  */
 class MDJM_Graph {
 
 	/*
-
 	Simple example:
 
 	data format for each point: array( location on x, location on y )
@@ -83,7 +91,7 @@ class MDJM_Graph {
 		$this->data = $_data;
 
 		// Generate unique ID
-		$this->id   = 'a' . md5( rand() );
+		$this->id = 'a' . md5( rand() );
 
 		// Setup default options;
 		$this->options = array(
@@ -102,7 +110,7 @@ class MDJM_Graph {
 			'borderwidth'     => 2,
 			'bars'            => false,
 			'lines'           => true,
-			'points'          => true
+			'points'          => true,
 		);
 
 	}
@@ -164,18 +172,23 @@ class MDJM_Graph {
 		$this->load_scripts();
 
 		ob_start();
-?>
+		?>
 		<script type="text/javascript">
 			jQuery( document ).ready( function($) {
 				$.plot(
 					$("#mdjm-graph-<?php echo esc_attr( $this->id ); ?>"),
 					[
-						<?php foreach( $this->get_data() as $label => $data ) : ?>
+						<?php foreach ( $this->get_data() as $label => $data ) : ?>
 						{
 							label: "<?php echo esc_attr( $label ); ?>",
 							id: "<?php echo sanitize_key( $label ); ?>",
 							// data format is: [ point on x, value on y ]
-							data: [<?php foreach( $data as $point ) { echo '[' . implode( ',', $point ) . '],';  } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>],
+							data: [
+							<?php
+							foreach ( $data as $point ) {
+								echo '[' . implode( ',', $point ) . '],';  } // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+							?>
+							],
 							points: {
 								show: <?php echo $this->options['points'] ? 'true' : 'false'; ?>,
 							},
@@ -187,11 +200,14 @@ class MDJM_Graph {
 							lines: {
 								show: <?php echo $this->options['lines'] ? 'true' : 'false'; ?>
 							},
-							<?php if( $this->options['multiple_y_axes'] ) : ?>
+							<?php if ( $this->options['multiple_y_axes'] ) : ?>
 							yaxis: <?php echo esc_html( $yaxis_count ); ?>
 							<?php endif; ?>
 						},
-						<?php $yaxis_count++; endforeach; ?>
+							<?php
+							$yaxis_count++;
+endforeach;
+						?>
 					],
 					{
 						// Options
@@ -209,7 +225,7 @@ class MDJM_Graph {
 							mode: "<?php echo esc_html( $this->options['x_mode'] ); ?>",
 							timeFormat: "<?php echo $this->options['x_mode'] == 'time' ? esc_html( $this->options['time_format'] ) : ''; ?>",
 							tickSize: "<?php echo $this->options['x_mode'] == 'time' ? '' : esc_html( $this->options['ticksize_num'] ); ?>",
-							<?php if( $this->options['x_mode'] != 'time' ) : ?>
+							<?php if ( $this->options['x_mode'] != 'time' ) : ?>
 							tickDecimals: <?php echo esc_html( $this->options['x_decimals'] ); ?>
 							<?php endif; ?>
 						},
@@ -218,7 +234,7 @@ class MDJM_Graph {
 							min: 0,
 							mode: "<?php echo esc_html( $this->options['y_mode'] ); ?>",
 							timeFormat: "<?php echo $this->options['y_mode'] == 'time' ? esc_html( $this->options['time_format'] ) : ''; ?>",
-							<?php if( $this->options['y_mode'] != 'time' ) : ?>
+							<?php if ( $this->options['y_mode'] != 'time' ) : ?>
 							tickDecimals: <?php echo esc_html( $this->options['y_decimals'] ); ?>
 							<?php endif; ?>
 						}
@@ -269,7 +285,7 @@ class MDJM_Graph {
 
 		</script>
 		<div id="mdjm-graph-<?php echo esc_attr( $this->id ); ?>" class="mdjm-graph" style="height: 300px;"></div>
-<?php
+		<?php
 		return ob_get_clean();
 	}
 

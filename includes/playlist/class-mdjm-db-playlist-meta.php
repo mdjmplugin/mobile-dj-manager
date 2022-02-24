@@ -1,28 +1,31 @@
 <?php
+
+
 /**
  * Playlist Meta DB class
  *
  * This class is for interacting with the playlist meta database table
  *
- * @package		MDJM
- * @subpackage	Classes/DB_Playlist_Meta
- * @copyright   Copyright (c) 2017, Mike Howard
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- * @since       1.5
+ * @package MDJM
+ * @subpackage Classes/DB_Playlist_Meta
+ * @copyright Copyright (c) 2017, Mike Howard
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since 1.5
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 class MDJM_DB_Playlist_Meta extends MDJM_DB {
 
 	/**
 	 * Get things started
 	 *
-	 * @access	public
-	 * @since	1.5
-	*/
+	 * @access public
+	 * @since 1.5
+	 */
 	public function __construct() {
 		global $wpdb;
 
@@ -30,9 +33,11 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 		$this->primary_key = 'meta_id';
 		$this->version     = '1.0';
 
-		/*if ( ! $this->table_exists( $this->table_name ) ) {
+		/*
+		If ( ! $this->table_exists( $this->table_name ) ) {
 			$this->create_table();
-		}*/
+		}
+		*/
 
 		add_action( 'plugins_loaded', array( $this, 'register_table' ), 11 );
 
@@ -41,24 +46,24 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	/**
 	 * Get table columns and data types
 	 *
-	 * @access	public
-	 * @since	1.5
-	*/
+	 * @access public
+	 * @since 1.5
+	 */
 	public function get_columns() {
 		return array(
 			'meta_id'    => '%d',
 			'entry_id'   => '%d',
 			'meta_key'   => '%s',
-			'meta_value' => '%s'
+			'meta_value' => '%s',
 		);
 	} // get_columns
 
 	/**
 	 * Register the table with $wpdb so the metadata api can find it
 	 *
-	 * @access	public
-	 * @since	1.5
-	*/
+	 * @access public
+	 * @since 1.5
+	 */
 	public function register_table() {
 		global $wpdb;
 		$wpdb->mdjm_playlistmeta = $this->table_name;
@@ -69,13 +74,13 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	 *
 	 * For internal use only. Use MDJM_Playlist->get_meta() for public usage.
 	 *
-	 * @param	int		$id				Playlist Entry ID.
-	 * @param	str		$meta_key		The meta key to retrieve.
-	 * @param	bool	$single			Whether to return a single value.
-	 * @return	mixed	Will be an array if $single is false. Will be value of meta data field if $single is true.
+	 * @param int  $id Playlist Entry ID.
+	 * @param str  $meta_key The meta key to retrieve.
+	 * @param bool $single Whether to return a single value.
+	 * @return mixed Will be an array if $single is false. Will be value of meta data field if $single is true.
 	 *
-	 * @access	public
-	 * @since	1.5
+	 * @access public
+	 * @since 1.5
 	 */
 	public function get_meta( $id = 0, $meta_key = '', $single = false ) {
 		$entry_id = $this->sanitize_entry_id( $id );
@@ -91,14 +96,14 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	 *
 	 * For internal use only. Use MDJM_Playlist->add_meta() for public usage.
 	 *
-	 * @param	int		$id				Entry ID.
-	 * @param	str		$meta_key		Metadata name.
-	 * @param	mixed	$meta_value		Metadata value.
-	 * @param	bool	$unique			Optional, default is false. Whether the same key should not be added.
-	 * @return	bool	False for failure. True for success.
+	 * @param int   $id Entry ID.
+	 * @param str   $meta_key Metadata name.
+	 * @param mixed $meta_value Metadata value.
+	 * @param bool  $unique Optional, default is false. Whether the same key should not be added.
+	 * @return bool False for failure. True for success.
 	 *
-	 * @access	private
-	 * @since	1.5
+	 * @access private
+	 * @since 1.5
 	 */
 	public function add_meta( $id = 0, $meta_key = '', $meta_value, $unique = false ) {
 		$id = $this->sanitize_entry_id( $id );
@@ -119,14 +124,14 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	 *
 	 * If the meta field for the entry does not exist, it will be added.
 	 *
-	 * @param	int		$id				Playlist entry ID.
-	 * @param	str		$meta_key		Metadata key.
-	 * @param	mixed	$meta_value		Metadata value.
-	 * @param	mixed	$prev_value		Optional. Previous value to check before removing.
-	 * @return	bool	False on failure, true if success.
+	 * @param int   $id Playlist entry ID.
+	 * @param str   $meta_key Metadata key.
+	 * @param mixed $meta_value Metadata value.
+	 * @param mixed $prev_value Optional. Previous value to check before removing.
+	 * @return bool False on failure, true if success.
 	 *
-	 * @access	private
-	 * @since	1.5
+	 * @access private
+	 * @since 1.5
 	 */
 	public function update_meta( $id = 0, $meta_key = '', $meta_value, $prev_value = '' ) {
 		$id = $this->sanitize_entry_id( $id );
@@ -146,13 +151,13 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	 * value, will keep from removing duplicate metadata with the same key. It also
 	 * allows removing all metadata matching key, if needed.
 	 *
-	 * @param	int		$id				Playlist entry ID.
-	 * @param	str		$meta_key		Metadata name.
-	 * @param	mixed	$meta_value		Optional. Metadata value.
-	 * @return	bool	False for failure. True for success.
+	 * @param int   $id Playlist entry ID.
+	 * @param str   $meta_key Metadata name.
+	 * @param mixed $meta_value Optional. Metadata value.
+	 * @return bool False for failure. True for success.
 	 *
-	 * @access	private
-	 * @since	1.5
+	 * @access private
+	 * @since 1.5
 	 */
 	public function delete_meta( $id = 0, $meta_key = '', $meta_value = '' ) {
 		return delete_metadata( 'mdjm_playlist', $id, $meta_key, $meta_value );
@@ -161,9 +166,9 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	/**
 	 * Create the table
 	 *
-	 * @access	public
-	 * @since	1.5
-	*/
+	 * @access public
+	 * @since 1.5
+	 */
 	public function create_table() {
 		global $wpdb;
 
@@ -174,12 +179,10 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 			entry_id bigint(20) NOT NULL,
 			meta_key varchar(255) DEFAULT NULL,
 			meta_value longtext,
-			PRIMARY KEY  (meta_id),
+			PRIMARY KEY (meta_id),
 			KEY entry_id (entry_id),
 			KEY meta_key (meta_key)
 			) $charset_collate;";
-
-		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
 		dbDelta( $sql );
 
@@ -189,9 +192,9 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	/**
 	 * Given a playlist entry ID, make sure it's a positive number, greater than zero before inserting or adding.
 	 *
-	 * @since	1.5
-	 * @param	int|str		$entry_id	A passed playlist entry ID.
-	 * @return	int|bool	The normalized customer ID or false if it's found to not be valid.
+	 * @since 1.5
+	 * @param int|str $entry_id A passed playlist entry ID.
+	 * @return int|bool The normalized customer ID or false if it's found to not be valid.
 	 */
 	private function sanitize_entry_id( $entry_id ) {
 		if ( ! is_numeric( $entry_id ) ) {
@@ -200,7 +203,7 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 
 		$entry_id = (int) $entry_id;
 
-		// We were given a non positive number
+		// We were given a non positive number.
 		if ( absint( $entry_id ) !== $entry_id ) {
 			return false;
 		}

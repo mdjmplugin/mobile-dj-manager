@@ -1,38 +1,50 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Process event actions
  *
- * @package		MDJM
- * @subpackage	Events
- * @since		1.3
+ * @package     MDJM
+ * @subpackage  Events
+ * @since       1.3
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Activates the given task.
  *
- * @since	1.4.7
- * @return	void
+ * @since   1.4.7
+ * @return  void
  */
-function mdjm_activate_task_action( $data )	{
-	if ( empty( $data['id'] ) )	{
+function mdjm_activate_task_action( $data ) {
+	if ( empty( $data['id'] ) ) {
 		return;
 	}
 
-	if ( mdjm_task_set_active_status( $data['id'] ) )	{
+	if ( mdjm_task_set_active_status( $data['id'] ) ) {
 		$message = 'task-status-updated';
-	} else	{
+	} else {
 		$message = 'task-status-update-failed';
 	}
 
-	$redirect = add_query_arg( array(
-		'post_type'    => 'mdjm-event',
-		'page'         => 'mdjm-tasks',
-		'mdjm-message' => $message
-	), admin_url( 'edit.php' ) );
+	$redirect = add_query_arg(
+		array(
+			'post_type'    => 'mdjm-event',
+			'page'         => 'mdjm-tasks',
+			'mdjm-message' => $message,
+		),
+		admin_url( 'edit.php' )
+	);
 
 	wp_safe_redirect( $redirect );
 	die();
@@ -43,25 +55,28 @@ add_action( 'mdjm-activate_task', 'mdjm_activate_task_action' );
 /**
  * Deactivates the given task.
  *
- * @since	1.4.7
- * @return	void
+ * @since   1.4.7
+ * @return  void
  */
-function mdjm_deactivate_task_action( $data )	{
-	if ( empty( $data['id'] ) )	{
+function mdjm_deactivate_task_action( $data ) {
+	if ( empty( $data['id'] ) ) {
 		return;
 	}
 
-	if ( mdjm_task_set_active_status( $data['id'], false ) )	{
+	if ( mdjm_task_set_active_status( $data['id'], false ) ) {
 		$message = 'task-status-updated';
-	} else	{
+	} else {
 		$message = 'task-status-update-failed';
 	}
 
-	$redirect = add_query_arg( array(
-		'post_type'    => 'mdjm-event',
-		'page'         => 'mdjm-tasks',
-		'mdjm-message' => $message
-	), admin_url( 'edit.php' ) );
+	$redirect = add_query_arg(
+		array(
+			'post_type'    => 'mdjm-event',
+			'page'         => 'mdjm-tasks',
+			'mdjm-message' => $message,
+		),
+		admin_url( 'edit.php' )
+	);
 
 	wp_safe_redirect( $redirect );
 	die();
@@ -72,17 +87,17 @@ add_action( 'mdjm-deactivate_task', 'mdjm_deactivate_task_action' );
 /**
  * Save an individual task.
  *
- * @since	1.4.7
- * @param	arr		$data	Array of POST data
- * @return	void
+ * @since   1.4.7
+ * @param   arr $data   Array of POST data
+ * @return  void
  */
-function mdjm_save_task_action( $data )	{
+function mdjm_save_task_action( $data ) {
 
-	if ( ! isset( $_POST['mdjm_task_nonce'] ) || ! wp_verify_nonce( $_POST['mdjm_task_nonce'], 'mdjm_update_task_details_nonce' ) )	{
+	if ( ! isset( $_POST['mdjm_task_nonce'] ) || ! wp_verify_nonce( $_POST['mdjm_task_nonce'], 'mdjm_update_task_details_nonce' ) ) {
 		return;
 	}
 
-	if ( ! isset( $_POST['mdjm_task_id'] ) )	{
+	if ( ! isset( $_POST['mdjm_task_id'] ) ) {
 		return;
 	}
 
@@ -92,32 +107,39 @@ function mdjm_save_task_action( $data )	{
 		'frequency' => sanitize_text_field( $data['task_frequency'] ),
 		'desc'      => $data['task_description'],
 		'options'   => array(
-			'age'       => absint( $data['task_run_time'] ) . ' ' . sanitize_text_field( $data['task_run_period'] ),
-			'run_when'  => sanitize_text_field( $data['task_run_event_status'] )
-		)
+			'age'      => absint( $data['task_run_time'] ) . ' ' . sanitize_text_field( $data['task_run_period'] ),
+			'run_when' => sanitize_text_field( $data['task_run_event_status'] ),
+		),
 	);
 
-	if ( isset( $data['task_email_template'] ) )	{
+	if ( isset( $data['task_email_template'] ) ) {
 		$task_data['options']['email_template'] = absint( $data['task_email_template'] );
 		$task_data['options']['email_subject']  = sanitize_text_field( $data['task_email_subject'] );
 		$task_data['options']['email_from']     = sanitize_text_field( $data['task_email_from'] );
 	}
 
-	$task_data['active'] = ! empty( $data['task_active'] ) ? true : false;
+	if ( 'upload-playlists' != $task_data['id'] ) {
+		$task_data['active'] = ! empty( $data['task_active'] ) ? true : false;
+	}
 
-	if( mdjm_update_task( $task_data ) )	{
+	if ( mdjm_update_task( $task_data ) ) {
 		$message = 'task-updated';
-	} else	{
+	} else {
 		$message = 'task-update-failed';
 	}
 
-	wp_safe_redirect( add_query_arg( array(
-		'post_type'    => 'mdjm-event',
-		'page'         => 'mdjm-tasks',
-		'view'         => 'task',
-		'id'           => $task_data['id'],
-		'mdjm-message' => $message
-	), admin_url( 'edit.php' ) ) );
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'post_type'    => 'mdjm-event',
+				'page'         => 'mdjm-tasks',
+				'view'         => 'task',
+				'id'           => $task_data['id'],
+				'mdjm-message' => $message,
+			),
+			admin_url( 'edit.php' )
+		)
+	);
 	die();
 
 } // mdjm_save_task_action
@@ -126,25 +148,28 @@ add_action( 'mdjm-update_task_details', 'mdjm_save_task_action' );
 /**
  * Runs the given task.
  *
- * @since	1.4.7
- * @return	void
+ * @since   1.4.7
+ * @return  void
  */
-function mdjm_run_now_task_action( $data )	{
-	if ( empty( $data['id'] ) )	{
+function mdjm_run_now_task_action( $data ) {
+	if ( empty( $data['id'] ) ) {
 		return;
 	}
 
-	if ( mdjm_task_run_now( $data['id'] ) )	{
+	if ( mdjm_task_run_now( $data['id'] ) ) {
 		$message = 'task-run';
-	} else	{
+	} else {
 		$message = 'task-run-failed';
 	}
 
-	$redirect = add_query_arg( array(
-		'post_type'    => 'mdjm-event',
-		'page'         => 'mdjm-tasks',
-		'mdjm-message' => $message
-	), admin_url( 'edit.php' ) );
+	$redirect = add_query_arg(
+		array(
+			'post_type'    => 'mdjm-event',
+			'page'         => 'mdjm-tasks',
+			'mdjm-message' => $message,
+		),
+		admin_url( 'edit.php' )
+	);
 
 	wp_safe_redirect( $redirect );
 	die();
@@ -155,25 +180,25 @@ add_action( 'mdjm-run_task', 'mdjm_run_now_task_action' );
 /**
  * Schedule tasks to run after event approval.
  *
- * @since	1.4.7
- * @return	void
+ * @since   1.4.7
+ * @return  void
  */
-function mdjm_set_task_run_time_after_approval( $result, $event_id, $old_status )	{
+function mdjm_set_task_run_time_after_approval( $result, $event_id, $old_status ) {
 
-	if ( empty( $result ) )	{
+	if ( empty( $result ) ) {
 		return;
 	}
 
 	$tasks = mdjm_get_tasks();
 
-	if ( ! $tasks )	{
+	if ( ! $tasks ) {
 		return;
 	}
 
-	foreach( $tasks as $slug => $data )	{
+	foreach ( $tasks as $slug => $data ) {
 		$meta_key = '_mdjm_event_task_after_approval_' . $slug;
 
-		if ( 'after_approval' != $data['options']['run_when'] )	{
+		if ( 'after_approval' != $data['options']['run_when'] ) {
 			continue;
 		}
 

@@ -1,17 +1,22 @@
-/* jshint node:true */
+/**
+ * Jshint node:true
+ *
+ * @package MDJM
+ */
+
 'use strict';
 
 module.exports = function( grunt ) {
 
-	// auto load grunt tasks
+	// auto load grunt tasks.
 	require( 'load-grunt-tasks' )( grunt );
 
 	var pluginConfig = {
 
-		// gets the package vars
+		// gets the package vars.
 		pkg: grunt.file.readJSON( 'package.json' ),
 
-		// plugin directories
+		// plugin directories.
 		dirs: {
 			main: {
 				js: 'assets/js',
@@ -24,47 +29,47 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// pot file
+		// pot file.
 		makepot: {
 			target: {
 				options: {
-					domainPath: '<%= dirs.main.lang %>/',    // Where to save the POT file.
+					domainPath: '<%= dirs.main.lang %>/', // Where to save the POT file.
 					exclude: ['build/.*'],
-					mainFile: 'mobile-dj-manager.php',    // Main project file.
-					potFilename: 'mobile-dj-manager.pot',    // Name of the POT file.
+					mainFile: 'mobile-dj-manager.php', // Main project file.
+					potFilename: 'mobile-dj-manager.pot', // Name of the POT file.
 					potHeaders: {
-						poedit: true,                 // Includes common Poedit headers.
+						poedit: true, // Includes common Poedit headers.
 						'x-poedit-keywordslist': true // Include a list of all possible gettext functions.
-								},
-					type: 'wp-plugin',    // Type of project (wp-plugin or wp-theme).
-					updateTimestamp: true,    // Whether the POT-Creation-Date should be updated without other changes.
+					},
+					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
+					updateTimestamp: true, // Whether the POT-Creation-Date should be updated without other changes.
 					processPot: function( pot ) {
-						pot.headers['report-msgid-bugs-to'] = 'https://mdjm.co.uk/';
-						pot.headers['last-translator'] = 'WP-Translations (http://wp-translations.org/)';
-						pot.headers['language-team'] = 'WP-Translations <wpt@wp-translations.org>';
-						pot.headers.language = 'en_GB';
+						pot.headers['report-msgid-bugs-to'] = 'https://mobileeventsmanager.co.uk/';
+						pot.headers['last-translator']      = 'WP-Translations (http://wp-translations.org/)';
+						pot.headers['language-team']        = 'WP-Translations <wpt@wp-translations.org>';
+						pot.headers.language                = 'en_GB';
 						var translation, // Exclude meta data from pot.
-							excluded_meta = [
-								'MDJM Event Management',
-								'https://mdjm.co.uk',
+							excluded_meta                   = [
+								'Mobile DJ Manager',
+								'https://mobileeventsmanager.co.uk',
 								'Mike Howard',
 								'http://mikesplugins.co.uk'
 							];
-							for ( translation in pot.translations[''] ) {
-								if ( 'undefined' !== typeof pot.translations[''][ translation ].comments.extracted ) {
-									if ( excluded_meta.indexOf( pot.translations[''][ translation ].comments.extracted ) >= 0 ) {
-										console.log( 'Excluded meta: ' + pot.translations[''][ translation ].comments.extracted );
-										delete pot.translations[''][ translation ];
-									}
+						for ( translation in pot.translations[''] ) {
+							if ( 'undefined' !== typeof pot.translations[''][ translation ].comments.extracted ) {
+								if ( excluded_meta.indexOf( pot.translations[''][ translation ].comments.extracted ) >= 0 ) {
+									console.log( 'Excluded meta: ' + pot.translations[''][ translation ].comments.extracted );
+									delete pot.translations[''][ translation ];
 								}
 							}
+						}
 						return pot;
 					}
 				}
 			}
 		},
 
-		// checktextdomain
+		// checktextdomain.
 		checktextdomain: {
 			options:{
 				text_domain: 'mobile-dj-manager',
@@ -92,11 +97,9 @@ module.exports = function( grunt ) {
 			},
 			files: {
 				src: [
-					'**/*.php', // Include all files
-					'!node_modules/**', // Exclude node_modules/
-					'!build/.*', // Exclude build/
-					'!tests/**', // Exclude tests
-					'!includes/EDD_SL_Plugin_Updater.php',
+					'**/*.php', // Include all files.
+					'!node_modules/**', // Exclude node_modules.
+					'!build/.*', // Exclude build.
 					'!client-zone/**',
 					'!includes/admin/procedures/**'
 					],
@@ -104,7 +107,7 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// svn settings
+		// svn settings.
 		svn_settings: {
 			path: 'https://plugins.svn.wordpress.org/mobile-dj-manager/<%= pkg.name %>',
 			tag: '<%= svn_settings.path %>/tags/<%= pkg.version %>',
@@ -117,8 +120,6 @@ module.exports = function( grunt ) {
 				'.sass-cache/',
 				'node_modules/',
 				'docs/',
-				'phpunit.xml',
-				'tests/',
 				'Gruntfile.js',
 				'README.md',
 				'package.json',
@@ -126,7 +127,7 @@ module.exports = function( grunt ) {
 			]
 		},
 
-		// javascript linting with jshint
+		// javascript linting with jshint.
 		jshint: {
 			options: {
 				jshintrc: '.jshintrc'
@@ -139,7 +140,7 @@ module.exports = function( grunt ) {
 			]
 		},
 
-		// cssmin
+		// cssmin.
 		cssmin:	{
 			build:	{
 				files: {
@@ -149,7 +150,7 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// uglify to concat and minify
+		// uglify to concat and minify.
 		uglify: {
 			dist: {
 				files: {
@@ -160,7 +161,7 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// watch for changes and trigger jshint and uglify
+		// watch for changes and trigger jshint and uglify.
 		watch: {
 			js: {
 				files: [
@@ -170,7 +171,7 @@ module.exports = function( grunt ) {
 			}
 		},
 
-		// image optimization
+		// image optimization.
 		imagemin: {
 			dist: {
 				options: {
@@ -183,18 +184,18 @@ module.exports = function( grunt ) {
 						cwd: '<%= dirs.main.images %>/',
 						src: '**/*.{png,jpg,gif}',
 						dest: '<%= dirs.main.images %>/'
-					},
+				},
 					{
 						expand: true,
 						cwd: './',
 						src: 'screenshot-*.png',
 						dest: './'
-					}
+				}
 				]
 			}
 		},
 
-		// rsync commands used to take the files to svn repository
+		// rsync commands used to take the files to svn repository.
 		rsync: {
 			options: {
 				args: ['--verbose'],
@@ -210,13 +211,13 @@ module.exports = function( grunt ) {
 			},
 			trunk: {
 				options: {
-				src: './',
-				dest: '<%= svn_settings.trunk %>'
+					src: './',
+					dest: '<%= svn_settings.trunk %>'
 				}
 			}
 		},
 
-		// shell command to commit the new version of the plugin
+		// shell command to commit the new version of the plugin.
 		shell: {
 			// Remove delete files.
 			svn_remove: {
@@ -254,31 +255,37 @@ module.exports = function( grunt ) {
 		}
 	};
 
-	// initialize grunt config
-	// --------------------------
+	// initialize grunt config.
+	// --------------------------.
 	grunt.initConfig( pluginConfig );
 
-	// register tasks
-	// --------------------------
+	// register tasks.
+	// --------------------------.
 
-	// default task
-	grunt.registerTask( 'default', [
+	// default task.
+	grunt.registerTask(
+		'default',
+		[
 		'checktextdomain',
 		'jshint',
 		'cssmin',
 		'uglify',
 		'makepot',
-		//'potomo',
-		//'glotpress_download'
-	] );
+		// 'potomo',
+		// 'glotpress_download'
+		]
+	);
 
-	// deploy task
-	grunt.registerTask( 'deploy', [
+	// deploy task.
+	grunt.registerTask(
+		'deploy',
+		[
 		'default',
 		'rsync:tag',
 		'rsync:trunk',
 		'shell:svn_remove',
 		'shell:svn_add',
 		'shell:svn_commit'
-	] );
+		]
+	);
 };

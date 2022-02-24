@@ -1,26 +1,28 @@
 <?php
 
-if ( ! defined( 'ABSPATH' ) )
+
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Contains all template related functions
  *
- * @package		MDJM
- * @subpackage	Templates
- * @since		1.3
+ * @package     MDJM
+ * @subpackage  Templates
+ * @since       1.3
  */
 
 /**
  * Retrieve page ID's.
  *
- * Used for the Client Zone pages.
+ * Used for the Client Portal pages.
  *
- * @since	1.4.8
- * @param	str		$page	The page to retrieve the ID for
- * @return	int		The page ID
+ * @since   1.4.8
+ * @param   str $page   The page to retrieve the ID for
+ * @return  int     The page ID
  */
-function mdjm_get_page_id( $page )	{
+function mdjm_get_page_id( $page ) {
 	$page = apply_filters( 'mdjm_get_' . $page . '_page_id', mdjm_get_option( $page . '_page' ) );
 
 	return $page ? absint( $page ) : -1;
@@ -31,9 +33,9 @@ function mdjm_get_page_id( $page )	{
  *
  * Automatically appends the enquiry link to package content, if enabled.
  *
- * @since	1.4
- * @param	int		package_id	Package ID
- * @return	void
+ * @since   1.4
+ * @param   int     package_id  Package ID
+ * @return  void
  */
 
 function mdjm_append_package_enquiry_link( $package_id ) {
@@ -48,14 +50,19 @@ add_action( 'mdjm_after_package_content', 'mdjm_append_package_enquiry_link' );
  *
  * Automatically appends the enquiry link to addon content, if enabled.
  *
- * @since	1.4
- * @param	int		addon_id	Addon ID
- * @return	void
+ * @since   1.4
+ * @param   int     addon_id    Addon ID
+ * @return  void
  */
 
 function mdjm_append_addon_enquiry_link( $addon_id ) {
 	if ( mdjm_get_option( 'package_contact_btn', false ) ) {
-		echo mdjm_get_enquire_now_button( array( 'type' => 'addon', 'id' => $addon_id ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo mdjm_get_enquire_now_button( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			array(
+				'type' => 'addon',
+				'id'   => $addon_id,
+			)
+		);
 	}
 } // mdjm_append_addon_enquiry_link
 add_action( 'mdjm_after_addon_content', 'mdjm_append_addon_enquiry_link' );
@@ -63,15 +70,15 @@ add_action( 'mdjm_after_addon_content', 'mdjm_append_addon_enquiry_link' );
 /**
  * Generates an enquire now button.
  *
- * @since	1.4
- * @param	arr		Array of arguments. See @defaults.
- * @return	str		Enquire Now HTML button
+ * @since   1.4
+ * @param   arr     Array of arguments. See @defaults.
+ * @return  str     Enquire Now HTML button
  */
-function mdjm_get_enquire_now_button( $args )	{
+function mdjm_get_enquire_now_button( $args ) {
 
 	$defaults = array(
 		'type' => 'package',
-		'id'   => 0
+		'id'   => 0,
 	);
 
 	$args = wp_parse_args( $args, $defaults );
@@ -84,10 +91,10 @@ function mdjm_get_enquire_now_button( $args )	{
 
 	ob_start();
 	?>
-    <a href="<?php echo esc_url( mdjm_get_formatted_url( mdjm_get_option( 'contact_page' ) ) . $args['type'] . '=' . $args['id'] ); ?>">
-        <button type="button" name="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( $class ); ?>" formmethod="get" value="test"><?php echo esc_html( $label ); ?></button>
-    </a>
-    <?php
+	<a href="<?php echo esc_url( mdjm_get_formatted_url( mdjm_get_option( 'contact_page' ) ) . $args['type'] . '=' . $args['id'] ); ?>">
+		<button type="button" name="<?php echo esc_attr( $name ); ?>" class="<?php echo esc_attr( $class ); ?>" formmethod="get" value="test"><?php echo esc_html( $label ); ?></button>
+	</a>
+	<?php
 	$enquire_link = ob_get_clean();
 
 	return apply_filters( 'mdjm_enquire_now_' . $args['type'] . '_button', $enquire_link, $args );
@@ -96,8 +103,8 @@ function mdjm_get_enquire_now_button( $args )	{
 /**
  * Returns the path to the MDJM templates directory
  *
- * @since	1.3
- * @return	str
+ * @since   1.3
+ * @return  str
  */
 function mdjm_get_templates_dir() {
 	return MDJM_PLUGIN_DIR . '/templates';
@@ -106,8 +113,8 @@ function mdjm_get_templates_dir() {
 /**
  * Returns the URL to the MDJM templates directory
  *
- * @since	1.3
- * @return	str
+ * @since   1.3
+ * @return  str
  */
 function mdjm_get_templates_url() {
 	return MDJM_PLUGIN_URL . '/templates';
@@ -116,52 +123,52 @@ function mdjm_get_templates_url() {
 /**
  * Returns the MDJM template files.
  *
- * @since	1.3
- * @return	arr
+ * @since   1.3
+ * @return  arr
  */
 function mdjm_get_template_files() {
 
 	$template_files = array(
 		'availability' => array(
 			'availability-horizontal.php',
-			'availability-vertical.php'
+			'availability-vertical.php',
 		),
-		'contract' => array(
+		'contract'     => array(
 			'contract.php',
 			'contract-signed.php',
 		),
-		'contract' => array(
+		'contract'     => array(
 			'contract.php',
 			'contract-signed.php',
 		),
-		'email' => array(
+		'email'        => array(
 			'email-body.php',
 			'email-footer.php',
-			'email-header.php'
+			'email-header.php',
 		),
-		'event' => array(
+		'event'        => array(
 			'event-loop-footer.php',
 			'event-loop-header.php',
 			'event-loop.php',
 			'event-none.php',
-			'event-single.php'
+			'event-single.php',
 		),
-		'login' => array(
-			'login-form.php'
+		'login'        => array(
+			'login-form.php',
 		),
-		'payments' => array(
+		'payments'     => array(
 			'payments-cc.php',
-			'payments-items.php'
+			'payments-items.php',
 		),
-		'playlist' => array(
+		'playlist'     => array(
 			'playlist-client.php',
 			'playlist-guest.php',
-			'playlist-noevent.php'
+			'playlist-noevent.php',
 		),
-		'quote' => array(
+		'quote'        => array(
 			'quote-noevent.php',
-			'quote.php'
-		)
+			'quote.php',
+		),
 	);
 
 	return apply_filters( 'mdjm_template_files', $template_files );
@@ -171,17 +178,17 @@ function mdjm_get_template_files() {
 /**
  * Retrieves a template part
  *
- * @since	1.3
+ * @since   1.3
  *
- * @param	str	$slug
- * @param	str $name Optional. Default null
- * @param	bool   $load
+ * @param   str  $slug
+ * @param   str  $name Optional. Default null
+ * @param   bool $load
  *
- * @return	str
+ * @return  str
  *
- * @uses	mdjm_locate_template()
- * @uses	load_template()
- * @uses	get_template_part()
+ * @uses    mdjm_locate_template()
+ * @uses    load_template()
+ * @uses    get_template_part()
  */
 function mdjm_get_template_part( $slug, $name = null, $load = true ) {
 
@@ -191,7 +198,7 @@ function mdjm_get_template_part( $slug, $name = null, $load = true ) {
 	// Setup possible parts
 	$templates = array();
 
-	if ( isset( $name ) )	{
+	if ( isset( $name ) ) {
 		$templates[] = $slug . '/' . $slug . '-' . $name . '.php';
 	}
 
@@ -214,13 +221,13 @@ function mdjm_get_template_part( $slug, $name = null, $load = true ) {
  *
  * Taken from bbPress
  *
- * @since	1.3
+ * @since   1.3
  *
- * @param	str|arr	$template_names Template file(s) to search for, in order.
- * @param	bool	$load If true the template file will be loaded if it is found.
- * @param	bool	$require_once Whether to require_once or require. Default true.
+ * @param   str|arr $template_names Template file(s) to search for, in order.
+ * @param   bool    $load If true the template file will be loaded if it is found.
+ * @param   bool    $require_once Whether to require_once or require. Default true.
  *   Has no effect if $load is false.
- * @return	str		The template filename if one is located.
+ * @return  str     The template filename if one is located.
  */
 function mdjm_locate_template( $template_names, $load = false, $require_once = true ) {
 
@@ -231,7 +238,7 @@ function mdjm_locate_template( $template_names, $load = false, $require_once = t
 	foreach ( (array) $template_names as $template_name ) {
 
 		// Continue if template is empty
-		if ( empty( $template_name ) )	{
+		if ( empty( $template_name ) ) {
 			continue;
 		}
 
@@ -239,20 +246,20 @@ function mdjm_locate_template( $template_names, $load = false, $require_once = t
 		$template_name = ltrim( $template_name, '/' );
 
 		// try locating this template file by looping through the template paths
-		foreach( mdjm_get_theme_template_paths() as $template_path ) {
+		foreach ( mdjm_get_theme_template_paths() as $template_path ) {
 
-			if( file_exists( $template_path . $template_name ) ) {
+			if ( file_exists( $template_path . $template_name ) ) {
 				$located = $template_path . $template_name;
 				break;
 			}
 		}
 
-		if( $located ) {
+		if ( $located ) {
 			break;
 		}
 	}
 
-	if ( ( true == $load ) && ! empty( $located ) )	{
+	if ( ( true == $load ) && ! empty( $located ) ) {
 		load_template( $located, $require_once );
 	}
 
@@ -263,17 +270,17 @@ function mdjm_locate_template( $template_names, $load = false, $require_once = t
 /**
  * Returns a list of paths to check for template locations
  *
- * @since	1.3
- * @return	mixed|void
+ * @since   1.3
+ * @return  mixed|void
  */
 function mdjm_get_theme_template_paths() {
 
 	$template_dir = mdjm_get_theme_template_dir_name();
 
 	$file_paths = array(
-		1        => trailingslashit( get_stylesheet_directory() ) . $template_dir,
-		10       => trailingslashit( get_template_directory() ) . $template_dir,
-		100      => mdjm_get_templates_dir()
+		1   => trailingslashit( get_stylesheet_directory() ) . $template_dir,
+		10  => trailingslashit( get_template_directory() ) . $template_dir,
+		100 => mdjm_get_templates_dir(),
 	);
 
 	$file_paths = apply_filters( 'mdjm_template_paths', $file_paths );
@@ -290,9 +297,9 @@ function mdjm_get_theme_template_paths() {
  *
  * Themes can filter this by using the mdjm_templates_dir filter.
  *
- * @since	1.3
- * @return	str
-*/
+ * @since   1.3
+ * @return  str
+ */
 function mdjm_get_theme_template_dir_name() {
 	return trailingslashit( apply_filters( 'mdjm_templates_dir', 'mdjm-templates' ) );
 } // mdjm_get_theme_template_dir_name
@@ -303,10 +310,10 @@ function mdjm_get_theme_template_dir_name() {
  * Adds an action to the beginning of a packages post content that can be hooked to
  * by other functions.
  *
- * @since	1.4
- * @global	$post
- * @param	$content	The the_content field of the package object
- * @return	str			The content with any additional data attached
+ * @since   1.4
+ * @global  $post
+ * @param   $content    The the_content field of the package object
+ * @return  str         The content with any additional data attached
  */
 function mdjm_before_package_content( $content ) {
 	global $post;
@@ -327,10 +334,10 @@ add_filter( 'the_content', 'mdjm_before_package_content' );
  * Adds an action to the end of a packages post content that can be hooked to by
  * other functions.
  *
- * @since	1.4
- * @global	$post
- * @param	$content	The the_content field of the package object
- * @return	str			The content with any additional data attached
+ * @since   1.4
+ * @global  $post
+ * @param   $content    The the_content field of the package object
+ * @return  str         The content with any additional data attached
  */
 function mdjm_after_package_content( $content ) {
 	global $post;
@@ -351,10 +358,10 @@ add_filter( 'the_content', 'mdjm_after_package_content' );
  * Adds an action to the beginning of an addona post content that can be hooked to
  * by other functions.
  *
- * @since	1.4
- * @global	$post
- * @param	$content	The the_content field of the addon object
- * @return	str			The content with any additional data attached
+ * @since   1.4
+ * @global  $post
+ * @param   $content    The the_content field of the addon object
+ * @return  str         The content with any additional data attached
  */
 function mdjm_before_addon_content( $content ) {
 	global $post;
@@ -375,10 +382,10 @@ add_filter( 'the_content', 'mdjm_before_addon_content' );
  * Adds an action to the end of an addons post content that can be hooked to by
  * other functions.
  *
- * @since	1.4
- * @global	$post
- * @param	$content	The the_content field of the addon object
- * @return	str			The content with any additional data attached
+ * @since   1.4
+ * @global  $post
+ * @param   $content    The the_content field of the addon object
+ * @return  str         The content with any additional data attached
  */
 function mdjm_after_addon_content( $content ) {
 	global $post;

@@ -1,5 +1,13 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
+ * @author: Mike Howard, Jack Mawhinney, Dan Porter
+ *
  * Admin Actions
  *
  * @package     MDJM
@@ -9,9 +17,10 @@
  * @since       1.3
  */
 
-// Exit if accessed directly
-if ( ! defined( 'ABSPATH' ) )
+// Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) {
 	exit;
+}
 
 /**
  * Processes all MDJM actions sent via POST and GET by looking for the 'mdjm-action'
@@ -21,23 +30,23 @@ if ( ! defined( 'ABSPATH' ) )
  * @return void
  */
 function mdjm_process_actions() {
-	if ( isset( $_POST['mdjm-action'] ) ) {
+	if ( isset( $_POST['mdjm-action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 
-		if ( isset( $_FILES ) )	{
+		if ( isset( $_FILES ) ) {
 			$_POST['FILES'] = $_FILES;
 		}
 
-		do_action( 'mdjm-' . sanitize_text_field( wp_unslash( $_POST['mdjm-action'] ) ), $_POST );
+		do_action( 'mdjm-' . sanitize_text_field( wp_unslash( $_POST['mdjm-action'] ) ), $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
 
 	}
 
-	if ( isset( $_GET['mdjm-action'] ) ) {
+	if ( isset( $_GET['mdjm-action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 
-		if ( isset( $_FILES ) )	{
+		if ( isset( $_FILES ) ) {
 			$_POST['FILES'] = $_FILES;
 		}
 
-		do_action( 'mdjm-' . sanitize_text_field( wp_unslash( $_GET['mdjm-action'] ) ), $_GET );
+		do_action( 'mdjm-' . sanitize_text_field( wp_unslash( $_GET['mdjm-action'] ) ), $_GET ); // phpcs:ignore WordPress.Security.NonceVerification
 
 	}
 
@@ -49,20 +58,19 @@ add_action( 'admin_init', 'mdjm_process_actions' );
  *
  * Prints the output for a hidden form field which is required for admin post forms.
  *
- * @since	1.3
- * @param	str		$action		The action identifier
- * @param	bool	$echo		True echo's the input field, false to return as a string
- * @return	str		$input		Hidden form field string
+ * @since   1.3
+ * @param   str  $action     The action identifier.
+ * @param   bool $echo       True echo's the input field, false to return as a string.
+ * @return  str     $input      Hidden form field string
  */
-function mdjm_admin_action_field( $action, $echo = true )	{
+function mdjm_admin_action_field( $action, $echo = true ) {
 	$name = apply_filters( 'mdjm-action_field_name', 'mdjm-action' );
 
 	$input = '<input type="hidden" name="' . $name . '" id="' . $name . '" value="' . $action . '" />';
 
-	if( ! empty( $echo ) )	{
+	if ( ! empty( $echo ) ) {
 		echo apply_filters( 'mdjm-action_field', $input, $action ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-	}
-	else	{
+	} else {
 		return apply_filters( 'mdjm-action_field', $input, $action );
 	}
 

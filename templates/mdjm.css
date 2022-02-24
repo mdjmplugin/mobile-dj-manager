@@ -1,10 +1,16 @@
 /**
- * MDJM Event Management Styles
- *
- * @package     MDJM
- * @subpackage  CSS
- * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
- */
+* Mobile DJ Manager Styles
+*
+* This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+* We acknowledge and are grateful to these developers for their contributions to open source.
+*
+* Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+* License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+*
+* @package MDJM
+* @subpackage CSS
+* @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
+*/
 
 @charset "UTF-8";
 
@@ -367,6 +373,147 @@ a	{
 	-webkit-box-shadow: none;
 	box-shadow: none;
 }
+.btn.btn-yellow	{
+	background-color: #FFFF00;
+	border-color: #b3b300;
+	-webkit-box-shadow: 0 3px 0 #b3b300;
+	box-shadow: 0 3px 0 #b3b300;
+	color: #000;
+}
+.btn.btn-yellow:hover	{
+	background-color:#b3b300;
+	border-color: #ffff00;
+	color: #fff;
+	-webkit-box-shadow: 0 3px 0 #ffff00;
+	box-shadow: 0 3px 0 #ffff00;
+}
+.btn.btn-yellow:active	{
+	top: 3px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.btn.btn-black	{
+	background-color: #000000;
+	border-color: #ffffff;
+	-webkit-box-shadow: 0 3px 0 #ffffff;
+	box-shadow: 0 3px 0 #ffffff;
+}
+.btn.btn-black:hover	{
+	background-color:#ffffff;
+	border-color: #000000;
+	color: #000;
+	-webkit-box-shadow: 0 3px 0 #000000;
+	box-shadow: 0 3px 0 #000000;
+}
+.btn.btn-black:active	{
+	top: 3px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.btn.btn-white	{
+	background-color: #ffffff;
+	border-color: #000000;
+	-webkit-box-shadow: 0 3px 0 #000000;
+	box-shadow: 0 3px 0 #000000;
+	color: #000;
+}
+.btn.btn-white:hover	{
+	background-color:#000000;
+	border-color: #ffffff;
+	color: #fff;
+	-webkit-box-shadow: 0 3px 0 #ffffff;
+	box-shadow: 0 3px 0 #ffffff;
+}
+.btn.btn-white:active	{
+	top: 3px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.btn.btn-purple	{
+	background-color: #990099;
+	border-color: #ff00ff;
+	-webkit-box-shadow: 0 3px 0 #ff00ff;
+	box-shadow: 0 3px 0 #ff00ff;
+}
+.btn.btn-purple:hover	{
+	background-color:#ff00ff;
+	border-color: #990099;
+	color: #fff;
+	-webkit-box-shadow: 0 3px 0 #990099;
+	box-shadow: 0 3px 0 #990099;
+}
+.btn.btn-purple:active	{
+	top: 3px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.btn.btn-pink	{
+	background-color: #ff00ff;
+	border-color: #990099;
+	-webkit-box-shadow: 0 3px 0 #990099;
+	box-shadow: 0 3px 0 #990099;
+}
+.btn.btn-pink:hover	{
+	background-color:#990099;
+	border-color: #ff00ff;
+	color: #fff;
+	-webkit-box-shadow: 0 3px 0 #ff00ff;
+	box-shadow: 0 3px 0 #ff00ff;
+}
+.btn.btn-pink:active	{
+	top: 3px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+
+.btn.btn-lightgrey	{
+	background-color: #f5f5f5;
+	border-color: #808080;
+	-webkit-box-shadow: 0 3px 0 #808080;
+	box-shadow: 0 3px 0 #808080;
+	color: #000;
+}
+.btn.btn-lightgrey:hover	{
+	background-color:#808080;
+	border-color: #f5f5f5;
+	color: #fff;
+	-webkit-box-shadow: 0 3px 0 #f5f5f5;
+	box-shadow: 0 3px 0 #f5f5f5;
+}
+.btn.btn-lightgrey:active	{
+	top: 3px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
+.btn.btn-darkgrey	{
+	background-color: #808080;
+	border-color: #f5f5f5;
+	-webkit-box-shadow: 0 3px 0 #808080;
+	box-shadow: 0 3px 0 #f5f5f5;
+}
+.btn.btn-darkgrey:hover	{
+	background-color:#f5f5f5;
+	border-color: #808080;
+	color: #000;
+	-webkit-box-shadow: 0 3px 0 #808080;
+	box-shadow: 0 3px 0 #808080;
+}
+.btn.btn-darkgrey:active	{
+	top: 3px;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+}
 
 .btn i {
 	padding-right:0.8em;
@@ -471,20 +618,20 @@ a	{
 /* =Contracts Page
 -------------------------------------------------------------- */
 #mdjm-contract-signature-form .col	{
-    padding-right: 5px;
+	padding-right: 5px;
 	float: left;
-    width: 47%;
+	width: 47%;
 }
 
 #mdjm-contract-signature-form .last	{
 	padding-left: 5px;
 	float: right;
-    width: 47%;
+	width: 47%;
 }
 
 #mdjm-contract-signature-form .row	{
-    height: auto;
-    overflow: auto;
+	height: auto;
+	overflow: auto;
 }
 
 #mdjm-contract-signature-form input,
@@ -636,21 +783,21 @@ a	{
 }
 
 .guest-playlist-entry-column {
-    float: left;
-    width: 33%;
-    padding: 2px;
+	float: left;
+	width: 33%;
+	padding: 2px;
 }
 
 .guest-playlist-entry-column:nth-child(3) {
-    float: left;
-    width: 15%;
-    padding: 2px;
+	float: left;
+	width: 15%;
+	padding: 2px;
 }
 
 .playlist-entry-column {
-    float: left;
-    width: 20%;
-    padding: 2px;
+	float: left;
+	width: 20%;
+	padding: 2px;
 }
 .playlist-entry-column:nth-child(4) {
 	width: 30%;
@@ -663,9 +810,9 @@ a	{
 .playlist-entry-row:after,
 .guest-playlist-entry-row-headings:after,
 .guest-playlist-entry-row:after {
-    content: "";
-    display: table;
-    clear: both;
+	content: "";
+	display: table;
+	clear: both;
 }
 
 .playlist-entry-row:hover,
@@ -679,20 +826,20 @@ span.guest-playlist-entry-heading	{
 }
 
 .mdjm_playlist_share {
-    margin: 2px;
-    text-align: center;
+	margin: 2px;
+	text-align: center;
 }
 
 .mdjm_playlist_removing {
 	background-color: #c4554e;
-    opacity: 0.7;
+	opacity: 0.7;
 }
 
 p.view_current_playlist {
-    font-size: 80%;
-    padding: 0px;
-    margin: 0px;
-    text-align: right;
+	font-size: 80%;
+	padding: 0px;
+	margin: 0px;
+	text-align: right;
 }
 /* =Login Form
 -------------------------------------------------------------- */
@@ -955,4 +1102,92 @@ p.view_current_playlist {
 #mdjm-client-zone-footer a:hover {
 	color: #F90;
 	text-decoration: underline;
+}
+
+
+/* Single Event */
+
+.mdjm-s-event {
+	width:100%;
+	max-width:100%;
+}
+#mdjm-singleevent-details .mdjm-heading {
+	font-size: 15px;
+	padding: 5px;
+	background: hsla(38, 100%, 50%, 0.28);
+	color: #404040;
+	margin: 15px 0;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+#mdjm-singleevent-details .full {
+	width:100%;
+}
+#mdjm-singleevent-details .half {
+	width:47%;
+	margin:0 1%;
+	display: inline-block;
+}
+
+@media only screen and (max-width:991px){
+	#mdjm-singleevent-details .half {
+		width:100%;
+		display: block;
+	}
+}
+
+/* Event Loop */
+
+.event-loop .mdjm-action-button.mdjm-action-button-more {
+	background: #ffa200;
+	color: #fff;
+	border: 0px;
+	box-shadow: none;
+	outline: 0;
+	font-size: 17px;
+	text-transform: uppercase;
+	text-decoration: none;
+	font-weight: bold;
+	width: 100%;
+	display: block;
+	-webkit-transition: background-color .25s linear;
+	transition: background-color .25s linear;
+
+}
+
+.event-loop .mdjm-action-button.mdjm-action-button-more:hover {
+	background: #848484;
+}
+
+.event-loop  {
+	width:100%;
+	max-width:100%;
+	border-bottom: 1px solid #c3c3c3;
+	padding-bottom: 20px;
+	display: block;
+}
+
+.event-loop .mdjm-heading {
+	font-size: 15px;
+	padding: 5px;
+	background: hsla(38, 100%, 50%, 0.28);
+	color: #404040;
+	margin: 15px 0;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+.event-loop .full {
+	width:100%;
+}
+.event-loop .half {
+	width:47%;
+	margin:0 1%;
+	display: inline-block;
+}
+
+@media only screen and (max-width:991px){
+	.event-loop .half {
+		width:100%;
+		display: block;
+	}
 }
