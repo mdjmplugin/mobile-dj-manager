@@ -110,9 +110,9 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 		// Event Date.
 		case 'event_date':
 			if ( mdjm_employee_can( 'read_events' ) ) {
-				echo '<strong><a href="' . esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ) . '">' . esc_html( gmdate( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) ) . '</a>';
+				echo '<strong><a href="' . esc_url( admin_url( 'post.php?post=' . $post_id . '&action=edit' ) ) . '">' . esc_html( date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) ) . '</a>';
 			} else {
-				echo '<strong>' . esc_html( gmdate( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) ) . '</strong>';
+				echo '<strong>' . esc_html( date( 'd M Y', strtotime( get_post_meta( $post_id, '_mdjm_event_date', true ) ) ) ) . '</strong>';
 			}
 			break;
 
@@ -1032,8 +1032,8 @@ function mdjm_event_post_filtered( $query ) {
 	if ( ! empty( $_GET['mdjm_filter_date'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 
 		// Create the date start and end range.
-		$start = gmdate( 'Y-m-d', strtotime( substr( sanitize_text_field( wp_unslash( $_GET['mdjm_filter_date'] ) ), 0, 4 ) . '-' . substr( sanitize_text_field( wp_unslash( $_GET['mdjm_filter_date'] ) ), -2 ) . '-01' ) ); // phpcs:ignore WordPress.Security.NonceVerification
-		$end   = gmdate( 'Y-m-t', strtotime( $start ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		$start = date( 'Y-m-d', strtotime( substr( sanitize_text_field( wp_unslash( $_GET['mdjm_filter_date'] ) ), 0, 4 ) . '-' . substr( sanitize_text_field( wp_unslash( $_GET['mdjm_filter_date'] ) ), -2 ) . '-01' ) ); // phpcs:ignore WordPress.Security.NonceVerification
+		$end   = date( 'Y-m-t', strtotime( $start ) ); // phpcs:ignore WordPress.Security.NonceVerification
 
 		$query->query_vars['meta_query'] = array(
 			array(
@@ -1479,38 +1479,38 @@ function mdjm_save_event_post( $post_id, $post, $update ) {
 	 */
 	if ( mdjm_get_option( 'time_format', 'H:i' ) === 'H:i' ) { // 24 Hr
 
-		$event_data['_mdjm_event_start']        = gmdate(
+		$event_data['_mdjm_event_start']        = date(
 			'H:i:s',
 			strtotime( // phpcs:ignore WordPress.Security.NonceVerification
 				sanitize_text_field( wp_unslash( $_POST['event_start_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_start_min'] ) ) // phpcs:ignore WordPress.Security.NonceVerification
 			)
 		); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$event_data['_mdjm_event_finish']       = gmdate(
+		$event_data['_mdjm_event_finish']       = date(
 			'H:i:s',
 			strtotime( // phpcs:ignore WordPress.Security.NonceVerification
 				sanitize_text_field( wp_unslash( $_POST['event_finish_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_finish_min'] ) ) // phpcs:ignore WordPress.Security.NonceVerification
 			)
 		); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$event_data['_mdjm_event_djsetup_time'] = gmdate(
+		$event_data['_mdjm_event_djsetup_time'] = date(
 			'H:i:s',
 			strtotime( // phpcs:ignore WordPress.Security.NonceVerification
 				sanitize_text_field( wp_unslash( $_POST['dj_setup_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['dj_setup_min'] ) ) // phpcs:ignore WordPress.Security.NonceVerification
 			)
 		); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 	} else { // 12 hr
-		$event_data['_mdjm_event_start']        = gmdate(
+		$event_data['_mdjm_event_start']        = date(
 			'H:i:s',
 			strtotime( // phpcs:ignore WordPress.Security.NonceVerification
 				sanitize_text_field( wp_unslash( $_POST['event_start_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_start_min'] ) ) . sanitize_text_field( wp_unslash( $_POST['event_start_period'] ) ) // phpcs:ignore WordPress.Security.NonceVerification
 			)
 		); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$event_data['_mdjm_event_finish']       = gmdate(
+		$event_data['_mdjm_event_finish']       = date(
 			'H:i:s',
 			strtotime( // phpcs:ignore WordPress.Security.NonceVerification
 				sanitize_text_field( wp_unslash( $_POST['event_finish_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['event_finish_min'] ) ) . sanitize_text_field( wp_unslash( $_POST['event_finish_period'] ) ) // phpcs:ignore WordPress.Security.NonceVerification
 			)
 		); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
-		$event_data['_mdjm_event_djsetup_time'] = gmdate(
+		$event_data['_mdjm_event_djsetup_time'] = date(
 			'H:i:s',
 			strtotime( // phpcs:ignore WordPress.Security.NonceVerification
 				sanitize_text_field( wp_unslash( $_POST['dj_setup_hr'] ) ) . ':' . sanitize_text_field( wp_unslash( $_POST['dj_setup_min'] ) ) . sanitize_text_field( wp_unslash( $_POST['dj_setup_period'] ) ) // phpcs:ignore WordPress.Security.NonceVerification
@@ -1528,10 +1528,10 @@ function mdjm_save_event_post( $post_id, $post, $update ) {
 	 * If the finish time is less than the start time, assume following day.
 	 */
 	if ( empty( $event_data['_mdjm_event_end_date'] ) ) {
-		if ( gmdate( 'H', strtotime( $event_data['_mdjm_event_finish'] ) ) > gmdate( 'H', strtotime( $event_data['_mdjm_event_start'] ) ) ) {
+		if ( date( 'H', strtotime( $event_data['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $event_data['_mdjm_event_start'] ) ) ) {
 			$event_data['_mdjm_event_end_date'] = sanitize_text_field( wp_unslash( $_POST['_mdjm_event_date'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		} else { // End date is following day.
-			$event_data['_mdjm_event_end_date'] = gmdate( 'Y-m-d', strtotime( '+1 day', strtotime( sanitize_text_field( wp_unslash( $_POST['_mdjm_event_date'] ) ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			$event_data['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( sanitize_text_field( wp_unslash( $_POST['_mdjm_event_date'] ) ) ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		}
 	}
 

@@ -23,33 +23,21 @@ global $mdjm_event;
 <?php do_action( 'mdjm_pre_event_loop' ); ?>
 <div id="post-<?php echo esc_attr( $mdjm_event->ID ); ?>" class="event-loop <?php echo esc_attr( $mdjm_event->post_status ); ?>">
 	<div class="single-event-field full">
-		<div class="mdjm-event-heading">{event_name} - {event_date}</div>
-	</div>
+		
+<table class="table-full">
+		<tr><div class="mdjm-event-heading">{event_name} - {event_date}</tr></div><br/>
+		<tr>
+			<td><div class="table-column"><strong>Status: </strong> {event_status}</td></div>
+			<td><div class="table-column"><strong><?php printf(__('Function:', 'mobile-dj-manager'), mdjm_get_label_singular() ); ?></strong> {event_type}</td></div>
+		</tr>
+		<tr>
+			<td><div class="table-column"><strong>Start Date: </strong>{event_date} - {start_time}</td></div>
+			<td><div class="table-column"><strong>Remaining Balance: </strong> {balance}</td></div>
+		</tr>
+		<tr class="table-row-full">
+			<td colspan="2"><div class="table-header"><a class="table-header-text" href="{event_url}">View Event Details</a></div></td>
+		</tr>
+	</table>
 
-
-	<div class="mdjm-singleevent-overview">
-
-		<div class="single-event-field half">     
-			<strong> <?php _e( 'Status:', 'mobile-dj-manager' ); ?></strong><br/>
-			{event_status}
-		</div>
-
-		<div class="single-event-field half">     
-			<strong><?php printf( __( 'Event: ', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></strong>
-			<br/>{event_type}
-		</div>
-
-		<div class="single-event-field half">     
-			<strong><?php _e( 'Event Date: ', 'mobile-dj-manager' ); ?></strong><br/>{event_date} - {start_time}
-		</div>
-
-		<div class="single-event-field half">     
-			<strong>{balance_label} <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>:</strong><br/> {balance}
-		</div>
-
-		<div class="single-event-button">
-			<a class="mdjm-action-button mdjm-action-button-more" href="{event_url}"><?php esc_html_e( 'View Event Details', 'mobile-dj-manager' ); ?></a>
-		</div>
-	</div>
 </div>
 <?php do_action( 'mdjm_post_event_loop' ); ?>

@@ -249,7 +249,7 @@ class MDJM_Event {
 		);
 
 		$default_meta = array(
-			'_mdjm_event_date'            => gmdate( 'Y-m-d' ),
+			'_mdjm_event_date'            => date( 'Y-m-d' ),
 			'_mdjm_event_dj'              => ! mdjm_get_option( 'employer' ) ? 1 : 0,
 			'_mdjm_event_playlist_access' => mdjm_generate_playlist_guest_code(),
 			'_mdjm_event_playlist'        => mdjm_get_option( 'enable_playlists' ) ? 'Y' : 'N',
@@ -293,10 +293,10 @@ class MDJM_Event {
 
 			if ( ! empty( $meta['_mdjm_event_start'] ) && ! empty( $meta['_mdjm_event_finish'] ) ) {
 
-				if ( gmdate( 'H', strtotime( $meta['_mdjm_event_finish'] ) ) > gmdate( 'H', strtotime( $meta['_mdjm_event_start'] ) ) ) {
+				if ( date( 'H', strtotime( $meta['_mdjm_event_finish'] ) ) > date( 'H', strtotime( $meta['_mdjm_event_start'] ) ) ) {
 					$meta['_mdjm_event_end_date'] = $meta['_mdjm_event_date'];
 				} else {
-					$meta['_mdjm_event_end_date'] = gmdate( 'Y-m-d', strtotime( '+1 day', strtotime( $meta['_mdjm_event_date'] ) ) );
+					$meta['_mdjm_event_end_date'] = date( 'Y-m-d', strtotime( '+1 day', strtotime( $meta['_mdjm_event_date'] ) ) );
 				}
 			}
 
@@ -595,7 +595,7 @@ class MDJM_Event {
 		if ( empty( $this->date ) ) {
 			$return = '';
 		} else {
-			$return = gmdate( 'l, jS F Y', strtotime( $this->date ) );
+			$return = date( 'l, jS F Y', strtotime( $this->date ) );
 		}
 
 		return apply_filters( 'mdjm_event_long_date', $return, $this->date, $this->ID );
@@ -615,7 +615,7 @@ class MDJM_Event {
 		if ( empty( $this->date ) ) {
 			$return = '';
 		} else {
-			$return = gmdate( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $this->date ) );
+			$return = date( mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $this->date ) );
 		}
 
 		return apply_filters( 'mdjm_event_short_date', $return, $this->date, $this->ID );

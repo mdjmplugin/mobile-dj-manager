@@ -715,8 +715,8 @@ function mdjm_prepare_playlist_upload_data() {
 			}
 
 			$uploads[ $entry->ID ] = array(
-				'date_added' => gmdate( 'Y-m-d', strtotime( $entry->post_date ) ),
-				'event_date' => gmdate( 'Y-m-d', strtotime( $mdjm_event->date ) ),
+				'date_added' => date( 'Y-m-d', strtotime( $entry->post_date ) ),
+				'event_date' => date( 'Y-m-d', strtotime( $mdjm_event->date ) ),
 				'event_type' => esc_attr( urlencode( $mdjm_event->get_type() ) ),
 				'song'       => esc_attr( urlencode( stripslashes( get_post_meta( $entry->ID, '_mdjm_playlist_entry_song', true ) ) ) ),
 				'artist'     => esc_attr( urlencode( stripslashes( get_post_meta( $entry->ID, '_mdjm_playlist_entry_artist', true ) ) ) ),

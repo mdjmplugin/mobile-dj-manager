@@ -538,7 +538,7 @@ function mdjm_event_metabox_tasks_row( $event_id ) {
 		$tasks_history[] = sprintf(
 			'%s: %s',
 			mdjm_get_task_name( $task_slug ),
-			gmdate( mdjm_get_option( 'short_date_format' ), $run_time )
+			date( mdjm_get_option( 'short_date_format' ), $run_time )
 		);
 	}
 
@@ -1582,14 +1582,14 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 			<?php
 			echo MDJM()->html->time_hour_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				array(
-					'selected' => esc_attr( ! empty( $start ) ? gmdate( $format[0], esc_html( strtotime( $start ) ) ) : '' ),
+					'selected' => esc_attr( ! empty( $start ) ? date( $format[0], esc_html( strtotime( $start ) ) ) : '' ),
 				)
 			);
 			?>
 			<?php
 			echo MDJM()->html->time_minute_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				array(
-					'selected' => esc_attr( ! empty( $start ) ? gmdate( $format[2], esc_html( strtotime( $start ) ) ) : '' ),
+					'selected' => esc_attr( ! empty( $start ) ? date( $format[2], esc_html( strtotime( $start ) ) ) : '' ),
 				)
 			);
 			?>
@@ -1597,7 +1597,7 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 				<?php
 				echo MDJM()->html->time_period_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'selected' => esc_attr( ! empty( $start ) ? gmdate( 'A', esc_html( strtotime( $start ) ) ) : '' ),
+						'selected' => esc_attr( ! empty( $start ) ? date( 'A', esc_html( strtotime( $start ) ) ) : '' ),
 					)
 				);
 				?>
@@ -1613,7 +1613,7 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 			echo MDJM()->html->time_hour_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				array(
 					'name'     => 'event_finish_hr',
-					'selected' => esc_attr( ! empty( $finish ) ? gmdate( $format[0], strtotime( $finish ) ) : '' ),
+					'selected' => esc_attr( ! empty( $finish ) ? date( $format[0], strtotime( $finish ) ) : '' ),
 				)
 			);
 			?>
@@ -1621,7 +1621,7 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 			echo MDJM()->html->time_minute_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				array(
 					'name'     => 'event_finish_min',
-					'selected' => esc_attr( ! empty( $finish ) ? gmdate( $format[2], strtotime( $finish ) ) : '' ),
+					'selected' => esc_attr( ! empty( $finish ) ? date( $format[2], strtotime( $finish ) ) : '' ),
 				)
 			);
 			?>
@@ -1630,7 +1630,7 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 				echo MDJM()->html->time_period_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
 						'name'     => 'event_finish_period',
-						'selected' => esc_attr( ! empty( $finish ) ? gmdate( 'A', strtotime( $finish ) ) : '' ),
+						'selected' => esc_attr( ! empty( $finish ) ? date( 'A', strtotime( $finish ) ) : '' ),
 					)
 				);
 				?>
@@ -1646,7 +1646,7 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 			echo MDJM()->html->time_hour_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				array(
 					'name'        => 'dj_setup_hr',
-					'selected'    => esc_attr( ! empty( $setup_time ) ? gmdate( $format[0], strtotime( $setup_time ) ) : '' ),
+					'selected'    => esc_attr( ! empty( $setup_time ) ? date( $format[0], strtotime( $setup_time ) ) : '' ),
 					'blank_first' => true,
 				)
 			);
@@ -1655,7 +1655,7 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 			echo MDJM()->html->time_minute_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				array(
 					'name'        => 'dj_setup_min',
-					'selected'    => esc_attr( ! empty( $setup_time ) ? gmdate( $format[2], strtotime( $setup_time ) ) : '' ),
+					'selected'    => esc_attr( ! empty( $setup_time ) ? date( $format[2], strtotime( $setup_time ) ) : '' ),
 					'blank_first' => true,
 				)
 			);
@@ -1665,7 +1665,7 @@ function mdjm_event_overview_metabox_event_times_row( $event_id ) {
 				echo MDJM()->html->time_period_select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
 						'name'        => 'dj_setup_period',
-						'selected'    => esc_attr( ! empty( $setup_time ) ? gmdate( 'A', strtotime( $setup_time ) ) : '' ),
+						'selected'    => esc_attr( ! empty( $setup_time ) ? date( 'A', strtotime( $setup_time ) ) : '' ),
 						'blank_first' => true,
 					)
 				);
@@ -2824,7 +2824,7 @@ function mdjm_event_metabox_history_journal_table( $event_id ) {
 				<?php if ( $journals ) : ?>
 					<?php foreach ( $journals as $journal ) : ?>
 						<tr>
-							<td><a href="<?php echo esc_url( get_edit_comment_link( $journal->comment_ID ) ); ?>"><?php echo esc_html( gmdate( mdjm_get_option( 'time_format' ) . ' ' . mdjm_get_option( 'short_date_format' ), strtotime( $journal->comment_date ) ) ); ?></a></td>
+							<td><a href="<?php echo esc_url( get_edit_comment_link( $journal->comment_ID ) ); ?>"><?php echo esc_html( date( mdjm_get_option( 'time_format' ) . ' ' . mdjm_get_option( 'short_date_format' ), strtotime( $journal->comment_date ) ) ); ?></a></td>
 							<td><?php echo substr( $journal->comment_content, 0, 250 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></td>
 						</tr>
 						<?php $i++; ?>
@@ -2896,7 +2896,7 @@ function mdjm_event_metabox_history_emails_table( $event_id ) {
 				<?php if ( $emails ) : ?>
 					<?php foreach ( $emails as $email ) : ?>
 						<tr>
-							<td><?php echo esc_html( gmdate( mdjm_get_option( 'time_format' ) . ' ' . mdjm_get_option( 'short_date_format' ), strtotime( $email->post_date ) ) ); ?></td>
+							<td><?php echo esc_html( date( mdjm_get_option( 'time_format' ) . ' ' . mdjm_get_option( 'short_date_format' ), strtotime( $email->post_date ) ) ); ?></td>
 							<td><a href="<?php echo esc_url( get_edit_post_link( $email->ID ) ); ?>"><?php echo esc_html( get_the_title( $email->ID ) ); ?></a></td>
 							<td>
 							<?php
@@ -2905,7 +2905,7 @@ function mdjm_event_metabox_history_emails_table( $event_id ) {
 							if ( ! empty( $email->post_modified ) && 'opened' === $email->post_status ) :
 								?>
 								<?php echo '<br />'; ?>
-								<span class="description"><?php echo esc_html( gmdate( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $email->post_modified ) ) ); ?></span>
+								<span class="description"><?php echo esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $email->post_modified ) ) ); ?></span>
 							<?php endif; ?></td>
 						</tr>
 						<?php $i++; ?>

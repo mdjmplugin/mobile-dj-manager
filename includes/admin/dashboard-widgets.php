@@ -57,16 +57,16 @@ function mdjm_widget_events_overview() {
 			'last_year' => 0,
 		);
 		$enquiry_periods   = array(
-			'month'     => gmdate( 'Y-m-01' ),
-			'this_year' => gmdate( 'Y-01-01' ),
-			'last_year' => gmdate( 'Y-01-01', strtotime( '-1 year' ) ),
+			'month'     => date( 'Y-m-01' ),
+			'this_year' => date( 'Y-01-01' ),
+			'last_year' => date( 'Y-01-01', strtotime( '-1 year' ) ),
 		);
 
 		foreach ( $enquiry_periods as $period => $date ) {
 			$current_count = mdjm_count_events(
 				array(
 					'start-date' => $date,
-					'end-date'   => 'last_year' !== $period ? gmdate( 'Y-m-d' ) : gmdate( 'Y-12-31', strtotime( '-1 year' ) ),
+					'end-date'   => 'last_year' !== $period ? date( 'Y-m-d' ) : date( 'Y-12-31', strtotime( '-1 year' ) ),
 				)
 			);
 
@@ -85,9 +85,9 @@ function mdjm_widget_events_overview() {
 			'last_year' => 0,
 		);
 		$event_periods    = array(
-			'month'     => array( gmdate( 'Y-m-01' ), gmdate( 'Y-m-d' ) ),
-			'this_year' => array( gmdate( 'Y-01-01' ), gmdate( 'Y-m-d' ) ),
-			'last_year' => array( gmdate( 'Y-m-01', strtotime( '-1 year' ) ), gmdate( 'Y-12-31', strtotime( '-1 year' ) ) ),
+			'month'     => array( date( 'Y-m-01' ), date( 'Y-m-d' ) ),
+			'this_year' => array( date( 'Y-01-01' ), date( 'Y-m-d' ) ),
+			'last_year' => array( date( 'Y-m-01', strtotime( '-1 year' ) ), date( 'Y-12-31', strtotime( '-1 year' ) ) ),
 		);
 
 		foreach ( $event_periods as $period => $date ) {
@@ -103,12 +103,12 @@ function mdjm_widget_events_overview() {
 			}
 		}
 
-		$income_month  = $stats->get_income_by_date( null, gmdate( 'n' ), gmdate( 'Y' ) );
-		$income_year   = $stats->get_income_by_date( null, '', gmdate( 'Y' ) );
-		$income_last   = $stats->get_income_by_date( null, '', gmdate( 'Y' ) - 1 );
-		$expense_month = $stats->get_expenses_by_date( null, gmdate( 'n' ), gmdate( 'Y' ) );
-		$expense_year  = $stats->get_expenses_by_date( null, '', gmdate( 'Y' ) );
-		$expense_last  = $stats->get_expenses_by_date( null, '', gmdate( 'Y' ) - 1 );
+		$income_month  = $stats->get_income_by_date( null, date( 'n' ), date( 'Y' ) );
+		$income_year   = $stats->get_income_by_date( null, '', date( 'Y' ) );
+		$income_last   = $stats->get_income_by_date( null, '', date( 'Y' ) - 1 );
+		$expense_month = $stats->get_expenses_by_date( null, date( 'n' ), date( 'Y' ) );
+		$expense_year  = $stats->get_expenses_by_date( null, '', date( 'Y' ) );
+		$expense_last  = $stats->get_expenses_by_date( null, '', date( 'Y' ) - 1 );
 
 		$earnings_month = $income_month - $expense_month;
 		$earnings_year  = $income_year - $expense_year;
@@ -123,7 +123,7 @@ function mdjm_widget_events_overview() {
 						<th>&nbsp;</th>
 						<th><?php esc_html_e( 'MTD', 'mobile-dj-manager' ); ?></th>
 						<th><?php esc_html_e( 'YTD', 'mobile-dj-manager' ); ?></th>
-						<th><?php echo esc_html( gmdate( 'Y', strtotime( '-1 year' ) ) ); ?></th>
+						<th><?php echo esc_html( date( 'Y', strtotime( '-1 year' ) ) ); ?></th>
 					</tr>
 				</thead>
 				<tbody>

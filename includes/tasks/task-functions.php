@@ -426,7 +426,7 @@ function mdjm_request_deposit_single_task( $event_id ) {
 			wp_update_post(
 				array(
 					'ID'            => $event->ID,
-					'post_modified' => gmdate( 'Y-m-d H:i:s' ),
+					'post_modified' => date( 'Y-m-d H:i:s' ),
 				)
 			);
 			add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
@@ -486,7 +486,7 @@ function mdjm_balance_reminder_single_task( $event_id ) {
 			wp_update_post(
 				array(
 					'ID'            => $event->ID,
-					'post_modified' => gmdate( 'Y-m-d H:i:s' ),
+					'post_modified' => date( 'Y-m-d H:i:s' ),
 				)
 			);
 			add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );

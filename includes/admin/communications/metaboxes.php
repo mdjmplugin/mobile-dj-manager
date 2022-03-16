@@ -141,7 +141,7 @@ function mdjm_communication_details_metabox( $post ) {
 	printf(
 		/* translators: %s Date */
 		__( '<strong>Date Sent</strong>: %s', 'mobile-dj-manager' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		gmdate( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post->ID, '_date_sent', true ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+		date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post->ID, '_date_sent', true ) ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
 	);
 	?>
 		</p>
@@ -207,7 +207,7 @@ function mdjm_communication_details_metabox( $post ) {
 		echo esc_html( get_post_status_object( $post->post_status )->label );
 
 		if ( 'opened' === $post->post_status ) {
-			echo ' ' . esc_html( gmdate( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) );
+			echo ' ' . esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) );
 		}
 		?>
 		</p>

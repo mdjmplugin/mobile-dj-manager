@@ -250,10 +250,10 @@ class MDJM_HTML_Elements {
 	 * @return str $output Year dropdown
 	 */
 	public function year_dropdown( $name = 'year', $selected = 0, $years_before = 5, $years_after = 0 ) {
-		$current    = gmdate( 'Y' );
+		$current    = date( 'Y' );
 		$start_year = $current - absint( $years_before );
 		$end_year   = $current + absint( $years_after );
-		$selected   = empty( $selected ) ? gmdate( 'Y' ) : $selected;
+		$selected   = empty( $selected ) ? date( 'Y' ) : $selected;
 		$options    = array();
 
 		while ( $start_year <= $end_year ) {
@@ -297,7 +297,7 @@ class MDJM_HTML_Elements {
 
 		$month    = 1;
 		$options  = array();
-		$selected = ( empty( $args['selected'] ) && ! $args['multiple'] ) ? gmdate( 'n' ) : $args['selected'];
+		$selected = ( empty( $args['selected'] ) && ! $args['multiple'] ) ? date( 'n' ) : $args['selected'];
 
 		while ( $month <= 12 ) {
 			$options[ absint( $month ) ] = mdjm_month_num_to_name( $month, $args['fullname'] );

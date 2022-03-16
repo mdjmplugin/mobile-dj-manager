@@ -28,3 +28,4 @@ Thumbs.db
 mdjm_debug.log
 phpcs_all.txt
 phpcs_source.txt
+*.xml

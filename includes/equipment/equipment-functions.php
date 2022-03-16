@@ -355,11 +355,11 @@ function mdjm_get_package_price_for_month( $package_id, $date = null ) {
 	$price = mdjm_get_package_price( $package_id );
 
 	if ( ! isset( $date ) ) {
-		$date = gmdate( 'n' );
+		$date = date( 'n' );
 	}
 
 	if ( ! is_numeric( $date ) ) {
-		$date = gmdate( 'n', strtotime( $date ) );
+		$date = date( 'n', strtotime( $date ) );
 	}
 
 	$monthly_prices = mdjm_get_package_variable_prices( $package_id );
@@ -632,7 +632,7 @@ function mdjm_package_is_available_for_event_date( $package_id, $event_date = ''
 	if ( is_numeric( $event_date ) ) {
 		$event_month = $event_date;
 	} else {
-		$event_month = gmdate( 'n', strtotime( $event_date ) );
+		$event_month = date( 'n', strtotime( $event_date ) );
 	}
 
 	if ( in_array( $event_month, $event_months ) ) {
@@ -1231,11 +1231,11 @@ function mdjm_get_addon_price_for_month( $addon_id, $date = null ) {
 	$price = mdjm_get_addon_price( $addon_id );
 
 	if ( ! isset( $date ) ) {
-		$date = gmdate( 'n' );
+		$date = date( 'n' );
 	}
 
 	if ( ! is_numeric( $date ) ) {
-		$date = gmdate( 'n', strtotime( $date ) );
+		$date = date( 'n', strtotime( $date ) );
 	}
 
 	$monthly_prices = mdjm_get_addon_variable_prices( $addon_id );
@@ -1424,7 +1424,7 @@ function mdjm_addon_is_available_for_event_date( $addon_id, $event_date = '' ) {
 	}
 
 	$event_months = mdjm_get_addon_months_available( $addon_id );
-	$event_month  = gmdate( 'n', strtotime( $event_date ) );
+	$event_month  = date( 'n', strtotime( $event_date ) );
 
 	if ( in_array( $event_month, $event_months ) ) {
 		return true;

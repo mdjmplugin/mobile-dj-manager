@@ -1,10 +1,10 @@
 <?php
 
 /**
- * Plugin Name: Mobile DJ Manager
+ * Plugin Name: MDJM Event Management
  * Plugin URI: https://www.mobileeventsmanager.co.uk
  * Description: The flexible event management solution for WordPress - not just for DJs!
- * Version: 1.6
+ * Version: 1.6.1
  * Date: February 2022
  * Author: Mobile Events Manager <support@mobileeventsmanager.co.uk>
  * Author URI:  https://mobileeventsmanager.co.uk
@@ -31,18 +31,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
-			/**
-		 * Check environment before activating
-		 *
-		 * @changed 07-01-20
-		 */
-
-if ( in_array( 'mobile-events-manager/mobile-events-manager.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || class_exists( 'Mobile_Events_Manager' ) ) {
-	deactivate_plugins( basename( __FILE__ ) );
-	wp_die( '<h1>Mobile DJ Manager cannot be activated</h1><p>To avoid a conflict of plugins, if you wish to carry on installing Mobile DJ Manager, please deactivate Mobile Events Manager first.</p>', 'Plugin Activation Error', array( 'back_link' => true ) );
-}
-
 
 if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 	/**
@@ -156,7 +144,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants() {
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.6' );
+			define( 'MDJM_VERSION_NUM', '1.6.1' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version' );
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );

@@ -85,7 +85,7 @@ class MDJM_DB_Playlists extends MDJM_DB {
 			'added_by'      => get_current_user_id(),
 			'category'      => '',
 			'notes'         => '',
-			'date_added'    => gmdate( 'Y-m-d H:i:s' ),
+			'date_added'    => date( 'Y-m-d H:i:s' ),
 			'_uploaded'     => 0,
 			'date_uploaded' => '',
 		);
@@ -326,22 +326,22 @@ class MDJM_DB_Playlists extends MDJM_DB {
 
 				if ( ! empty( $args['date']['start'] ) ) {
 
-					$start  = gmdate( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
+					$start  = date( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
 					$where .= " AND `date_created` >= '{$start}'";
 
 				}
 
 				if ( ! empty( $args['date']['end'] ) ) {
 
-					$end    = gmdate( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
+					$end    = date( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
 					$where .= " AND `date_created` <= '{$end}'";
 
 				}
 			} else {
 
-				$year  = gmdate( 'Y', strtotime( $args['date'] ) );
-				$month = gmdate( 'm', strtotime( $args['date'] ) );
-				$day   = gmdate( 'd', strtotime( $args['date'] ) );
+				$year  = date( 'Y', strtotime( $args['date'] ) );
+				$month = date( 'm', strtotime( $args['date'] ) );
+				$day   = date( 'd', strtotime( $args['date'] ) );
 
 				$where .= " AND $year = YEAR ( date_added ) AND $month = MONTH ( date_added ) AND $day = DAY ( date_added )";
 			}
@@ -465,22 +465,22 @@ class MDJM_DB_Playlists extends MDJM_DB {
 
 				if ( ! empty( $args['date']['start'] ) ) {
 
-					$start  = gmdate( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
+					$start  = date( 'Y-m-d 00:00:00', strtotime( $args['date']['start'] ) );
 					$where .= " AND `date_created` >= '{$start}'";
 
 				}
 
 				if ( ! empty( $args['date']['end'] ) ) {
 
-					$end    = gmdate( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
+					$end    = date( 'Y-m-d 23:59:59', strtotime( $args['date']['end'] ) );
 					$where .= " AND `date_created` <= '{$end}'";
 
 				}
 			} else {
 
-				$year  = gmdate( 'Y', strtotime( $args['date'] ) );
-				$month = gmdate( 'm', strtotime( $args['date'] ) );
-				$day   = gmdate( 'd', strtotime( $args['date'] ) );
+				$year  = date( 'Y', strtotime( $args['date'] ) );
+				$month = date( 'm', strtotime( $args['date'] ) );
+				$day   = date( 'd', strtotime( $args['date'] ) );
 
 				$where .= " AND $year = YEAR ( date_added ) AND $month = MONTH ( date_added ) AND $day = DAY ( date_added )";
 			}

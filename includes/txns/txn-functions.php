@@ -506,13 +506,13 @@ function mdjm_add_txn( $data ) {
 			'ID'            => isset( $data['invoice'] ) ? $data['invoice'] : '',
 			'post_title'    => isset( $data['invoice'] ) ? mdjm_get_option( 'event_prefix' ) . $data['invoice'] : '',
 			'post_status'   => 'mdjm-income',
-			'post_date'     => gmdate( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
+			'post_date'     => date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
 			'edit_date'     => true,
 			'post_author'   => isset( $data['item_number'] ) ? get_post_meta( $data['item_number'], '_mdjm_event_client', true ) : 1,
 			'post_type'     => 'mdjm-transaction',
 			'post_category' => ( ! empty( $data['txn_type'] ) ? array( $data['txn_type'] ) : '' ),
 			'post_parent'   => isset( $data['event_id'] ) ? $data['event_id'] : '',
-			'post_modified' => gmdate( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
+			'post_modified' => date( 'Y-m-d H:i:s', current_time( 'timestamp' ) ),
 		)
 	);
 

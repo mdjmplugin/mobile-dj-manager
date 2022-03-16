@@ -59,7 +59,7 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id ) {
 	switch ( $column_name ) {
 		// Date Sent.
 		case 'date_sent':
-			echo esc_html( gmdate( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post_id, '_date_sent', true ) ) );
+			echo esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), get_post_meta( $post_id, '_date_sent', true ) ) );
 
 			break;
 
@@ -119,7 +119,7 @@ function mdjm_communication_posts_custom_column( $column_name, $post_id ) {
 
 			if ( ! empty( $post->post_modified ) && 'opened' === $post->post_status ) {
 				echo '<br />';
-				echo '<em>' . esc_html( gmdate( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) ) . '</em>';
+				echo '<em>' . esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format', 'd/m/Y' ), strtotime( $post->post_modified ) ) ) . '</em>';
 			}
 
 			break;

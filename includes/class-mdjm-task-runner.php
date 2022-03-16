@@ -495,7 +495,7 @@ class MDJM_Task_Runner {
 					wp_update_post(
 						array(
 							'ID'            => $event->ID,
-							'post_modified' => gmdate( 'Y-m-d H:i:s' ),
+							'post_modified' => date( 'Y-m-d H:i:s' ),
 						)
 					);
 					add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
@@ -533,7 +533,7 @@ class MDJM_Task_Runner {
 	public function request_deposit() {
 		MDJM()->debug->log_it( "*** Starting the $this->name task ***", true );
 
-		$due_date = gmdate( 'Y-m-d', strtotime( '-' . $this->options['age'] ) );
+		$due_date = date( 'Y-m-d', strtotime( '-' . $this->options['age'] ) );
 
 		$i         = 1;
 		$completed = 0;
@@ -584,7 +584,7 @@ class MDJM_Task_Runner {
 					wp_update_post(
 						array(
 							'ID'            => $event->ID,
-							'post_modified' => gmdate( 'Y-m-d H:i:s' ),
+							'post_modified' => date( 'Y-m-d H:i:s' ),
 						)
 					);
 					add_action( 'save_post_mdjm-event', 'mdjm_save_event_post', 10, 3 );
@@ -795,7 +795,7 @@ class MDJM_Task_Runner {
 	 */
 	public function build_query() {
 		if ( 'after_approval' !== $this->options['run_when'] ) {
-			$run_date   = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $this->options['age'] ) );
+			$run_date   = date( 'Y-m-d H:i:s', strtotime( '-' . $this->options['age'] ) );
 			$date_query = array(
 				'key'     => '_mdjm_event_task_after_approval_' . $this->slug,
 				'compare' => '<',
@@ -804,7 +804,7 @@ class MDJM_Task_Runner {
 			);
 		} else {
 			if ( 'before_event' === $this->options['run_when'] ) {
-				$run_date   = gmdate( 'Y-m-d', strtotime( '+' . $this->options['age'] ) );
+				$run_date   = date( 'Y-m-d', strtotime( '+' . $this->options['age'] ) );
 				$date_query = array(
 					'key'     => '_mdjm_event_date',
 					'compare' => '<=',
@@ -812,7 +812,7 @@ class MDJM_Task_Runner {
 					'type'    => 'date',
 				);
 			} else {
-				$run_date   = gmdate( 'Y-m-d', strtotime( '-' . $this->options['age'] ) );
+				$run_date   = date( 'Y-m-d', strtotime( '-' . $this->options['age'] ) );
 				$date_query = array(
 					'key'     => '_mdjm_event_date',
 					'compare' => '>=',
@@ -831,7 +831,7 @@ class MDJM_Task_Runner {
 					'order'       => 'ASC',
 					'meta_query'  => array(
 						'key'     => '_mdjm_event_date',
-						'value'   => gmdate( 'Y-m-d' ),
+						'value'   => date( 'Y-m-d' ),
 						'type'    => 'date',
 						'compare' => '<=',
 					),
@@ -839,7 +839,7 @@ class MDJM_Task_Runner {
 				break;
 
 			case 'fail-enquiry':
-				$expired = gmdate( 'Y-m-d', strtotime( '-' . $this->options['age'] ) );
+				$expired = date( 'Y-m-d', strtotime( '-' . $this->options['age'] ) );
 
 				$query = array(
 					'post_status' => array( 'mdjm-unattended', 'mdjm-enquiry' ),
@@ -857,7 +857,7 @@ class MDJM_Task_Runner {
 						array(
 							'key'     => '_mdjm_event_date',
 							'compare' => '>=',
-							'value'   => gmdate( 'Y-m-d' ),
+							'value'   => date( 'Y-m-d' ),
 							'type'    => 'date',
 						),
 						$date_query,
@@ -883,7 +883,7 @@ class MDJM_Task_Runner {
 						array(
 							'key'     => '_mdjm_event_date',
 							'compare' => '>=',
-							'value'   => gmdate( 'Y-m-d' ),
+							'value'   => date( 'Y-m-d' ),
 							'type'    => 'date',
 						),
 						array(
@@ -907,8 +907,8 @@ class MDJM_Task_Runner {
 				break;
 
 			case 'playlist-employee-notify':
-				$start = gmdate( 'Y-m-d' );
-				$end   = gmdate( 'Y-m-d', strtotime( '+' . $this->options['age'] ) );
+				$start = date( 'Y-m-d' );
+				$end   = date( 'Y-m-d', strtotime( '+' . $this->options['age'] ) );
 				$query = array(
 					'post_status' => 'mdjm-approved',
 					'meta_query'  => array(

@@ -185,8 +185,8 @@ class MDJM_Stats {
 		$minute          = $end_date ? 59 : 0;
 		$hour            = $end_date ? 23 : 0;
 		$day             = 1;
-		$month           = gmdate( 'n', current_time( 'timestamp' ) );
-		$year            = gmdate( 'Y', current_time( 'timestamp' ) );
+		$month           = date( 'n', current_time( 'timestamp' ) );
+		$year            = date( 'Y', current_time( 'timestamp' ) );
 
 		if ( array_key_exists( $date, $this->get_predefined_dates() ) ) {
 
@@ -224,7 +224,7 @@ class MDJM_Stats {
 					break;
 
 				case 'today':
-					$day = gmdate( 'd', current_time( 'timestamp' ) );
+					$day = date( 'd', current_time( 'timestamp' ) );
 
 					if ( $end_date ) {
 						$hour   = 23;
@@ -235,7 +235,7 @@ class MDJM_Stats {
 					break;
 
 				case 'yesterday':
-					$day = gmdate( 'd', current_time( 'timestamp' ) ) - 1;
+					$day = date( 'd', current_time( 'timestamp' ) ) - 1;
 
 					// Check if Today is the first day of the month (meaning subtracting one will get us 0).
 					if ( $day < 1 ) {
@@ -259,8 +259,8 @@ class MDJM_Stats {
 					break;
 
 				case 'this_week':
-					$days_to_week_start = ( gmdate( 'w', current_time( 'timestamp' ) ) - 1 ) * 60 * 60 * 24;
-					$today              = gmdate( 'd', current_time( 'timestamp' ) ) * 60 * 60 * 24;
+					$days_to_week_start = ( date( 'w', current_time( 'timestamp' ) ) - 1 ) * 60 * 60 * 24;
+					$today              = date( 'd', current_time( 'timestamp' ) ) * 60 * 60 * 24;
 
 					if ( $today < $days_to_week_start ) {
 
@@ -273,12 +273,12 @@ class MDJM_Stats {
 
 					if ( ! $end_date ) {
 						// Getting the start day.
-						$day  = gmdate( 'd', current_time( 'timestamp' ) - $days_to_week_start ) - 1;
+						$day  = date( 'd', current_time( 'timestamp' ) - $days_to_week_start ) - 1;
 						$day += get_option( 'start_of_week' );
 
 					} else {
 						// Getting the end day.
-						$day  = gmdate( 'd', current_time( 'timestamp' ) - $days_to_week_start ) - 1;
+						$day  = date( 'd', current_time( 'timestamp' ) - $days_to_week_start ) - 1;
 						$day += get_option( 'start_of_week' ) + 6;
 
 					}
@@ -286,8 +286,8 @@ class MDJM_Stats {
 					break;
 
 				case 'last_week':
-					$days_to_week_start = ( gmdate( 'w', current_time( 'timestamp' ) ) - 1 ) * 60 * 60 * 24;
-					$today              = gmdate( 'd', current_time( 'timestamp' ) ) * 60 * 60 * 24;
+					$days_to_week_start = ( date( 'w', current_time( 'timestamp' ) ) - 1 ) * 60 * 60 * 24;
+					$today              = date( 'd', current_time( 'timestamp' ) ) * 60 * 60 * 24;
 
 					if ( $today < $days_to_week_start ) {
 
@@ -300,19 +300,19 @@ class MDJM_Stats {
 
 					if ( ! $end_date ) {
 						// Getting the start day.
-						$day  = gmdate( 'd', current_time( 'timestamp' ) - $days_to_week_start ) - 8;
+						$day  = date( 'd', current_time( 'timestamp' ) - $days_to_week_start ) - 8;
 						$day += get_option( 'start_of_week' );
 
 					} else {
 						// Getting the end day.
-						$day  = gmdate( 'd', current_time( 'timestamp' ) - $days_to_week_start ) - 8;
+						$day  = date( 'd', current_time( 'timestamp' ) - $days_to_week_start ) - 8;
 						$day += get_option( 'start_of_week' ) + 6;
 					}
 
 					break;
 
 				case 'this_quarter':
-					$month_now = gmdate( 'n', current_time( 'timestamp' ) );
+					$month_now = date( 'n', current_time( 'timestamp' ) );
 
 					if ( $month_now <= 3 ) {
 
@@ -363,7 +363,7 @@ class MDJM_Stats {
 					break;
 
 				case 'last_quarter':
-					$month_now = gmdate( 'n', current_time( 'timestamp' ) );
+					$month_now = date( 'n', current_time( 'timestamp' ) );
 
 					if ( $month_now <= 3 ) {
 
@@ -450,9 +450,9 @@ class MDJM_Stats {
 		} elseif ( false !== strtotime( $date ) ) {
 
 			$date  = strtotime( $date, current_time( 'timestamp' ) );
-			$year  = gmdate( 'Y', $date );
-			$month = gmdate( 'm', $date );
-			$day   = gmdate( 'd', $date );
+			$year  = date( 'Y', $date );
+			$month = date( 'm', $date );
+			$day   = date( 'd', $date );
 
 		} else {
 
@@ -492,7 +492,7 @@ class MDJM_Stats {
 				$format = 'Y-m-d 00:00:00';
 			}
 
-			$start_date  = gmdate( $format, $this->start_date );
+			$start_date  = date( $format, $this->start_date );
 			$start_where = " AND p.post_date >= '{$start_date}'";
 		}
 
@@ -504,7 +504,7 @@ class MDJM_Stats {
 				$format = 'Y-m-d 23:59:59';
 			}
 
-			$end_date = gmdate( $format, $this->end_date );
+			$end_date = date( $format, $this->end_date );
 
 			$end_where = " AND p.post_date <= '{$end_date}'";
 		}
@@ -537,7 +537,7 @@ class MDJM_Stats {
 				$format = 'Y-m-d 00:00:00';
 			}
 
-			$start_date  = gmdate( $format, $this->start_date );
+			$start_date  = date( $format, $this->start_date );
 			$start_where = " AND $wpdb->posts.post_date >= '{$start_date}'";
 		}
 
@@ -549,7 +549,7 @@ class MDJM_Stats {
 				$format = 'Y-m-d 23:59:59';
 			}
 
-			$end_date = gmdate( $format, $this->end_date );
+			$end_date = date( $format, $this->end_date );
 
 			$end_where = " AND $wpdb->posts.post_date <= '{$end_date}'";
 		}
@@ -581,7 +581,7 @@ class MDJM_Stats {
 				$format = 'Y-m-d 00:00:00';
 			}
 
-			$start_date  = gmdate( $format, $this->start_date );
+			$start_date  = date( $format, $this->start_date );
 			$start_where = " AND p.post_date >= '{$start_date}'";
 		}
 
@@ -593,7 +593,7 @@ class MDJM_Stats {
 				$format = 'Y-m-d 23:59:59';
 			}
 
-			$end_date = gmdate( $format, $this->end_date );
+			$end_date = date( $format, $this->end_date );
 
 			$end_where = " AND p.post_date <= '{$end_date}'";
 		}
@@ -626,7 +626,7 @@ class MDJM_Stats {
 				$format = 'Y-m-d 00:00:00';
 			}
 
-			$start_date  = gmdate( $format, $this->start_date );
+			$start_date  = date( $format, $this->start_date );
 			$start_where = " AND $wpdb->posts.post_date >= '{$start_date}'";
 		}
 
@@ -638,7 +638,7 @@ class MDJM_Stats {
 				$format = 'Y-m-d 23:59:59';
 			}
 
-			$end_date = gmdate( $format, $this->end_date );
+			$end_date = date( $format, $this->end_date );
 
 			$end_where = " AND $wpdb->posts.post_date <= '{$end_date}'";
 		}
@@ -696,11 +696,11 @@ class MDJM_Stats {
 			'post_status'            => 'any',
 			'fields'                 => 'ids',
 			'meta_key'               => '_mdjm_event_date',
-			'meta_value'             => gmdate( 'Y-m-d' ),
+			'meta_value'             => date( 'Y-m-d' ),
 			'update_post_term_cache' => false,
 		);
 
-		$date = gmdate( 'Y-m-d', strtotime( $year . '-' . $month_num . '-' . $day ) );
+		$date = date( 'Y-m-d', strtotime( $year . '-' . $month_num . '-' . $day ) );
 
 		$args['meta_value'] = $date;
 
@@ -1081,14 +1081,14 @@ class MDJM_Stats {
 					'date_query' => array(
 						array(
 							'after'     => array(
-								'year'  => gmdate( 'Y', $this->start_date ),
-								'month' => gmdate( 'n', $this->start_date ),
-								'day'   => gmdate( 'd', $this->start_date ),
+								'year'  => date( 'Y', $this->start_date ),
+								'month' => date( 'n', $this->start_date ),
+								'day'   => date( 'd', $this->start_date ),
 							),
 							'before'    => array(
-								'year'  => gmdate( 'Y', $this->end_date ),
-								'month' => gmdate( 'n', $this->end_date ),
-								'day'   => gmdate( 'd', $this->end_date ),
+								'year'  => date( 'Y', $this->end_date ),
+								'month' => date( 'n', $this->end_date ),
+								'day'   => date( 'd', $this->end_date ),
 							),
 							'inclusive' => true,
 						),

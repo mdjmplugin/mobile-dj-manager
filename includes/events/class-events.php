@@ -18,7 +18,7 @@ class MDJM_Events {
 	public function employee_bookings( $dj = '', $date = '' ) {
 		global $mdjm_settings;
 
-		$date = ! empty( $date ) ? $date : gmdate( 'Y-m-d' );
+		$date = ! empty( $date ) ? $date : date( 'Y-m-d' );
 		$dj   = ! empty( $dj ) ? $dj : mdjm_get_employees();
 
 		if ( is_array( $dj ) ) {
@@ -94,11 +94,11 @@ class MDJM_Events {
 			'client'          => ( ! empty( $client ) ? get_userdata( $client ) : '' ),
 			'dj'              => ( ! empty( $dj ) ? get_userdata( $dj ) : __( 'Not Assigned', 'mobile-dj-manager' ) ),
 			'dj_wage'         => ( ! empty( $dj_wage ) ? mdjm_currency_filter( mdjm_sanitize_amount( $dj_wage ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
-			'start'           => ( ! empty( $start ) ? gmdate( mdjm_get_option( 'time_format' ), strtotime( $start ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
-			'finish'          => ( ! empty( $finish ) ? gmdate( mdjm_get_option( 'time_format' ), strtotime( $finish ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+			'start'           => ( ! empty( $start ) ? date( mdjm_get_option( 'time_format' ), strtotime( $start ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+			'finish'          => ( ! empty( $finish ) ? date( mdjm_get_option( 'time_format' ), strtotime( $finish ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 			'status'          => ( ! empty( $status ) ? $status : '' ),
 			'setup_date'      => ( ! empty( $setup_date ) ? strtotime( $setup_date ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
-			'setup_time'      => ( ! empty( $setup_time ) ? gmdate( mdjm_get_option( 'time_format' ), strtotime( $setup_time ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
+			'setup_time'      => ( ! empty( $setup_time ) ? date( mdjm_get_option( 'time_format' ), strtotime( $setup_time ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 			'cost'            => ( ! empty( $cost ) ? mdjm_currency_filter( mdjm_sanitize_amount( $cost ) ) : __( 'Not Specified', 'mobile-dj-manager' ) ),
 			'deposit'         => ( ! empty( $deposit ) ? mdjm_currency_filter( mdjm_sanitize_amount( $deposit ) ) : '0.00' ),
 			'balance'         => ( ! empty( $paid ) && '0.00' !== $paid && ! empty( $cost ) ?
@@ -109,8 +109,8 @@ class MDJM_Events {
 			'type'            => mdjm_get_event_type( $post_id, true ),
 			'online_quote'    => mdjm_get_option( 'online_enquiry', false ) && ! empty( $online_quote ) ? $online_quote : '',
 			'contract'        => ( ! empty( $contract ) ? $contract : '' ),
-			'contract_date'   => ( ! empty( $contract_date ) ? gmdate( mdjm_get_option( 'short_date_format' ), strtotime( $contract_date ) ) :
-				gmdate( mdjm_get_option( 'short_date_format' ) ) ),
+			'contract_date'   => ( ! empty( $contract_date ) ? date( mdjm_get_option( 'short_date_format' ), strtotime( $contract_date ) ) :
+				date( mdjm_get_option( 'short_date_format' ) ) ),
 
 			'signed_contract' => ( ! empty( $signed_contract ) ? $signed_contract : '' ),
 			'notes'           => ( ! empty( $notes ) ? $notes : '' ),

@@ -57,95 +57,67 @@ global $mdjm_event;
 	 */
 	?>
   <?php do_action( 'mdjm_pre_event_details', $mdjm_event->ID, $mdjm_event ); ?>
-
-  <div id="mdjm-singleevent-details">
-	<div class="single-event-field full">
-	  <div class="mdjm-event-heading">{event_name} - {event_date}</div>
-	</div>
-
-
-	<div class="mdjm-singleevent-overview">
-
-	  <div class="single-event-field half">     
-		<strong> <?php _e( 'Status:', 'mobile-dj-manager' ); ?></strong> {event_status}
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php printf( __( 'Function: ', 'mobile-dj-manager' ), mdjm_get_label_singular() ); ?></strong> {event_type}
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Function Starts: ', 'mobile-dj-manager' ); ?></strong> {start_time}
-	  </div>
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Function Ends: ', 'mobile-dj-manager' ); ?></strong> {end_time} ({end_date})
-	  </div>
-		
-	<div class="single-event-field full">     
-		<div class="mdjm-heading">Package Details</div>
-	  </div>
-		
-	<div class="single-event-field full">     
-		<strong><?php _e( '', 'mobile-dj-manager' ); ?></strong> {event_package}
-		<strong><?php _e( 'Invoice Link:', 'mobile-dj-manager' ); ?></strong> {mdjm_cf_married_name}
-	  </div>
-			
-		<div class="single-event-field full">     
-		<div class="mdjm-heading">Addons Selected</div>
-	  </div>
-		
-	  <div class="single-event-field full">     
-		<strong><?php _e( '', 'mobile-dj-manager' ); ?></strong> {event_addons}
-	  </div>
-
-	<div class="single-event-field full">     
-		<div class="mdjm-heading">Pricing</div>
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Total Cost:', 'mobile-dj-manager' ); ?></strong> {total_cost}<br />
-		<strong>{deposit_label}:</strong> {deposit} ({deposit_status})<br />
-		<strong>{balance_label} <?php _e( 'Remaining', 'mobile-dj-manager' ); ?>:</strong> {balance}
-	  </div>
-
-	  <div class="single-event-field full">     
-		<div class="mdjm-heading"><?php _e( 'Your Details', 'mobile-dj-manager' ); ?></div>
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Your Name: ', 'mobile-dj-manager' ); ?></strong> {client_fullname}
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Phone:', 'mobile-dj-manager' ); ?></strong> {client_primary_phone}
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Email: ', 'mobile-dj-manager' ); ?></strong> {client_email}
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Address: ', 'mobile-dj-manager' ); ?></strong> {client_full_address}
-	  </div>
-
-	  <div class="single-event-field full">     
-		<div class="mdjm-heading"><?php _e( 'Venue Details', 'mobile-dj-manager' ); ?></div>
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Venue: ', 'mobile-dj-manager' ); ?></strong> {venue}
-	  </div>
-
-	  <div class="single-event-field half">     
-		<strong><?php _e( 'Address: ', 'mobile-dj-manager' ); ?></strong> {venue_full_address}
-	  </div>
-
-	  <div class="single-event-field full">     
-		<div class="mdjm-heading"><?php _e( 'Function Notes', 'mobile-dj-manager' ); ?></div>
-		{client_notes}
-	  </div>
-
-	</div>
-
-  </div>
+<br/><br/><br/>
+	 <table class="table-full">
+		<tr><div class="mdjm-event-heading">{event_name} - {event_date}</tr></div><br/>
+		<tr>
+			<td><div class="table-column"><strong>Status: </strong> {event_status}</td></div>
+			<td><div class="table-column"><strong><?php printf(__('Function:', 'mobile-dj-manager'), mdjm_get_label_singular() ); ?></strong> {event_type}</td></div>
+		</tr>
+		<tr>
+			<td><div class="table-column"><strong>Start Time: </strong> {start_time}</td></div>
+			<td><div class="table-column"><strong>End Time: </strong> {end_time}</td></div>
+		</tr>
+		<tr class="table-row-full">
+			<td colspan="2"><div class="table-header">Package Details</div></td>
+		</tr>
+			<td colspan="2"><div class="table-column">{event_package}</td></div>
+		</tr>
+		<tr class="table-row-full">
+			<td colspan="2"><div class="table-header">Add-Ons Selected</div></td>
+		</tr>
+		</tr>
+			<td colspan="2"><div class="table-column">{event_addons}</td></div>
+		</tr>
+		<tr class="table-row-full">
+			<td colspan="2"><div class="table-header">Pricing</div></td>
+		</tr>
+		</tr>
+			<td colspan="2"><div class="table-column"><strong>Total Cost: </strong>{total_cost}<br />
+				<strong>{deposit_label}: </strong> {deposit} ({deposit_status})<br />
+				<strong>{balance_label} Remaining: </strong>{balance}</td></div>
+		</tr>
+		<tr class="table-row-full">
+			<td colspan="2"><div class="table-header">Your Details</div></td>
+		</tr>
+		<tr>
+			<td>
+				<div class="table-column"><strong>Name: </strong>{client_fullname}<br />
+				<strong>Phone Number: </strong> {client_primary_phone} <br />
+				<strong>Email Address: </strong>{client_email}</div><br />
+			</td>
+			<td>
+				<div class="table-column"><strong>Address: <br/></strong>{client_full_address}</div>
+			</td>
+		</tr>
+		<tr class="table-row-full">
+			<td colspan="2"><div class="table-header">Venue Details</div></td>
+		</tr>
+		<tr>
+			<td>
+				<div class="table-column"><strong>Venue Name: </strong>{venue}<br />
+			</td>
+			<td>
+				<div class="table-column"><strong>Address: <br/></strong>{venue_full_address}</div>
+			</td>
+		</tr>
+		<tr class="table-row-full">
+			<td colspan="2"><div class="table-header">Function Notes</div></td>
+		</tr>
+		<tr>
+			<td colspan="2">
+				<div class="table-column">{client_notes}</div>
+			</td>
+		</tr>
+	</table>
   <?php do_action( 'mdjm_post_event_details', $mdjm_event->ID, $mdjm_event ); ?>
