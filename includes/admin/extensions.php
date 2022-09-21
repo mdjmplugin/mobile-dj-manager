@@ -40,7 +40,7 @@ function mdjm_extensions_page() {
 				'utm_campaign' => 'MDJM_Addons_Page',
 				'utm_content'  => 'All Addons',
 			),
-			'https://mdjm.co.uk/add-ons/'
+			'https://mdjm.co.uk/extensions/'
 		)
 	);
 
