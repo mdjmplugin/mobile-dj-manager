@@ -39,5 +39,5 @@ global $mdjm_event;
 		</tr>
 	</table>
 
-</div>
+</div></div>
 <?php do_action( 'mdjm_post_event_loop' ); ?>

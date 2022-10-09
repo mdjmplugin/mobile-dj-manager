@@ -4,8 +4,8 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: https://www.mobileeventsmanager.co.uk
  * Description: The flexible event management solution for WordPress - not just for DJs!
- * Version: 1.6.1
- * Date: February 2022
+ * Version: 1.6.2
+ * Date: Octboer 2022
  * Author: Mobile Events Manager <support@mobileeventsmanager.co.uk>
  * Author URI:  https://mobileeventsmanager.co.uk
  * Text Domain: mobile-dj-manager
@@ -144,7 +144,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants() {
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.6.1' );
+			define( 'MDJM_VERSION_NUM', '1.6.2' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version' );
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );

@@ -588,6 +588,7 @@ a	{
 .mdjm-event-heading	{
 	font-size: larger;
 	font-weight: bold;
+	margin-top:10px;
 }
 .mdjm-event-label	{
 	font-style: italic;
@@ -1162,8 +1163,8 @@ p.view_current_playlist {
 .event-loop  {
 	width:100%;
 	max-width:100%;
-	border-bottom: 1px solid #c3c3c3;
-	padding-bottom: 20px;
+	border-bottom: 5px solid #404040;
+	padding-bottom: 0px;
 	display: block;
 }
 
@@ -1194,6 +1195,7 @@ p.view_current_playlist {
 
 .table-full{
 	width: 100%;
+	margin-bottom: 10px;
 }
 .table-column{
 	text-align: left;

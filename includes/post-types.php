@@ -30,7 +30,7 @@ function mdjm_register_post_types() {
 		array(
 			'name'               => _x( '%2$s', 'post type general name', 'mobile-dj-manager' ),
 			'singular_name'      => _x( '%1$s', 'post type singular name', 'mobile-dj-manager' ),
-			'menu_name'          => _x( 'MDJM', 'admin menu', 'mobile-dj-manager' ),
+			'menu_name'          => _x( 'MDJM Events', 'admin menu', 'mobile-dj-manager' ),
 			'name_admin_bar'     => _x( '%1$s', 'add new on admin bar', 'mobile-dj-manager' ),
 			'add_new'            => __( 'Create %1$s', 'mobile-dj-manager' ),
 			'add_new_item'       => __( 'Create New %1$s', 'mobile-dj-manager' ),
@@ -50,7 +50,7 @@ function mdjm_register_post_types() {
 
 	$event_args = array(
 		'labels'            => $event_labels,
-		'description'       => __( 'MDJM', 'mobile-dj-manager' ),
+		'description'       => __( 'MDJM Events', 'mobile-dj-manager' ),
 		'show_ui'           => true,
 		'show_in_menu'      => true,
 		'menu_position'     => defined( 'MDJM_MENU_POS' ) ? MDJM_MENU_POS : 58.4,

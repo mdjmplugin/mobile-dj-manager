@@ -23,7 +23,7 @@ global $mdjm_event;
 <?php do_action( 'mdjm_pre_event_detail', $mdjm_event->ID, $mdjm_event ); ?>
 <div id="post-<?php echo $mdjm_event->ID; ?>" class="mdjm-s-event mdjm-<?php echo $mdjm_event->post_status; ?>">
   
-  <?php do_action( 'mdjm_print_notices' ); ?>
+  <?php do_action( 'mdjm_print_notices'); ?>
 
   <p>
   <?php

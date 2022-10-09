@@ -1351,7 +1351,7 @@
 						var event_end = finish_date;
 
 						if(event_end < event_start){
-							alert('Your event end date is before your start date. If the event finishes at midnight or later, please change the date to the next day first.');
+							alert('Your event end date and time is before your start date and time. If the event finishes at midnight or later, please change the date to the next day first.');
 						}
 
 					}
