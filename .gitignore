@@ -46,3 +46,4 @@ domain.txt
 
 # WordPress
 wp-config.php
+wp-cron.php
