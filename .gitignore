@@ -40,11 +40,8 @@ Thumbs.db
 *.exe
 *.war
 
-# Large media files
-*.mp4
-*.tiff
-*.avi
-*.flv
-*.mov
-*.wmv
+# Vagrant
+.vagrant
 
+# WordPress
+wp-config.php

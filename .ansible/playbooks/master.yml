@@ -1,0 +1,139 @@
+---
+- hosts: all
+  vars:
+    sitename: dev-mdjm
+    mysql_root_password: root
+
+  tasks:
+    # Install nodejs
+    - name: Download node repo file
+      get_url:
+        url: http://deb.nodesource.com/setup_16.x
+        dest: /tmp/node_setup
+      tags: nodejs
+
+    - name: Add node repo to apt
+      command: bash /tmp/node_setup
+      args:
+        creates: /etc/apt/sources.list.d/nodesource.list
+      tags: nodejs
+
+    # Apt packages
+    - name: Install apt packages
+      apt:
+        pkg:
+          [
+            apache2,
+            mysql-server,
+            libmysqlclient-dev,
+            mysql-client,
+            php7.4,
+            php7.4-dev,
+            php7.4-mbstring,
+            php7.4-soap,
+            php7.4-cli,
+            php7.4-common,
+            php7.4-curl,
+            php7.4-gd,
+            php7.4-mysql,
+            php7.4-xml,
+            php7.4-zip,
+            python3-mysqldb,
+            postfix,
+            git,
+            build-essential,
+            nodejs,
+          ]
+
+    - name: set timezone to Europe/London
+      timezone:
+        name: Europe/London
+
+    # Configure mysql-server
+
+    - name: Create admin db user
+      mysql_user:
+        name: vagrant
+        password: vagrant
+        priv: '*.*:ALL'
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Create local DB
+      mysql_db:
+        name: '{{sitename}}'
+        state: present
+        login_unix_socket: /var/run/mysqld/mysqld.sock
+
+    - name: Restart MySQL service
+      service:
+        name: mysql
+        state: restarted
+
+    # Install WP CLI
+    - name: Download WP CLI
+      get_url:
+        url: https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
+        dest: /usr/local/bin/wp
+
+    - name: Make WP CLI Executable
+      file: dest=/usr/local/bin/wp mode=a+x
+
+    # Configure WP
+    - name: Copy WP config
+      command: cp /var/www/html/wp-config-sample.php /var/www/html/wp-config.php
+
+    - name: Update WP config
+      lineinfile:
+        path: /var/www/html/wp-config.php
+        regexp: '{{item.regexp}}'
+        line: '{{item.line}}'
+      with_items:
+        - { 'regexp': "define\\( 'DB_NAME', '(.)+' \\);", 'line': "define( 'DB_NAME', '{{sitename}}' );" }
+        - { 'regexp': "define\\( 'DB_USER', '(.)+' \\);", 'line': "define( 'DB_USER', 'vagrant' );" }
+        - { 'regexp': "define\\( 'DB_PASSWORD', '(.)+' \\);", 'line': "define( 'DB_PASSWORD', 'vagrant' );" }
+        - { 'regexp': "define\\( 'WP_DEBUG', '(.)+' \\);", 'line': "define( 'WP_DEBUG', true );" }
+
+    # Configure apache2
+    - name: Enable mod_vhost_alias, mod_rewrite, mod_ssl
+      action: apache2_module name={{item}}
+      with_items:
+        - vhost_alias
+        - rewrite
+        - ssl
+
+    - name: Install apache config
+      template: src=/vagrant/{{ item }}
+        dest=/etc/apache2/sites-available/{{ item }}
+      with_items:
+        - default-ssl.conf
+        - default.conf
+
+    - name: Disable default HTTP vhost
+      command: a2dissite 000-default
+
+    - name: enable live apache2 default and 'localhost' site config
+      file: src=/etc/apache2/sites-available/{{ item.split('/')[-1] }}
+        dest=/etc/apache2/sites-enabled/{{ item.split('/')[-1] }}
+        state=link
+      with_items:
+        - default-ssl.conf
+        - default.conf
+
+    - name: Restart apache2
+      service:
+        name: apache2
+        state: restarted
+
+    - name: Change to /var/www/html when logging in
+      lineinfile:
+        path: /home/vagrant/.bashrc
+        line: 'cd /var/www/html;'
+        state: present
+        owner: vagrant
+        group: vagrant
+        mode: 0644
+
+  # Perform these actions as root
+  become: yes
+  become_user: root
