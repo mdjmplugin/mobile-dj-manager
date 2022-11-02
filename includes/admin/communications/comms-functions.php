@@ -244,12 +244,12 @@ function mdjm_send_comm_email( $data ) {
 		$message = 'comm_missing_content';
 	} else {
 
-		if ( isset( $_FILES['mdjm_email_upload_file'] ) && isset( $_FILES['mdjm_email_upload_file']['name'] ) && '' !== $_FILES['mdjm_email_upload_file']['name'] ) {
+		if ( isset( $_FILES['mdjm_email_upload_file'] ) && '' !== $_FILES['mdjm_email_upload_file']['name'] ) {
 			$upload_dir = wp_upload_dir();
 
-			$file_name = sanitize_file_name( wp_unslash( $_FILES['mdjm_email_upload_file']['name'] ) );
+			$file_name = $_FILES['mdjm_email_upload_file']['name']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 			$file_path = $upload_dir['path'] . '/' . $file_name;
-			$tmp_path  = sanitize_file_name( wp_unslash( $_FILES['mdjm_email_upload_file']['tmp_name'] ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
+			$tmp_path  = $_FILES['mdjm_email_upload_file']['tmp_name']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 			if ( move_uploaded_file( $tmp_path, $file_path ) ) {
 				$attachments[] = $file_path;

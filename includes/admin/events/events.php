@@ -794,6 +794,12 @@ function mdjm_output_event_name_field( $post ) {
 	} else {
 		echo '&mdash;';
 	}
+	
+	$client = get_userdata( get_post_meta( $post->ID, '_mdjm_event_client', true ) );
+
+		echo '<a class="button-primary" href="' . esc_url( mdjm_get_admin_page( 'comms' ) . '&recipient=' . $client->ID . '&event_id=' . $post->ID ) . '">' .
+		/* translators: %s Event or Events */
+		sprintf( esc_html__( 'Email Client', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ), "</a>\r\n";
 	?>
 	<?php
 } // mdjm_output_event_name_field

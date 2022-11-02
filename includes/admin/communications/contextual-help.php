@@ -40,7 +40,7 @@ function mdjm_comms_email_contextual_help() {
 		'<p><strong>' . __( 'For more information:', 'mobile-dj-manager' ) . '</strong></p>' .
 		'<p>' . sprintf( /* translators: %s external link */
 			__( 'Visit the <a href="%s">documentation</a> on the Mobile DJ Manager website.', 'mobile-dj-manager' ),
-			esc_url( 'http://mobileeventsmanager.co.uk/support/' )
+			esc_url( 'http://mdjm.co.uk/support/' )
 		) . '</p>' .
 		'<p>' . sprintf( /* translators: %s external link */
 			__( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ),

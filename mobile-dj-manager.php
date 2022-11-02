@@ -2,12 +2,12 @@
 
 /**
  * Plugin Name: MDJM Event Management
- * Plugin URI: https://www.mobileeventsmanager.co.uk
+ * Plugin URI: https://www.mdjm.co.uk
  * Description: The flexible event management solution for WordPress - not just for DJs!
  * Version: 1.6.2
- * Date: Octboer 2022
- * Author: Mobile Events Manager <support@mobileeventsmanager.co.uk>
- * Author URI:  https://mobileeventsmanager.co.uk
+ * Date: October 2022
+ * Author: MDJM <support@mdjm.co.uk>
+ * Author URI:  https://mdjm.co.uk
  * Text Domain: mobile-dj-manager
  * Domain Path: /languages
  * License: GPL2
@@ -323,6 +323,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				'mdjm-stripe-payments.php',
 				'mdjm-google-calendar-sync.php',
 				'mdjm-dynamic-contact-forms.php',
+				'mdjm-mailchimp-subscribe.php',
 			);
 
 			$get_active_plugins = (array) get_option( 'active_plugins', array() );
@@ -341,7 +342,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 
 				} else {
 					// no dir, just plugin file name
-					$plugin_filename = esc_html( $plugin );
+					$plugin_filename = 	esc_html( $plugin );
 				}
 
 				$plugin_filenames[] = $plugin_filename;

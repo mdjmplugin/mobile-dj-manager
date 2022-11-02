@@ -847,7 +847,7 @@ class MDJM_HTML_Elements {
 		$args['id'] = ! empty( $args['id'] ) ? $args['id'] : $args['name'];
 
 		if ( 'H:i' === mdjm_get_option( 'time_format', 'H:i' ) ) {
-			$i      = '00';
+			$i      = '0';
 			$x      = '23';
 			$format = 'H';
 		} else {
@@ -857,7 +857,7 @@ class MDJM_HTML_Elements {
 		}
 
 		while ( $i <= $x ) {
-			if ( 0 === $i && $i < 10 && 'H' === $format ) {
+			if ( 0 !== $i && $i < 10 && 'H' === $format ) {
 				$i = '0' . $i;
 			}
 			$options[ $i ] = $i;

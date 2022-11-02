@@ -1,4 +1,4 @@
-# Copyright (C) 2018 Mike Howard <mike@mdjm.co.uk>
+# Copyright (C) 2018 Mike Howard <info@mdjm.co.uk>
 # This file is distributed under the GPL2.
 msgid ""
 msgstr ""

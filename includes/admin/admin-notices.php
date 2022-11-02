@@ -624,12 +624,29 @@ function mdjm_admin_wp_addons() {
 	ob_start();
 	?>
 
-	<div class="updated notice notice-mdjm-dismiss is-dismissible" data-notice="mdjm_request_wp_addons">
+<div class="updated notice notice-mdjm-dismiss is-dismissible" data-notice="mdjm_request_wp_addons">
 		<p>
 			<strong><?php esc_html_e( 'Thank you for installing Mobile DJ Manager!', 'mobile-dj-manager' ); ?></strong>
 		</p>
+			<p>
+			<?php
+			printf(
+				wp_kses( 'If you haven&#39;t already, please check out our <a href="https://www.mdjm.co.uk/extensions">Extensions</a> to further enhance Mobile DJ Manager.', 'mobile-dj-manager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			?>
+		</p>
+			<p>
+			<?php
+			printf(
+				wp_kses( 'You can also join our Mobile DJ Manager User Group on <a href="https://www.facebook.com/groups/mdjmusers">Facebook</a>. Don&#39;t forget to Like our <a href="https://www.facebook.com/mdjmplugin">Facebook Page</a> too.', 'mobile-dj-manager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+			?>
+		</p>
+				<p>
+			<?php
+			printf(
+				wp_kses( 'If you come across a bug or would like a feature added, please use our <a href="https://www.mdjm.co.uk/support/features-and-bugs">Contact Form</a>.', 'mobile-dj-manager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped 
+			?>
+		</p>
 	</div>
-
 	<?php
 	echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 } // mdjm_admin_wp_addons
@@ -684,7 +701,7 @@ function mdjm_request_wp_addons() {
 		)
 	);
 
-	if ( $addon_events >= 0 ) {
+	if ( $addon_events <= 0 ) {
 		add_action( 'admin_notices', 'mdjm_admin_wp_addons' );
 	}
 

@@ -7,7 +7,6 @@ Requires PHP: 7.3
 Stable tag: 1.6.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Donate link: https://mobileeventsmanager.co.uk
 
 The most efficient and versatile event management solution for WordPress.
 

@@ -645,7 +645,7 @@ function mdjm_run_install() {
 			'id'       => 'marketing',
 			'type'     => 'checkbox',
 			'value'    => '1',
-			'checked'  => ' checked',
+			'checked'  => 'checked',
 			'display'  => '1',
 			'desc'     => __( 'Do we add the user to the mailing list', 'mobile-dj-manager' ) . '?',
 			'default'  => '1',
