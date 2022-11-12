@@ -596,7 +596,8 @@ class MDJM_Check_Premium {
 	public function check_mdjm_premium() {
 			$addons = array(
 				'mdjm-stripe-payments.php',
-				'mdjm-enquiry-forms.php',
+				'mdjm-dynamic-contact-forms.php',
+				'mdjm-mailchimp-subscribe.php',
 			);
 
 			$get_active_plugins = (array) get_option( 'active_plugins', array() );

@@ -946,12 +946,13 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id ) {
 	<?php if ( ! $mdjm_event_update || 'mdjm-unattended' === $mdjm_event->post_status ) : ?>
 		<div class="mdjm-client-template-fields">
 			<div class="mdjm-quote-template">
-				<span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Quote Template', 'mobile-dj-manager' ); ?></span>
+				<span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Email Quote Template', 'mobile-dj-manager' ); ?></span>
 				<?php
 				echo MDJM()->html->select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'name'    => 'mdjm_email_template',
-						'options' => mdjm_list_templates( 'email_template' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'name'   	  => 'mdjm_email_template',
+						'description' => printf('<i>This is the email template used when you set the status to Enquiry</i>'),
+						'options' 	  => mdjm_list_templates( 'email_template' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'selected'    => mdjm_get_option( 'enquiry' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'chosen'      => true,
 					'data'        => array(
@@ -966,11 +967,12 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id ) {
 			<?php if ( mdjm_get_option( 'online_enquiry', false ) ) : ?>
 
 				<div class="mdjm-online-template">
-					<span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Online Quote', 'mobile-dj-manager' ); ?></span>
+					<span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Online Quote Template', 'mobile-dj-manager' ); ?></span>
 					<?php
 					echo MDJM()->html->select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						array(
 							'name'    => 'mdjm_online_quote',
+							'description' => printf('<i>This is the template used in the Client Portal</i>'),
 							'options' => mdjm_list_templates( 'email_template' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'selected'    => mdjm_get_option( 'online_enquiry' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'chosen'      => true,
