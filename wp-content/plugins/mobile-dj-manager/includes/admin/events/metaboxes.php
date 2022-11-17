@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Contains all metabox functions for the mdjm-event post type
@@ -946,12 +940,13 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id ) {
 	<?php if ( ! $mdjm_event_update || 'mdjm-unattended' === $mdjm_event->post_status ) : ?>
 		<div class="mdjm-client-template-fields">
 			<div class="mdjm-quote-template">
-				<span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Quote Template', 'mobile-dj-manager' ); ?></span>
+				<span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Email Quote Template', 'mobile-dj-manager' ); ?></span>
 				<?php
 				echo MDJM()->html->select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					array(
-						'name'    => 'mdjm_email_template',
-						'options' => mdjm_list_templates( 'email_template' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'name'   	  => 'mdjm_email_template',
+						'description' => printf('<i>This is the email template used when you set the status to Enquiry</i>'),
+						'options' 	  => mdjm_list_templates( 'email_template' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'selected'    => mdjm_get_option( 'enquiry' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					'chosen'      => true,
 					'data'        => array(
@@ -966,11 +961,12 @@ function mdjm_event_overview_metabox_client_templates_row( $event_id ) {
 			<?php if ( mdjm_get_option( 'online_enquiry', false ) ) : ?>
 
 				<div class="mdjm-online-template">
-					<span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Online Quote', 'mobile-dj-manager' ); ?></span>
+					<span class="mdjm-repeatable-row-setting-label"><?php esc_html_e( 'Online Quote Template', 'mobile-dj-manager' ); ?></span>
 					<?php
 					echo MDJM()->html->select( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						array(
 							'name'    => 'mdjm_online_quote',
+							'description' => printf('<i>This is the template used in the Client Portal</i>'),
 							'options' => mdjm_list_templates( 'email_template' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'selected'    => mdjm_get_option( 'online_enquiry' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 						'chosen'      => true,
@@ -2896,7 +2892,7 @@ function mdjm_event_metabox_history_emails_table( $event_id ) {
 				<?php if ( $emails ) : ?>
 					<?php foreach ( $emails as $email ) : ?>
 						<tr>
-							<td><?php echo esc_html( date( mdjm_get_option( 'time_format' ) . ' ' . mdjm_get_option( 'short_date_format' ), strtotime( $email->post_date ) ) ); ?></td>
+							<td><?php echo esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format' ), strtotime( $email->post_date ) ) ); ?></td>
 							<td><a href="<?php echo esc_url( get_edit_post_link( $email->ID ) ); ?>"><?php echo esc_html( get_the_title( $email->ID ) ); ?></a></td>
 							<td>
 							<?php

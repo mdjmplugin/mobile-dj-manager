@@ -221,6 +221,23 @@ a.mdjm-fake { cursor: pointer; cursor: hand; }
 	clear: both;
 }
 
+.mdjm-settings-section {
+	margin: 0 0px 10px 0;
+	width: 100%;
+	border-bottom: 1px solid #ccc;
+	box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
+}
+
+.mdjm-settings-section a {
+	padding: 10px;
+	display: block;
+}
+
+.mdjm-settings-section a.current {
+	border-bottom: 3px solid #2271b1;
+	padding-bottom: 9px;
+}
+
 /* =Client Field Settings
 -------------------------------------------------------------- */
 .mdjm-client-field-container	{

@@ -25,12 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 function shortcode_mdjm( $atts ) {
 	// Array mapping the args to the pages/functions
 	$pairs = array(
-		'Home'         => 'mdjm_shortcode_home',
-		'Profile'      => 'mdjm_shortcode_profile',
-		'Playlist'     => 'mdjm_shortcode_playlist',
-		'Contract'     => 'mdjm_shortcode_contract',
-		'Availability' => 'f_mdjm_availability_form',
-		'Online Quote' => 'mdjm_shortcode_quote',
+		'Home'         			=> 'mdjm_shortcode_home',
+		'Profile'      			=> 'mdjm_shortcode_profile',
+		'Playlist'     			=> 'mdjm_shortcode_playlist',
+		'Contract'     			=> 'mdjm_shortcode_contract',
+		'Availability' 			=> 'f_mdjm_availability_form',
+		'Online Quote' 			=> 'mdjm_shortcode_quote',
+		'Compliance Documents'	=> 'mdjm_shortcode_compliance',
 	);
 
 	$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
@@ -222,6 +223,55 @@ function mdjm_shortcode_contract( $atts ) {
 
 } // mdjm_shortcode_contract
 add_shortcode( 'mdjm-contract', 'mdjm_shortcode_contract' );
+
+/**
+ * MDJM Compliance Shortcode.
+ *
+ * Displays the MDJM compliance page to allow the client to review your compliance documents.
+ *
+ * @since   1.3
+ *
+ * @return  string
+ */
+function mdjm_shortcode_compliance( $atts ) {
+
+	if ( is_user_logged_in() ) {
+
+		global $mdjm_event;
+
+		if ( isset( $_GET['event_id'] ) ) {
+			$event_id = sanitize_key( wp_unslash( $_GET['event_id'] ) );
+		} else {
+			$next_event = mdjm_get_clients_next_event( get_current_user_id() );
+
+			if ( $next_event ) {
+				$event_id = $next_event[0]->ID;
+			}
+		}
+
+		if ( ! isset( $event_id ) ) {
+			return __( "Ooops! There seems to be a slight issue and we've been unable to find your event", 'mobile-dj-manager' );
+		}
+
+		$mdjm_event = new MDJM_Event( $event_id );
+
+		if ( $mdjm_event ) {
+			ob_start();
+				mdjm_get_template_part( 'compliance' , '' );
+
+		} else {
+			return __( "Ooops! There seems to be a slight issue and we've been unable to find your event", 'mobile-dj-manager' );
+		}
+
+		// Reset global var
+		$mdjm_event = '';
+
+	} else {
+		echo mdjm_login_form(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+} // mdjm_shortcode_compliance
+add_shortcode( 'mdjm-compliance', 'mdjm_shortcode_compliance' );
 
 /**
  * Payment Form shortcode.

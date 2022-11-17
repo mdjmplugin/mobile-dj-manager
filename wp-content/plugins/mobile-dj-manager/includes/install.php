@@ -126,6 +126,20 @@ function mdjm_run_install() {
 				'comment_status' => 'closed',
 			)
 		);
+		
+		
+		// Compliance Documents Page
+		$compliance = wp_insert_post(
+			array(
+				'post_title'     => __( 'Compliance Documents', 'mobile-dj-manager' ),
+				'post_content'   => '[mdjm-compliance]',
+				'post_status'    => 'publish',
+				'post_author'    => 1,
+				'post_type'      => 'page',
+				'post_parent'    => $client_zone,
+				'comment_status' => 'closed',
+			)
+		);
 
 		// Payments Page.
 		$payments = wp_insert_post(
@@ -173,6 +187,7 @@ function mdjm_run_install() {
 		$options['playlist_page']  = $playlist;
 		$options['profile_page']   = $profile;
 		$options['quotes_page']    = $quotes;
+		$options['compliance_page']= $compliance;
 
 	}
 
@@ -645,7 +660,7 @@ function mdjm_run_install() {
 			'id'       => 'marketing',
 			'type'     => 'checkbox',
 			'value'    => '1',
-			'checked'  => ' checked',
+			'checked'  => 'checked',
 			'display'  => '1',
 			'desc'     => __( 'Do we add the user to the mailing list', 'mobile-dj-manager' ) . '?',
 			'default'  => '1',

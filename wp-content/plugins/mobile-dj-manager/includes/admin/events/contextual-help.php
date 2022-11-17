@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Contextual Help
@@ -43,7 +37,7 @@ function mdjm_events_contextual_help() {
 		'<p>' . sprintf(
 			/* translators: %s URL for section */
 			__( 'Visit the <a href="%s">documentation</a> on the Mobile DJ Manager website.', 'mobile-dj-manager' ),
-			esc_url( 'http://mobileeventsmanager.co.uk/support/' )
+			esc_url( 'http://mdjm.co.uk/support/' )
 		) . '</p>' .
 		'<p>' . sprintf(
 			/* translators: %s URL for section */
@@ -75,7 +69,7 @@ function mdjm_events_contextual_help() {
 				strtolower( $singular ),
 				'http://mdjm.co.uk/docs/event-statuses/'
 			) . '</p>' .
-			'<p>' . __( '<strong>Email Quote Template</strong> - During transition to <strong>Enquiry</strong> status, select which qu	ote email template should be sent to the client.', 'mobile-dj-manager' ) . '</p>' .
+			'<p>' . __( '<strong>Email Quote Template</strong> - During transition to <strong>Enquiry</strong> status, select which quote email template should be sent to the client.', 'mobile-dj-manager' ) . '</p>' .
 			'<p>' . __( '<strong>Online Quote Template</strong> - During transition to <strong>Enquiry</strong> status, select which quote template should be used to generate the page that displays the online quote.', 'mobile-dj-manager' ) . '</p>' .
 			'<p>' . sprintf(
 				/* translators: %1 Deposit label */

@@ -1,0 +1,173 @@
+
+/**----------------------------------------
+            CodePopular Promotion.
+--------------------------------------------*/
+
+.codepopular_notice {
+    padding: 20px 10px;
+
+    h4{
+        font-size: 16px;
+    }
+
+    p {
+        font-size: 14px;
+        line-height: 1.5714285714;
+        max-width: 800px
+    }
+
+    a {
+        box-shadow: none;
+        color: #2271b1;
+        outline: none;
+        text-decoration: underline;
+        transition: opacity .3s;
+
+        &:hover {
+            opacity: .5
+        }
+    }
+
+
+    &__buttons {
+        margin-top: -10px;
+        overflow: hidden;
+        padding: 10px 0
+    }
+
+    &__button {
+        float: left;
+        margin: 20px 20px 0 0;
+
+        &:last-child {
+            margin-right: 0
+        }
+
+
+    }
+
+
+
+    .codepopular__button {
+        background-color: #fff;
+        border: 1px solid transparent;
+        box-shadow: none !important;
+        box-sizing: border-box;
+        cursor: pointer;
+        display: inline-block;
+        font-size: 14px;
+        font-weight: 500;
+        line-height: 1.5714285714;
+        min-width: 180px;
+        opacity: 1 !important;
+        outline: none !important;
+        padding: 9px 30px;
+        position: relative;
+        margin:3px;
+        text-align: center;
+        text-decoration: none !important;
+        transition: color .3s !important;
+        z-index: 10;
+
+        &:before {
+            float: left;
+            font-family: dashicons;
+            font-size: 20px;
+            line-height: 1.1;
+            margin-right: 10px
+        }
+
+        &:after {
+            content: "";
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            transition: width .3s;
+            width: 0;
+            z-index: -1
+        }
+
+        &:hover:after {
+            width: 100%
+        }
+
+
+    }
+
+
+    .btn__blue:hover,
+    .btn__gray:hover,
+    .btn__green:hover,
+    .btn__yellow:hover,
+    .btn__dark:hover,
+    .btn__red:hover {
+        color: #fff !important
+    }
+
+    .btn__blue {
+        border-color: #2271b1;
+        color: #2271b1 !important;
+
+        &:after {
+            background-color: #2271b1
+        }
+    }
+
+  
+    .btn__green {
+        border-color: #00a32a;
+        color: #00a32a !important;
+
+        &:after {
+            background-color: #00a32a
+        }
+
+    }
+
+    .btn__yellow {
+        border-color: #ffad43;
+        color: #ffa23b!important;
+
+        &:after {
+            background-color: #eea404
+        }
+    
+
+    }
+
+    .btn__dark {
+        border-color: #838280;
+        color: #4b4640!important;
+
+        &:after {
+            background-color: #51504e
+        }
+    
+
+    }
+
+    .btn__red {
+        border-color: #d63638;
+        color: #d63638 !important;
+
+        &:after {
+            background-color: #d63638
+        }
+
+    }
+
+    .btn__gray {
+        border-color: #c3c4c7;
+        color: #c3c4c7 !important;
+
+        &:after {
+            background-color: #c3c4c7
+        }
+    
+
+    }
+   
+
+
+}

@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Admin Options Page
@@ -73,7 +67,7 @@ function mdjm_options_page() {
 		$number_of_sections = is_array( $sections ) ? count( $sections ) : '0';
 		$number             = 0;
 		if ( $number_of_sections > 1 ) {
-			echo '<div><ul class="subsubsub">';
+			echo '<div><ul class="subsubsub mdjm-settings-section">';
 			foreach ( $sections as $section_id => $section_name ) {
 				echo '<li>';
 				$number++;
@@ -91,7 +85,7 @@ function mdjm_options_page() {
 				echo '<a class="' . esc_attr( $class ) . '" href="' . esc_url( $tab_url ) . '">' . esc_html( $section_name ) . '</a>';
 
 				if ( $number != $number_of_sections ) {
-					echo ' | ';
+					echo ' ';
 				}
 				echo '</li>';
 			}

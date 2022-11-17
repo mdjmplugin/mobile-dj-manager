@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Plugin functions.
@@ -48,8 +42,7 @@ function mdjm_plugin_row_meta( $links, $file ) {
 	}
 
 	$mdjm_links[] = '<a href="http://mdjm.co.uk/support/" target="_blank">' . __( 'Support Docs', 'mobile-dj-manager' ) . '</a>';
-	$mdjm_links[] = '<a href="http://mdjm.co.uk/donate/" target="_blank">' . __( 'Donate', 'mobile-dj-manager' ) . '</a>';
-	$mdjm_links[] = '<a href="http://http://mdjm.co.uk/add-ons/" target="_blank">' . __( 'Extensions', 'mobile-dj-manager' ) . '</a>';
+	$mdjm_links[] = '<a href="http://mdjm.co.uk/extensions/" target="_blank">' . __( 'Extensions', 'mobile-dj-manager' ) . '</a>';
 
 	return array_merge( $links, $mdjm_links );
 

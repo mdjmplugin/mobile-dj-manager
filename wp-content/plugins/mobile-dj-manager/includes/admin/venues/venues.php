@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  */
 	defined( 'ABSPATH' ) or die( 'Direct access to this page is disabled!!!' );
@@ -180,7 +174,7 @@ function mdjm_venue_posts_custom_column( $column_name, $post_id ) {
 				$venue_term .= '</ul>' . "\r\n";
 			}
 
-			echo esc_html( ! empty( $venue_term ) ? $venue_term : '' );
+			echo ! empty( $venue_term ) ? $venue_term : '';
 			break;
 	} // switch
 

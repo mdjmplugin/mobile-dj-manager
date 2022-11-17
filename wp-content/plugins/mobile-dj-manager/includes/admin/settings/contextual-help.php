@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Contextual Help
@@ -39,7 +33,7 @@ function mdjm_settings_contextual_help() {
 		'<p><strong>' . __( 'For more information:', 'mobile-dj-manager' ) . '</strong></p>' .
 		'<p>' . sprintf(
 			__( 'Visit the <a href="%s">documentation</a> on the Mobile DJ Manager website.', 'mobile-dj-manager' ),
-			esc_url( 'http://mobileeventsmanager.co.uk/support/' )
+			esc_url( 'http://mdjm.co.uk/support/' )
 		) . '</p>' .
 		'<p>' . sprintf(
 			__( 'Join our <a href="%s">Facebook Group</a>.', 'mobile-dj-manager' ),
@@ -52,7 +46,7 @@ function mdjm_settings_contextual_help() {
 		) . '</p>' .
 		'<p>' . sprintf(
 			__( 'View <a href="%s">add-ons</a>.', 'mobile-dj-manager' ),
-			esc_url( 'http://mobileeventsmanager.co.uk/add-ons/' )
+			esc_url( 'http://mdjm.co.uk/add-ons/' )
 		) . '</p>'
 	);
 
@@ -120,7 +114,7 @@ function mdjm_settings_contextual_help() {
 			'content' =>
 			'<p>' . sprintf(
 				__( 'If you have any <a href="%s">Mobile DJ Manager paid add-ons</a> installed, this screen is where you should add the license to enable automatic updates whilst your license is valid.', 'mobile-dj-manager' ),
-				esc_url( 'http://mobileeventsmanager.co.uk/add-ons/' )
+				esc_url( 'http://mdjm.co.uk/add-ons/' )
 			) . '</p>',
 		)
 	);

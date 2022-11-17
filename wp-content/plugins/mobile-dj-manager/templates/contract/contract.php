@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * This template is used to display the contract page content.
  *
  * @version         1.0
@@ -27,14 +21,14 @@ global $mdjm_event;
 
 		<?php do_action( 'mdjm_print_notices' ); ?>
 
-		<p class="head-nav"><a href="{event_url}>"><?php printf( esc_html__( 'Back to %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></a></p>
+		<p class="head-nav"><a href="{event_url}>"><?php printf( __( 'Back to %s', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ); ?></a></p>
 
 		<?php do_action( 'mdjm_pre_contract_header', $mdjm_event->ID ); ?>
 
 		<p>
 		<?php
 		printf(
-			esc_html__( 'The contract for your %1$s taking place on %2$s is displayed below.', 'mobile-dj-manager' ),
+			__( 'The contract for your %1$s taking place on %2$s is displayed below.', 'mobile-dj-manager' ),
 			esc_html( mdjm_get_label_singular( true ) ),
 			'{event_date}'
 		);
