@@ -16,10 +16,10 @@
 global $mdjm_event;
 ?>
 
-<div id="mdjm-compliance-wrapper">
+<div class="mdjm-compliance-wrapper">
 	<?php do_action( 'mdjm_pre_compliance', $mdjm_event->ID ); ?>
 
-	<div id="mdjm-compliance-header">
+	<div class="mdjm-compliance-header">
 		
 		<?php do_action( 'mdjm_print_notices' ); ?>
 
@@ -29,7 +29,7 @@ global $mdjm_event;
 
 	</div><!-- end mdjm-compliance-header -->
 	<hr />
-	<div id="mdjm-compliance-content">
+	<div class="mdjm-compliance-content">
 		<p>
 		<?php
 		printf(

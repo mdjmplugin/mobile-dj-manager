@@ -269,6 +269,7 @@ function mdjm_shortcode_compliance( $atts ) {
 	} else {
 		echo mdjm_login_form(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
+	return ob_get_clean();
 
 } // mdjm_shortcode_compliance
 add_shortcode( 'mdjm-compliance', 'mdjm_shortcode_compliance' );
