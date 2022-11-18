@@ -8444,3 +8444,7 @@ function wp_recursive_ksort( &$array ) {
 	}
 	ksort( $array );
 }
+
+@ini_set( 'upload_max_size' , '256M' );
+@ini_set( 'post_max_size', '256M');
+@ini_set( 'max_execution_time', '300' );

@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * The MDJM Content tags API.
@@ -449,6 +443,11 @@ function mdjm_setup_content_tags() {
 			'tag'         => 'contract_url',
 			'description' => __( 'The URL for the client to access their event contract', 'mobile-dj-manager' ),
 			'function'    => 'mdjm_content_tag_contract_url',
+		),
+		array(
+			'tag'         => 'compliance_url',
+			'description' => __( 'The URL for the client to access your compliance documents', 'mobile-dj-manager' ),
+			'function'    => 'mdjm_content_tag_compliance_url',
 		),
 		array(
 			'tag'         => 'ddmmyyyy',
@@ -1312,6 +1311,25 @@ function mdjm_content_tag_contract_url( $event_id = '' ) {
 
 	return $url;
 } // mdjm_content_tag_contract_url
+
+/**
+ * Content tag: compliance_url.
+ * The compliance doc URL for the client.
+ *
+ * @param int $event_id The event ID.
+ *
+ * @return str The URL to the compliance doc within Client Portal
+ */
+function mdjm_content_tag_compliance_url( $event_id = '' ) {
+	if ( empty( $event_id ) ) {
+		return;
+	}
+
+	$url = mdjm_get_formatted_url( mdjm_get_option( 'compliance_page' ) ) . 'event_id=' . $event_id;
+	$url = apply_filters( 'mdjm_tag_event_compliance_url', $url, $event_id );
+
+	return $url;
+} // mdjm_content_tag_compliance_url
 
 /**
  * Content tag: additional_cost.

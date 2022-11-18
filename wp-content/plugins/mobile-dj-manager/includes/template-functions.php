@@ -137,9 +137,8 @@ function mdjm_get_template_files() {
 			'contract.php',
 			'contract-signed.php',
 		),
-		'contract'     => array(
-			'contract.php',
-			'contract-signed.php',
+		'compliance'     => array(
+			'compliance.php',
 		),
 		'email'        => array(
 			'email-body.php',

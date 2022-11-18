@@ -1,12 +1,6 @@
 /**
 * Mobile DJ Manager Styles
 *
-* This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
-* We acknowledge and are grateful to these developers for their contributions to open source.
-*
-* Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
-* License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
-*
 * @package MDJM
 * @subpackage CSS
 * @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
@@ -20,6 +14,7 @@ p.head-nav	{
 	font-size: 80%;
 	text-align: right;
 	color: #7B7D80;
+	text-decoration: underline;
 }
 #pleasewait,
 .mdjm-hidden { display: none; }

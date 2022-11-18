@@ -65,6 +65,11 @@
 								onclick: function () {
 									editor.insertContent( '{website_url}' );
 								}
+							}, {
+								text: 'Compliance Documents Page',
+								onclick: function () {
+									editor.insertContent( '{compliance_url}' );
+								}
 							}]
 						}, {
 							text: 'Clients',
@@ -420,6 +425,11 @@
 							text: 'Client Contract',
 							onclick: function () {
 								editor.insertContent( '[mdjm-contract]' );
+							}
+						}, {
+							text: 'Compliance Documents',
+							onclick: function () {
+								editor.insertContent( '[mdjm-compliance]' );
 							}
 						}, {
 							text: 'Client Payments',

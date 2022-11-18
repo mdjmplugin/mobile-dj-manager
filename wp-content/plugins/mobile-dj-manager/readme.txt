@@ -2,7 +2,7 @@
 Contributors: mdjm
 Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
 Requires at least: 5.3
-Tested up to: 6.0
+Tested up to: 6.1
 Requires PHP: 7.3
 Stable tag: 1.6.3
 License: GPLv2 or later
@@ -85,6 +85,16 @@ Extensions are available to enhance the plugin via our [Extension Store](https:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.6.3 =
+
+Enhancements:
+ - CSS Change on settings page to make it easier to read
+ - Easier to determine the email and online quote templates
+
+Fixes:
+ - File upload sending via email
+ - Time in Event settings
 
 = 1.6.2 =
 

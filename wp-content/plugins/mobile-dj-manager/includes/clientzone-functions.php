@@ -334,6 +334,23 @@ function mdjm_get_event_action_buttons( $event_id, $min = true ) {
 			)
 		);
 	}
+	
+	// Buttons for Compliance Documents
+	if ( mdjm_get_option( 'enable_pli' ) === '1' && mdjm_contract_is_signed( $event_id ) || mdjm_get_option( 'enable_pat' ) === '1' && mdjm_contract_is_signed( $event_id ) ) {
+		$buttons[35] = apply_filters(
+			'mdjm_view_compliance_action_button',
+			array(
+				'label' => __( 'Compliance Docs', 'mobile-dj-manager' ),
+				'id'    => 'mdjm_view_compliance_documents',
+				'fa'    => 'fas fa-file-alt',
+				'url'   => add_query_arg(
+					'event_id',
+					$event_id,
+					mdjm_get_formatted_url( mdjm_get_option( 'compliance_page' ), true )
+				),
+			)
+		);
+	}
 
 	if ( empty( $min ) ) {
 		$buttons[50] = apply_filters(

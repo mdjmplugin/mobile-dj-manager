@@ -1822,7 +1822,7 @@ function mdjm_update_event_meta( $event_id, $data ) {
 		'user_id'         => is_user_logged_in() ? get_current_user_id() : 1,
 		'event_id'        => $event_id,
 		'comment_content' => sprintf(
-			__( '%s Updated', 'mobile-dj-manager' ) . ':<br />    %s',
+			__( '%s Updated', 'mobile-dj-manager' ) . ':<br />',
 			mdjm_get_label_singular(),
 			implode( '<br />', $debug )
 		),
@@ -1882,6 +1882,7 @@ function mdjm_event_get_meta_label( $key ) {
 		'_mdjm_event_playlist'          => __( 'Playlist Enabled', 'mobile-dj-manager' ),
 		'_mdjm_event_playlist_access'   => __( 'Playlist Guest Access Code', 'mobile-dj-manager' ),
 		'_mdjm_event_playlist_limit'    => __( 'Playlist Limit', 'mobile-dj-manager' ),
+		'_mdjm_event_signed_contract'   => __( 'Contract', 'mobile-dj-manager'),
 		'_mdjm_event_start'             => __( 'Start Time', 'mobile-dj-manager' ),
 		'_mdjm_event_travel_data'       => __( 'Travel Data', 'mobile-dj-manager' ),
 		'_mdjm_event_venue_address1'    => __( 'Venue Address Line 1', 'mobile-dj-manager' ),
