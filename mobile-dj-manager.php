@@ -5,7 +5,7 @@
  * Plugin URI: https://www.mdjm.co.uk
  * Description: The flexible event management solution for WordPress - not just for DJs!
  * Version: 1.6.4
- * Date: November 2022
+ * Date: December 2022
  * Author: MDJM <support@mdjm.co.uk>
  * Author URI:  https://mdjm.co.uk
  * Text Domain: mobile-dj-manager
