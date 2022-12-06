@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Contains all metabox functions for the mdjm-event post type
@@ -1880,6 +1874,7 @@ function mdjm_event_overview_metabox_event_playlist_options_row( $event_id ) {
 				<?php endif; ?>
 
 			</div>
+			
 			<?php do_action( 'mdjm_event_overview_options', $event_id ); ?>
 		</div>
 	</div>
@@ -2898,7 +2893,7 @@ function mdjm_event_metabox_history_emails_table( $event_id ) {
 				<?php if ( $emails ) : ?>
 					<?php foreach ( $emails as $email ) : ?>
 						<tr>
-							<td><?php echo esc_html( date( mdjm_get_option( 'time_format' ) . ' ' . mdjm_get_option( 'short_date_format' ), strtotime( $email->post_date ) ) ); ?></td>
+							<td><?php echo esc_html( date( mdjm_get_option( 'time_format', 'H:i' ) . ' ' . mdjm_get_option( 'short_date_format' ), strtotime( $email->post_date ) ) ); ?></td>
 							<td><a href="<?php echo esc_url( get_edit_post_link( $email->ID ) ); ?>"><?php echo esc_html( get_the_title( $email->ID ) ); ?></a></td>
 							<td>
 							<?php

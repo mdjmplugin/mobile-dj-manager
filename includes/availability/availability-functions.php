@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Contains all availability checker related functions
@@ -312,7 +306,7 @@ function mdjm_add_employee_absence( $employee_id, $data ) {
  */
 function mdjm_remove_employee_absence( $id ) {
 
-	$id = absint( $id );
+	$id = $id;
 
 	if ( empty( $id ) ) {
 		return false;

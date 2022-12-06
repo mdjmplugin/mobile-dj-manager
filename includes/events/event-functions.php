@@ -1882,6 +1882,7 @@ function mdjm_event_get_meta_label( $key ) {
 		'_mdjm_event_playlist'          => __( 'Playlist Enabled', 'mobile-dj-manager' ),
 		'_mdjm_event_playlist_access'   => __( 'Playlist Guest Access Code', 'mobile-dj-manager' ),
 		'_mdjm_event_playlist_limit'    => __( 'Playlist Limit', 'mobile-dj-manager' ),
+		'_mdjm_event_signed_contract'   => __( 'Contract', 'mobile-dj-manager'),
 		'_mdjm_event_start'             => __( 'Start Time', 'mobile-dj-manager' ),
 		'_mdjm_event_travel_data'       => __( 'Travel Data', 'mobile-dj-manager' ),
 		'_mdjm_event_venue_address1'    => __( 'Venue Address Line 1', 'mobile-dj-manager' ),

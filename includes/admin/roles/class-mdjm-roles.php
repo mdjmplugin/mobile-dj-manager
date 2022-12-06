@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  */
 	defined( 'ABSPATH' ) or die( 'Direct access to this page is disabled!!!' );
@@ -60,7 +54,7 @@ if ( ! class_exists( 'MDJM_Roles' ) ) :
 				7 => array( 'updated', __( '', 'mobile-dj-manager' ) ),
 			);
 
-			mdjm_update_notice( $messages[ absint( wp_unslash( $_GET['message'] ) ) ][0], $messages[ absint( wp_unslash( $_GET['message'] ) ) ][1], true );
+			mdjm_update_notice( $messages[$_GET['message']][0], $messages[$_GET['message']][1], true );
 		} // messages
 
 		/**
@@ -201,8 +195,8 @@ if ( ! class_exists( 'MDJM_Roles' ) ) :
 				$return['msg']  = __( 'Ooops! You need to add a role name', 'mobile-dj-manager' );
 			} else {
 				$result = add_role(
-					'mdjm-' . sanitize_title_with_dashes( strtolower( str_replace( '_', '-', sanitize_text_field( wp_unslash( $_POST['role_name'] ) ) ) ) ),
-					ucwords( sanitize_text_field( wp_unslash( $_POST['role_name'] ) ) )
+					'mdjm-' . sanitize_title_with_dashes( strtolower( str_replace( '_', '-', $_POST['role_name'] ) ) ),
+					ucwords( $_POST['role_name'] )
 				);
 
 				if ( null !== $result ) {

@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * MDJM Settings API
@@ -725,7 +719,7 @@ function mdjm_get_registered_settings() {
 			),
 			'enquiry'                => array(
 				'id'      => 'enquiry',
-				'name'    => __( 'Quote Template', 'mobile-dj-manager' ),
+				'name'    => __( 'Email Quote Template', 'mobile-dj-manager' ),
 				'desc'    => __( 'This is the default template used when sending quotes via email to clients', 'mobile-dj-manager' ),
 				'type'    => 'select',
 				'chosen'  => true,
@@ -943,21 +937,17 @@ function mdjm_get_registered_settings() {
 				'id'      => 'action_button_colour',
 				'name'    => __( 'Action Button Colour', 'mobile-dj-manager' ),
 				'desc'    => sprintf( __( 'Select your preferred colour for the %s action buttons', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
-				'type'    => 'select',
-				'options' => array(
-					'blue'      => __( 'Blue', 'mobile-dj-manager' ),
-					'green'     => __( 'Green', 'mobile-dj-manager' ),
-					'red'       => __( 'Red', 'mobile-dj-manager' ),
-					'turquoise' => __( 'Turquoise', 'mobile-dj-manager' ),
-					'yellow'    => __( 'Yellow', 'mobile-dj-manager' ),
-					'black'     => __( 'Black', 'mobile-dj-manager' ),
-					'white'     => __( 'White', 'mobile-dj-manager' ),
-					'purple'    => __( 'Purple', 'mobile-dj-manager' ),
-					'pink'      => __( 'Pink', 'mobile-dj-manager' ),
-					'lightgrey' => __( 'Light Grey', 'mobile-dj-manager' ),
-					'darkgrey'  => __( 'Dark Grey', 'mobile-dj-manager' ),
-				),
-				'std'     => 'blue',
+				'type'    => 'color',
+				'default' => '#0000ff',
+				'std'	  => '#0000ff',
+			),
+			'action_button_font_colour' => array(
+				'id'      => 'action_button_font_colour',
+				'name'    => __( 'Action Button Font Colour', 'mobile-dj-manager' ),
+				'desc'    => sprintf( __( 'Select your preferred colour for the %s action buttons font', 'mobile-dj-manager' ), mdjm_get_label_singular( true ) ),
+				'type'    => 'color',
+				'default' => '#ffffff',
+				'std'	  => '#ffffff',
 			),
 		),
 		'pages'        => array(
@@ -998,6 +988,17 @@ function mdjm_get_registered_settings() {
 				'name'    => __( 'Contracts Page', 'mobile-dj-manager' ),
 				'desc'    => sprintf(
 					__( "Select your website's contracts page. Needs to contain the shortcode %1\$s[mdjm-contract]%2\$s", 'mobile-dj-manager' ),
+					'<code>',
+					'</code>'
+				),
+				'type'    => 'select',
+				'options' => mdjm_list_pages(),
+			),
+			'compliance_page' => array(
+				'id'	  => 'compliance_page',
+				'name'	  => __('Compliance Docs Page', 'mobile-dj-manager'),
+				'desc'    => sprintf(
+					__( "Select your website's compliance documents page. Needs to contain the shortcode %1\$s[mdjm-compliance]%2\$s", 'mobile-dj-manager' ),
 					'<code>',
 					'</code>'
 				),
@@ -1175,7 +1176,7 @@ function mdjm_get_registered_settings() {
 			),
 			'deposit_type'           => array(
 				'id'      => 'deposit_type',
-				'name'    => mdjm_get_deposit_label() . "'s " . __( 'are', 'mobile-dj-manager' ),
+				'name'    => mdjm_get_deposit_label() . "s " . __( 'are', 'mobile-dj-manager' ),
 				'desc'    => sprintf(
 					__( 'If you require ' . mdjm_get_deposit_label() . ' payments for your %s, how should they be calculated?', 'mobile-dj-manager' ),
 					mdjm_get_label_plural( true )
@@ -1381,7 +1382,7 @@ function mdjm_get_registered_settings() {
 		'name' => __( 'BACS Payment Information', 'mobile-dj-manager' ),
 		'desc' => __( 'Enter a brief message to show to clients', 'mobile-dj-manager' ),
 		'type' => 'text',
-		'std'  => __( 'This will not automatically update your account, it may take 24 hours to show', 'mobile-dj-manager' ),
+		'std'  => __( 'Please let me know via email if you pay through BACS', 'mobile-dj-manager' ),
 	),
 	'bank_detail_name'        => array(
 		'id'      => 'bank_detail_name',
@@ -1492,6 +1493,42 @@ function mdjm_get_registered_settings() {
 				'name' => __( 'Agreement Text', 'mobile-dj-manager' ),
 				'desc' => __( 'If Agree to Terms is checked, enter the agreement terms here.', 'mobile-dj-manager' ),
 				'type' => 'rich_editor',
+			),
+		),
+		'compliancedocs' => array(
+			'pli_settings'          => array(
+				'id'   => 'pli_settings',
+				'name' => '<h3>' . __( 'Public Liability Insurance', 'mobile-dj-manager' ) . '</h3>',
+				'type' => 'header',
+			),
+			'enable_pli'   => array(
+				'id'   => 'enable_pli',
+				'name' => __( 'Show Public Liability Insurance Certificate', 'mobile-dj-manager' ),
+				'desc' => __( 'Enable this option to show clients your Public Liability Insurance Certificate.', 'mobile-dj-manager' ),
+				'type' => 'checkbox',
+			),
+			'pli_cert_link'   => array(
+				'id'    => 'pli_cert_link',
+				'name'  => __( 'PLI Certificate Location', 'mobile-dj-manager' ),
+				'desc'  => __( 'Enter the URL from the Media repository for your PLI Certificate', 'mobile-dj-manager'),
+				'type'  => 'text',
+			),
+			'pat_settings'          => array(
+				'id'   => 'pat_settings',
+				'name' => '<h3>' . __( 'Portable Appliance Test', 'mobile-dj-manager' ) . '</h3>',
+				'type' => 'header',
+			),
+			'enable_pat'   => array(
+				'id'   => 'enable_pat',
+				'name' => __( 'Show Portable Appliance Testing Certificate', 'mobile-dj-manager' ),
+				'desc' => __( 'Enable this option to show clients your Portable Appliance Testing Certificate.', 'mobile-dj-manager' ),
+				'type' => 'checkbox',
+			),
+			'pat_cert_link'   => array(
+				'id'    => 'pat_cert_link',
+				'name'  => __( 'PAT Certificate Location', 'mobile-dj-manager' ),
+				'desc'  => __( 'Enter the URL from the Media repository for your PAT Certificate', 'mobile-dj-manager'),
+				'type'  => 'text',
 			),
 		),
 	)
@@ -1880,6 +1917,7 @@ function mdjm_get_registered_settings_sections() {
 			array(
 				'privacy'          => __( 'Privacy Policy', 'mobile-dj-manager' ),
 				'terms_conditions' => __( 'Terms and Conditions', 'mobile-dj-manager' ),
+				'compliancedocs'  => __( 'Compliance Documents', 'mobile-dj-manager' ),
 			)
 		),
 		'extensions'       => apply_filters(
@@ -2632,7 +2670,7 @@ if ( ! function_exists( 'mdjm_license_key_callback' ) ) {
 					default:
 					$class      = 'error';
 					$error      = ! empty( $license->error ) ? $license->error : __( 'unknown_error', 'mobile-dj-manager' );
-					$messages[] = sprintf( __( 'There was an error with this license key: %1$s. Please <a href="%2$s">contact our support team</a>.', 'mobile-dj-manager' ), $error, 'https://mobileeventsmanager.co.uk/support' );
+					$messages[] = sprintf( __( 'There was an error with this license key: %1$s. Please <a href="%2$s">contact our support team</a>.', 'mobile-dj-manager' ), $error, 'https://mdjm.co.uk/support' );
 
 					$license_status = 'license-' . $class . '-notice';
 					break;

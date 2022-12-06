@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Tools
@@ -78,7 +72,7 @@ function mdjm_tools_page() {
 function mdjm_get_tools_page_tabs() {
 
 	$tabs = array(
-		// 'api_keys'      => __( 'API Keys', 'mobile-dj-manager' ),
+		'api_keys'      => __( 'API Keys', 'mobile-dj-manager' ),
 		'system_info'   => __( 'System Info', 'mobile-dj-manager' ),
 		'import_export' => __( 'Import/Export', 'mobile-dj-manager' ),
 	);
@@ -235,6 +229,7 @@ function mdjm_tools_sysinfo_get() {
 	$playlist_page   = mdjm_get_option( 'playlist_page', '' );
 	$profile_page    = mdjm_get_option( 'profile_page', '' );
 	$quotes_page     = mdjm_get_option( 'quotes_page', '' );
+	$compliance_page = mdjm_get_option( 'compliance_page', '' );
 
 	$return .= "\n" . '-- MDJM Page Configuration' . "\n\n";
 	$return .= 'Client Portal Page:         ' . ( ! empty( $clientzone_page ) ? get_permalink( $clientzone_page ) . "\n" : "Unset\n" );
@@ -244,6 +239,7 @@ function mdjm_tools_sysinfo_get() {
 	$return .= 'Playlist Page:            ' . ( ! empty( $playlist_page ) ? get_permalink( $playlist_page ) . "\n" : "Unset\n" );
 	$return .= 'Profile Page:             ' . ( ! empty( $profile_page ) ? get_permalink( $profile_page ) . "\n" : "Unset\n" );
 	$return .= 'Quotes Page:              ' . ( ! empty( $quotes_page ) ? get_permalink( $quotes_page ) . "\n" : "Unset\n" );
+	$return .= 'Compliance Page:		  ' . ( ! empty( $compliance_page ) ? get_permalink ( $compliance_page ) . "\n" : "Unset\n" );
 
 	$return = apply_filters( 'mdjm_sysinfo_after_mdjm_pages', $return );
 

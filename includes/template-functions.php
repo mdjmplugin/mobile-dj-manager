@@ -137,9 +137,8 @@ function mdjm_get_template_files() {
 			'contract.php',
 			'contract-signed.php',
 		),
-		'contract'     => array(
-			'contract.php',
-			'contract-signed.php',
+		'compliance'     => array(
+			'compliance.php',
 		),
 		'email'        => array(
 			'email-body.php',
@@ -169,6 +168,9 @@ function mdjm_get_template_files() {
 			'quote-noevent.php',
 			'quote.php',
 		),
+		'timeline'	   => array(
+			'timeline.php',
+		)
 	);
 
 	return apply_filters( 'mdjm_template_files', $template_files );

@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Admin Notices
@@ -540,7 +534,7 @@ function mdjm_admin_wp_5star_rating_notice() {
 			<p>
 			<?php
 			printf(
-				__( 'If you haven&#39;t already, please check out our <a href="https://www.mdjm.co.uk/Add-Ons">Add Ons</a> to further enhance Mobile DJ Manager.', 'mobile-dj-manager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				__( 'If you haven&#39;t already, please check out our <a href="https://mdjm.co.uk/Extensions">Extensions</a> to further enhance Mobile DJ Manager.', 'mobile-dj-manager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</p>
 			<p>

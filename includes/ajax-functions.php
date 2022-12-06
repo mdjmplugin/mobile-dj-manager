@@ -127,7 +127,7 @@ add_action( 'wp_ajax_mdjm_add_employee_absence', 'mdjm_add_employee_absence_ajax
  * return   void
  */
 function mdjm_delete_employee_absence_ajax() {
-	$id = isset( $_POST['id'] ) ? absint( wp_unslash( $_POST['id'] ) ) : null;
+	$id = isset( $_POST['id'] ) ? $_POST['id'] : null;
 
 	if ( empty( $id ) ) {
 		wp_send_json_error( 'Error: Invalid data!' );

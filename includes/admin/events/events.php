@@ -1,11 +1,5 @@
 <?php
 /**
- * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
- * We acknowledge and are grateful to these developers for their contributions to open source.
- *
- * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
- * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
- *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Manages Event posts admin screen and queries.
@@ -552,7 +546,7 @@ function mdjm_event_employee_filter_dropdown() {
 		array(
 			'name'            => 'mdjm_filter_employee',
 			'id'              => 'filter-by-employee',
-			'selected'        => isset( $_GET['mdjm_filter_employee'] ) ? absint( wp_unslash( $_GET['mdjm_filter_employee'] ) ) : 0, // phpcs:ignore WordPress.Security.NonceVerification
+			'selected'        => isset( $_GET['mdjm_filter_employee'] ) ? wp_unslash( $_GET['mdjm_filter_employee'] ) : 0, // phpcs:ignore WordPress.Security.NonceVerification
 			'first_entry'     => __( 'All Employees', 'mobile-dj-manager' ),
 			'first_entry_val' => 0,
 			'group'           => true,

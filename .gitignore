@@ -85,3 +85,4 @@ templates/profile/_notes/dwsync.xml
 templates/quote/_notes/dwsync.xml
 assets/_notes/dwsync.xml
 includes/admin/contract/_notes/dwsync.xml
+*.bak
