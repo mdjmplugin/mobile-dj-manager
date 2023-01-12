@@ -432,6 +432,10 @@ function mdjm_event_metabox_options_payments_row( $event_id ) {
 	?>
 		<?php /* translators: %s Balance */ ?>
 		<?php printf( esc_html__( '%s Paid?', 'mobile-dj-manager' ), esc_html( mdjm_get_balance_label() ) ); ?></p>
+	<p>
+		<?php printf( esc_html__( 'Balance Remaining: %s', 'mobile-dj-manager' ), mdjm_currency_filter( mdjm_format_amount( mdjm_get_event_balance( $event_id ) ) ) ); ?>
+		
+		</p>
 
 	<?php
 
