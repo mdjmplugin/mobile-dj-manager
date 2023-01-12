@@ -167,9 +167,6 @@ function mdjm_get_template_files() {
 		'quote'        => array(
 			'quote-noevent.php',
 			'quote.php',
-		),
-		'timeline'	   => array(
-			'timeline.php',
 		)
 	);
 

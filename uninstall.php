@@ -121,8 +121,7 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 		'playlist_page',
 		'profile_page',
 		'quotes_page',
-		'compliance_page',
-		'timeline_page',
+		'compliance_page'
 	);
 
 	foreach ( $mdjm_pages as $mdjm_page ) {

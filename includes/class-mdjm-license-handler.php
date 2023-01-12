@@ -476,5 +476,17 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 
 		} // plugin_row_license_missing
 	} // MDJM_License
+	
+function mdjm_stripe_ood_version(){
+	
+	if ( class_exists( 'MDJM_Stripe_Gateway' ) && MDJM_STRIPE_VERSION < '1.3.2' ) {
+		
+		$stripeclass = 'notice notice-error';
+		$stripemessage = sprintf( 'Your Stripe version is out of date and is non compliant. Please visit the %s to upgrade.<br /><br />As a loyal user of MDJM, you can use code <code>SPGU20</code> to get 20percent off the new Stripe Payment Gateway.', '<a href="https://www.mdjm.co.uk/extensions/stripe-payment-gateway">MDJM Website</a>' );
+
+	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $stripeclass ), $stripemessage );
+	}
+}
+add_action( 'admin_notices', 'mdjm_stripe_ood_version' );
 
 } // end class_exists check

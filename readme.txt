@@ -1,10 +1,10 @@
 === MDJM Event Management ===
 Contributors: mdjm
-Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
-Requires at least: 5.3
+Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ, DJ Booking System, Event Booking System, Booking System, Event Manager, Mobile Event Planner, Mobile Event Manager, Photobooth, Photobooth Manager
+Requires at least: 6.0
 Tested up to: 6.1
 Requires PHP: 7.3
-Stable tag: 1.6.4
+Stable tag: 1.6.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,15 @@ Extensions are available to enhance the plugin via our [Extension Store](https:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.6.5 =
+
+Features:
+ - Added the Balance Remaining amount to the deposit/balance paid metabox.
+ - Got ready for Mailchimp release
+ 
+Fixes:
+ - Display "Make Payment" button if BACS option is only selected.
 
 = 1.6.4 =
 

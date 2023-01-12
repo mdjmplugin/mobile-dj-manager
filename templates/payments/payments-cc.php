@@ -24,5 +24,4 @@ if( isset( $_POST['payment_event_id'] ) ){
 
 	<?php do_action( 'mdjm_pre_default_payments_form' ); ?>
 	<div class="mdjm-alert mdjm-alert-error mdjm-hidden"></div>
-	<p class="mdjm-default-form-text"><?php esc_html_e( "Once you have selected your Payment Amount, click $pay_now to checkout", 'mobile-dj-manager' ); ?></p>
 	<?php do_action( 'mdjm_after_default_payments_form' ); ?>

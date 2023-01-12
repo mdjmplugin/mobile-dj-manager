@@ -321,7 +321,7 @@ function mdjm_get_event_action_buttons( $event_id, $min = true ) {
 	}
 
 	// Payment button
-	if ( mdjm_has_gateway() && mdjm_get_event_balance( $event_id ) > 0 ) {
+	if ( mdjm_has_gateway() && mdjm_get_event_balance( $event_id ) > 0 || mdjm_get_option( 'enable_bacs' ) === '1' && mdjm_get_event_balance( $event_id ) > 0 ) {
 		$buttons[30] = apply_filters(
 			'mdjm_make_payment_button',
 			array(

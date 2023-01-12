@@ -797,7 +797,7 @@ function mdjm_output_event_name_field( $post ) {
 	?>
 	<?php
 } // mdjm_output_event_name_field
-add_action( 'edit_form_after_title', 'mdjm_output_event_name_field' );
+add_action( 'edit_form_after_title', 'mdjm_output_event_name_field' ); 
 
 /**
  * Rename the Publish and Update post buttons for events
