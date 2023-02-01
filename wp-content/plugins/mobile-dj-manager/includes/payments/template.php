@@ -259,18 +259,19 @@ function mdjm_payment_hidden_fields() {
  */
 function mdjm_no_gateway_notice() {
 
-	if ( mdjm_has_gateway() ) {
+	if ( mdjm_has_gateway() && mdjm_get_option ('enable_bacs' ) !== '1' ) {
 		return;
 	}
 
 	ob_start();
 
-	$notice = __( 'A gateway must be installed and enabled within Mobile DJ Manager before payments can be processed.', 'mobile-dj-manager' );
+	$notice = __( 'Please confirm via email once you have made the payment if you have paid using a Bank Transfer.', 'mobile-dj-manager' );
 	?>
 	<div class="mdjm-alert mdjm-alert-error"><?php echo esc_html( $notice ); ?></div>
 
 	<?php
 	echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 
 } // mdjm_alert_no_gateway
 add_action( 'mdjm_before_payment_items', 'mdjm_no_gateway_notice' );

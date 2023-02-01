@@ -31,7 +31,7 @@ function shortcode_mdjm( $atts ) {
 		'Contract'     			=> 'mdjm_shortcode_contract',
 		'Availability' 			=> 'f_mdjm_availability_form',
 		'Online Quote' 			=> 'mdjm_shortcode_quote',
-		'Compliance Documents'	=> 'mdjm_shortcode_compliance',
+		'Compliance Documents'	=> 'mdjm_shortcode_compliance'
 	);
 
 	$pairs = apply_filters( 'mdjm_filter_shortcode_pairs', $pairs );
@@ -172,6 +172,7 @@ function mdjm_shortcode_home( $atts ) {
 	} else {
 		echo mdjm_login_form( mdjm_get_current_page_url() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
+	return ob_get_clean();
 
 } // mdjm_shortcode_home
 add_shortcode( 'mdjm-home', 'mdjm_shortcode_home' );
@@ -273,6 +274,7 @@ function mdjm_shortcode_compliance( $atts ) {
 
 } // mdjm_shortcode_compliance
 add_shortcode( 'mdjm-compliance', 'mdjm_shortcode_compliance' );
+
 
 /**
  * Payment Form shortcode.

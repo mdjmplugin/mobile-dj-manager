@@ -72,7 +72,7 @@ function mdjm_tools_page() {
 function mdjm_get_tools_page_tabs() {
 
 	$tabs = array(
-		// 'api_keys'      => __( 'API Keys', 'mobile-dj-manager' ),
+		'api_keys'      => __( 'API Keys', 'mobile-dj-manager' ),
 		'system_info'   => __( 'System Info', 'mobile-dj-manager' ),
 		'import_export' => __( 'Import/Export', 'mobile-dj-manager' ),
 	);

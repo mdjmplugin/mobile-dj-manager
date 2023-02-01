@@ -881,6 +881,20 @@ function mdjm_count_employee_events( $employee_id = '', $args = array() ) {
 
 } // mdjm_count_employee_events
 
+function mdjm_count_employee_active_events( $employee_id = '', $args = array() ) {
+
+	$count = 0;
+
+	$events = mdjm_active_event_statuses( $employee_id, $args );
+
+	if ( $events ) {
+		$count = count( $events );
+	}
+
+	return $count;
+
+} // mdjm_count_employee_active_events
+
 /**
  * Get the employees next event.
  *

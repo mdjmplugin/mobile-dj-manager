@@ -306,7 +306,7 @@ function mdjm_add_employee_absence( $employee_id, $data ) {
  */
 function mdjm_remove_employee_absence( $id ) {
 
-	$id = absint( $id );
+	$id = $id;
 
 	if ( empty( $id ) ) {
 		return false;

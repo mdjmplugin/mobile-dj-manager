@@ -655,17 +655,6 @@ function mdjm_run_install() {
 			'default'  => '1',
 			'position' => '10',
 		),
-		'marketing'  => array(
-			'label'    => __( 'Marketing Info', 'mobile-dj-manager' ) . '?',
-			'id'       => 'marketing',
-			'type'     => 'checkbox',
-			'value'    => '1',
-			'checked'  => 'checked',
-			'display'  => '1',
-			'desc'     => __( 'Do we add the user to the mailing list', 'mobile-dj-manager' ) . '?',
-			'default'  => '1',
-			'position' => '11',
-		),
 	);
 
 	// Populate some default values.

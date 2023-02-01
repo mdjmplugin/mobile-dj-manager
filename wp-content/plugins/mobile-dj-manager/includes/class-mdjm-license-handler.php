@@ -244,7 +244,7 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 			}
 
 			foreach ( $_POST as $key => $value ) {
-				if ( false !== strpos( $key, 'license_key_deactivate' ) ) {
+				if ( false != strpos( $key, 'license_key_deactivate' ) ) {
 					// Don't activate a key when deactivating a different key
 					return;
 				}
@@ -429,9 +429,9 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 
 			$license = get_option( $this->item_shortname . '_license_active' );
 
-			if ( is_object( $license ) && 'valid' !== $license->license && empty( $showed_invalid_message ) ) {
+			if ( is_object( $license ) && 'valid' != $license->license && empty( $showed_invalid_message ) ) {
 
-				if ( empty( $_GET['tab'] ) || 'licenses' !== $_GET['tab'] ) {
+				if ( empty( $_GET['tab'] ) || 'licenses' === $_GET['tab'] ) {
 
 					$messages[] = sprintf(
 						__( 'You have invalid or expired license keys for Mobile DJ Manager. Please go to the <a href="%s">Licenses page</a> to correct this issue.', 'mobile-dj-manager' ),
@@ -469,12 +469,24 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 
 			$license = get_option( $this->item_shortname . '_license_active' );
 
-			if ( ( ! is_object( $license ) || 'valid' !== $license->license ) && empty( $showed_imissing_key_message[ $this->item_shortname ] ) ) {
+			if ( ( ! is_object( $license ) || 'valid' != $license->license ) && empty( $showed_imissing_key_message[ $this->item_shortname ] ) ) {
 				echo '&nbsp;<strong><a href="' . esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-settings&tab=licenses' ) ) . '">' . esc_html__( 'Enter a valid license key for automatic updates.', 'mobile-dj-manager' ) . '</a></strong>';
 				$showed_imissing_key_message[ $this->item_shortname ] = true;
 			}
 
 		} // plugin_row_license_missing
 	} // MDJM_License
+	
+function mdjm_stripe_ood_version(){
+	
+	if ( class_exists( 'MDJM_Stripe_Gateway' ) && MDJM_STRIPE_VERSION < '1.3.2' ) {
+		
+		$stripeclass = 'notice notice-error';
+		$stripemessage = sprintf( 'Your Stripe version is out of date and is non compliant. Please visit the %s to upgrade.<br /><br />As a loyal user of MDJM, you can use code <code>SPGU20</code> to get 20percent off the new Stripe Payment Gateway.', '<a href="https://www.mdjm.co.uk/extensions/stripe-payment-gateway">MDJM Website</a>' );
+
+	printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $stripeclass ), $stripemessage );
+	}
+}
+add_action( 'admin_notices', 'mdjm_stripe_ood_version' );
 
 } // end class_exists check

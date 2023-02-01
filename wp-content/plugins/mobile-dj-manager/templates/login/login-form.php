@@ -20,6 +20,7 @@ global $mdjm_login_redirect; ?>
 
 	<!-- MDJM login form content starts -->
 
+
 	<form id="mdjm-login-form" name="mdjm-login-form" class="mdjm_form" action="" method="post">
 		<fieldset>
 			<legend><?php printf( esc_html__( 'Login to %s', 'mobile-dj-manager' ), '{company_name}' ); ?></legend>
@@ -53,7 +54,7 @@ global $mdjm_login_redirect; ?>
 		</fieldset>
 	</form>
 
-	<?php do_action( 'mdjm_after_login_form' ); ?>
+	<?php ( 'mdjm_after_login_form' ); ?>
 
 <?php else : ?>
 

@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Redirect to contract.
+ * Redirect to compliance.
  *
  * @since   1.3
  * @param
@@ -38,4 +38,4 @@ function mdjm_goto_compliance_action() {
 	);
 	exit;
 } // mdjm_goto_compliance_action
-add_action( 'mdjm_goto_compliance', 'mdjm_goto_compliance_action' );
+add_action( 'mdjm_goto_compliance', 'mdjm_goto_compliance_action' ); 

@@ -459,7 +459,7 @@ class MDJM_API {
 	 */
 	public function process_api_key( $args ) {
 
-		if ( ! isset( $_REQUEST['api_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_REQUEST['api_nonce'], 'mdjm-api-nonce' ) ) ) ) {
+		if ( ! isset( $_REQUEST['api_nonce'] ) || ! sanitize_text_field( $_REQUEST['api_nonce'], 'mdjm-api-nonce' ) ) {
 
 			wp_die( esc_html__( 'Nonce verification failed', 'mobile-dj-manager' ), esc_html__( 'Error', 'mobile-dj-manager' ), array( 'response' => 403 ) );
 

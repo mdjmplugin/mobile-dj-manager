@@ -191,9 +191,11 @@ function mdjm_do_action_buttons( $event_id ) {
 		$output .= '<div class="col three">' . "\n";
 
 		$output .= sprintf(
-			'<a href="%s" class="btn btn-%s"><i class="%s"></i> %s</a>',
+			'<a href="%s" class="btn" style="background-color: %s; color: %s"><i style="color: %s" class="%s"></i> %s</a>',
 			$button['url'],
-			mdjm_get_option( 'action_button_colour', 'blue' ),
+			mdjm_get_option( 'action_button_colour', '' ),
+			mdjm_get_option( 'action_button_font_colour', '' ),
+			mdjm_get_option( 'action_button_font_colour', '' ),
 			isset( $button['fa'] ) ? $button['fa'] : '',
 			$button['label']
 		);
@@ -319,7 +321,7 @@ function mdjm_get_event_action_buttons( $event_id, $min = true ) {
 	}
 
 	// Payment button
-	if ( mdjm_has_gateway() && mdjm_get_event_balance( $event_id ) > 0 ) {
+	if ( mdjm_has_gateway() && mdjm_get_event_balance( $event_id ) > 0 || mdjm_get_option( 'enable_bacs' ) === '1' && mdjm_get_event_balance( $event_id ) > 0 ) {
 		$buttons[30] = apply_filters(
 			'mdjm_make_payment_button',
 			array(

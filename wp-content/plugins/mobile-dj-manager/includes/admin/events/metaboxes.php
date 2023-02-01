@@ -171,6 +171,17 @@ function mdjm_add_event_meta_boxes( $post ) {
 				'permission' => '',
 			),
 			array(
+				'id'         => 'mdjm-price-overview-mb',
+				/* translators: %s Event */
+				'title'      => sprintf( __( 'Pricing', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+				'callback'   => 'mdjm_pricing_metabox_overview_callback',
+				'context'    => 'side',
+				'priority'   => 'high',
+				'args'       => array(),
+				'dependancy' => '',
+				'permission' => '',
+			),
+			array(
 				'id'         => 'mdjm-event-admin-mb',
 				'title'      => __( 'Administration', 'mobile-dj-manager' ),
 				'callback'   => 'mdjm_event_metabox_admin_callback',
@@ -297,6 +308,25 @@ function mdjm_event_metabox_overview_callback( $post ) {
 	do_action( 'mdjm_event_overview_fields', $post->ID );
 
 } // mdjm_event_metabox_overview_callback
+
+/**
+ * Output for the Price Overview meta box.
+ *
+ * @since   1.5
+ * @param   obj $post   The post object (WP_Post).
+ */
+function mdjm_pricing_metabox_overview_callback( $post ) {
+
+	global $post, $mdjm_event, $mdjm_event_update;
+
+	/*
+	 * Output the items for the event overview metabox
+	 * @since	1.5
+	 * @param	int	$post_id	The Event post ID
+	 */
+	do_action( 'mdjm_price_overview_fields', $post->ID );
+
+} // mdjm_pricing_metabox_overview_callback
 
 /**
  * Output for the Event Administration meta box.
@@ -432,6 +462,10 @@ function mdjm_event_metabox_options_payments_row( $event_id ) {
 	?>
 		<?php /* translators: %s Balance */ ?>
 		<?php printf( esc_html__( '%s Paid?', 'mobile-dj-manager' ), esc_html( mdjm_get_balance_label() ) ); ?></p>
+	<p>
+		<?php printf( esc_html__( 'Balance Remaining: %s', 'mobile-dj-manager' ), mdjm_currency_filter( mdjm_format_amount( mdjm_get_event_balance( $event_id ) ) ) ); ?>
+		
+		</p>
 
 	<?php
 
@@ -713,16 +747,7 @@ function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
 	if ( mdjm_employee_can( 'edit_txns' ) ) :
 		?>
 
-		<div id="mdjm_event_overview_event_price_fields" class="mdjm_meta_table_wrap">
-
-			<div class="widefat mdjm_repeatable_table">
-				<div class="mdjm-event-option-fields mdjm-repeatables-wrap">
-					<div class="mdjm_event_overview_wrapper">
-						<div class="mdjm-event-row-header">
-							<span class="mdjm-repeatable-row-title">
-								<?php esc_html_e( 'Pricing', 'mobile-dj-manager' ); ?>
-							</span>
-
+		<div class="mdjm_meta_table_wrap">
 							<?php
 							$actions = mdjm_event_pricing_get_action_links( $event_id, $mdjm_event, $mdjm_event_update );
 							?>
@@ -730,15 +755,13 @@ function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
 							<span class="mdjm-repeatable-row-actions">
 								<?php echo implode( '&nbsp;&#124;&nbsp;', $actions ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 							</span>
-						</div>
+						
 
-						<div id="mdjm-event-pricing-detail" class="mdjm-repeatable-row-standard-fields">
+						<div class="mdjm-repeatable-row-pricing-fields">
 							<?php do_action( 'mdjm_event_overview_standard_event_price_sections', $event_id ); ?>
 						</div>
 						<?php do_action( 'mdjm_event_overview_custom_event_price_sections', $event_id ); ?>
-					</div>
-				</div>
-			</div>
+					
 		</div>
 
 	<?php else : ?>
@@ -810,7 +833,7 @@ function mdjm_event_overview_metabox_event_price_sections( $event_id ) {
 	endif;
 
 } // mdjm_event_overview_metabox_event_price_sections
-add_action( 'mdjm_event_overview_fields', 'mdjm_event_overview_metabox_event_price_sections', 30 );
+add_action( 'mdjm_price_overview_fields', 'mdjm_event_overview_metabox_event_price_sections' );
 
 /**
  * Output the client name row
@@ -1874,6 +1897,7 @@ function mdjm_event_overview_metabox_event_playlist_options_row( $event_id ) {
 				<?php endif; ?>
 
 			</div>
+			
 			<?php do_action( 'mdjm_event_overview_options', $event_id ); ?>
 		</div>
 	</div>

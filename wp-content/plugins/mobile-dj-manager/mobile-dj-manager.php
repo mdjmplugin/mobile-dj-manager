@@ -4,15 +4,15 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: https://www.mdjm.co.uk
  * Description: The flexible event management solution for WordPress - not just for DJs!
- * Version: 1.6.3
- * Date: November 2022
- * Author: MDJM <support@mdjm.co.uk>
+ * Version: 1.6.5
+ * Date: January 2023
+ * Author: MDJM <info@mdjm.co.uk>
  * Author URI:  https://mdjm.co.uk
  * Text Domain: mobile-dj-manager
  * Domain Path: /languages
  * License: GPL2
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
+ * Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ, DJ Booking System, Event Booking System, Booking System, Event Manager, Mobile Event Planner, Mobile Event Manager, Photobooth, Photobooth Manager,
  *
  * Mobile DJ Manager is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License, version 2, as
@@ -144,7 +144,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants() {
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.6.3' );
+			define( 'MDJM_VERSION_NUM', '1.6.5' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version' );
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
@@ -289,6 +289,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 				require_once MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrade-functions.php';
 				require_once MDJM_PLUGIN_DIR . '/includes/admin/upgrades/upgrades.php';
 				require_once MDJM_PLUGIN_DIR . '/includes/admin/welcome.php';
+				require_once MDJM_PLUGIN_DIR . '/includes/admin/mdjm-dashboard.php';
 
 			}
 
@@ -321,7 +322,6 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		private function mdjm_prem_addons() {
 			$addons = array(
 				'mdjm-stripe-payments.php',
-				'mdjm-google-calendar-sync.php',
 				'mdjm-dynamic-contact-forms.php',
 				'mdjm-mailchimp-subscribe.php',
 			);

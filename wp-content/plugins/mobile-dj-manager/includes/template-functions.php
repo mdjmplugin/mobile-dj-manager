@@ -167,7 +167,7 @@ function mdjm_get_template_files() {
 		'quote'        => array(
 			'quote-noevent.php',
 			'quote.php',
-		),
+		)
 	);
 
 	return apply_filters( 'mdjm_template_files', $template_files );

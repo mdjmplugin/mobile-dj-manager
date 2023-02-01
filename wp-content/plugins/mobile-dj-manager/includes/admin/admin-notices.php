@@ -282,6 +282,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
+	
 	if ( isset( $_GET['mdjm-action'] ) && 'get_event_availability' === $_GET['mdjm-action'] ) {
 
 		if ( ! isset( $_GET['mdjm_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['mdjm_nonce'], 'get_event_availability' ) ) ) ) {
@@ -534,7 +535,7 @@ function mdjm_admin_wp_5star_rating_notice() {
 			<p>
 			<?php
 			printf(
-				__( 'If you haven&#39;t already, please check out our <a href="https://www.mdjm.co.uk/Add-Ons">Add Ons</a> to further enhance Mobile DJ Manager.', 'mobile-dj-manager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				__( 'If you haven&#39;t already, please check out our <a href="https://mdjm.co.uk/Extensions">Extensions</a> to further enhance Mobile DJ Manager.', 'mobile-dj-manager' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</p>
 			<p>

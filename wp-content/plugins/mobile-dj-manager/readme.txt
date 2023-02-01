@@ -1,10 +1,10 @@
 === MDJM Event Management ===
 Contributors: mdjm
-Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ
-Requires at least: 5.3
+Tags: Event Management, Event Planning, Event Planner, Events, DJ Event Planner, Mobile DJ, DJ Booking System, Event Booking System, Booking System, Event Manager, Mobile Event Planner, Mobile Event Manager, Photobooth, Photobooth Manager, DJ, DJ Planning, CRM, DJ Agency, DJ Tool, Playlist Management, Contact Forms, Mobile Disco, Disco, DJ Manager, Mobile DJ Manager, DJ Management
+Requires at least: 6.0
 Tested up to: 6.1
 Requires PHP: 7.3
-Stable tag: 1.6.3
+Stable tag: 1.6.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -85,6 +85,36 @@ Extensions are available to enhance the plugin via our [Extension Store](https:/
 7. The playlist feature as utilised by clients
 
 == Changelog ==
+
+= 1.6.6 = 
+
+Features:
+ - Email Client button now hides if the event status is set to "unattended enquiry"
+ - Message displays underneath the deposit/balance paid labels about saving in "unattended enquiry"
+ - Finances Overview now in a separate Metabox.
+ 
+Fixes:
+ - Event Details link from Event Summary screen now showing for everyone
+ - various _mdjm_** tags now displaying correctly
+ 
+
+= 1.6.5 =
+
+Features:
+ - Added the Balance Remaining amount to the deposit/balance paid metabox.
+ - Got ready for Mailchimp release
+ 
+Fixes:
+ - Display "Make Payment" button if BACS option is only selected.
+
+= 1.6.4 =
+
+Features:
+ - Added functionality of clients being able to download PLI and/or PAT Certificates from the Client Area.
+ - Changed the Client Portal button colour to Hex value
+ 
+Fixes:
+ - Position of the login form now showing in correct place
 
 = 1.6.3 =
 

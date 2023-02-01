@@ -1,0 +1,15 @@
+{
+  "name": "mdjm/mdjm-paypal-standard",
+  "type": "wordpress-plugin",
+  "homepage": "https://mdjm.co.uk/",
+  "license": "GPL-2.0+",
+  "support": {
+    "issues": "https://mdjm.co.uk/support"
+  },
+  "require-dev": {
+    "squizlabs/php_codesniffer": "*",
+    "dealerdirect/phpcodesniffer-composer-installer": "*",
+    "wp-coding-standards/wpcs": "*",
+    "phpcompatibility/phpcompatibility-wp": "*"
+  }
+}

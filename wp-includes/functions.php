@@ -6347,7 +6347,7 @@ function wp_timezone_choice( $selected_zone, $locale = null ) {
 		$locale_loaded = $locale ? $locale : get_locale();
 		$mofile        = WP_LANG_DIR . '/continents-cities-' . $locale_loaded . '.mo';
 		unload_textdomain( 'continents-cities' );
-		load_textdomain( 'continents-cities', $mofile );
+		load_textdomain( 'continents-cities', $mofile, $locale_loaded );
 		$mo_loaded = true;
 	}
 
@@ -8444,7 +8444,3 @@ function wp_recursive_ksort( &$array ) {
 	}
 	ksort( $array );
 }
-
-@ini_set( 'upload_max_size' , '256M' );
-@ini_set( 'post_max_size', '256M');
-@ini_set( 'max_execution_time', '300' );

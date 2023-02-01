@@ -152,23 +152,22 @@ class MDJM_DB_Availability extends MDJM_DB {
 	 * @since   1.5.6
 	 * @param   int $id The ID
 	 */
-	public function delete( $id = 0 ) {
-
-		if ( empty( $id ) ) {
-			return false;
-		}
-
-		$entry  = $this->get_entry_by( 'id', $id );
-		$return = false;
-
-		if ( ! empty( $entry ) && $entry->id > 0 ) {
-			global $wpdb;
-
-			$return = $wpdb->delete( $this->table_name, array( 'id' => $entry->id ), '%d' );
-		}
-
-		return $return;
-	} // delete
+public function delete( $id = 0 ) {
+    if ( empty( $id ) ) {
+        return false;
+    }
+    $entry  = $this->get_entry_by( 'id', $id );
+    var_dump($entry);
+    if ( ! empty( $entry ) && $entry->id > 0 ) {
+        global $wpdb;
+        $deleted = $wpdb->delete( $this->table_name, array( 'id' => $entry->id ), '%d' );
+        var_dump($deleted);
+        if ( false === $deleted ) {
+            error_log( 'Error deleting employee absence: ' . $wpdb->last_error );
+        }
+    }
+    return $return;
+}
 
 	/**
 	 * Retrieve a single entry by ID.
