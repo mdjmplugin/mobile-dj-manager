@@ -1,5 +1,11 @@
 <?php
 /**
+ * This plugin utilizes Open Source code. Details of these open source projects along with their licenses can be found below.
+ * We acknowledge and are grateful to these developers for their contributions to open source.
+ *
+ * Project: mobile-dj-manager https://github.com/deckbooks/mobile-dj-manager
+ * License: (GNU General Public License v2.0) https://github.com/deckbooks/mobile-dj-manager/blob/master/license.txt
+ *
  * @author: Mike Howard, Jack Mawhinney, Dan Porter
  *
  * Availability Meta DB class
@@ -105,10 +111,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	 *
 	 * @access  private
 	 * @since   1.5.6
-	 * 
-	 * 
 	 */
-
 	public function add_meta( $id = 0, $meta_key = '', $meta_value, $unique = false ) {
 
 		$id = $this->sanitize_entry_id( $id );

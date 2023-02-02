@@ -4,6 +4,7 @@
 * @license http://opensource.org/licenses/gpl-2.0.php GNU Public License
 */
 
+@charset "UTF-8";
 
 /* =General
 -------------------------------------------------------------- */
@@ -850,10 +851,7 @@ font-size: 16px;
 #mdjm_event_overview_event_price_fields {
 	margin-top: 12px;
 }
-#mdjm-event-actions .mdjm-select-chosen { 
-	min-width: 200px; 
-	margin-top: 6px; 
-}
+#mdjm-event-actions .mdjm-select-chosen { min-width: 200px; margin: 2px; padding-bottom: 2px; }
 #mdjm-event-actions a.chosen-single	{
 	min-width: 200px;
 }
@@ -953,10 +951,6 @@ font-size: 16px;
 	border-color: #e5e5e5;
 }
 
-.mdjm-repeatable-row-pricing-fields {
-	width: 100%
-}
-
 .mdjm-repeatable-row-setting-label {
 	display: block;
 	margin-bottom: 4px;
@@ -1014,24 +1008,18 @@ font-size: 16px;
 .mdjm-event-setup-time,
 .mdjm-event-package,
 .mdjm-event-addons,
-.mdjm-availability-check-date,
-.mdjm-custom-field {
-	width: 25%;
-	margin-right: 5%;
-}
-
 .mdjm-event-package-cost,
 .mdjm-event-addons-cost,
 .mdjm-event-travel-cost,
 .mdjm-event-additional-cost,
 .mdjm-event-discount,
 .mdjm-event-deposit,
-.mdjm-event-cost {
-	display: block !important;
-	width: 100%;
-	margin-top: 6px;
+.mdjm-event-cost,
+.mdjm-availability-check-date,
+.mdjm-custom-field {
+	width: 25%;
+	margin-right: 5%;
 }
-
 .mdjm-custom-field input[type="text"] {
 	width: 200px;
 }
@@ -1426,31 +1414,4 @@ span.mdjm-travel-unit {
 	display: inline-block;
 	vertical-align: top;
 	width: 80%;
-}
-
-/* Dashboard Styles
--------------------------------------*/
-.dashboard-table-header {
-	width: 50%;
-	background-color: #f9f9f9;
-	font-weight: 400;
-	padding:10px;
-}
-.dashboard-table{
-	width: 45%;
-	float: left;
-	border: 2px solid #e5e5e5;
-	/*box-shadow: 5px 5px #000; */
-}
-
-.dashboard-table-items{
-	width: 30%;
-	padding: 10px;
-	align-content: center;
-}
-
-.enquiry-dashboard{
-	padding: 10px;
-	background-color: white;
-	overflow-y: auto;
 }

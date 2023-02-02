@@ -244,7 +244,7 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 			}
 
 			foreach ( $_POST as $key => $value ) {
-				if ( false != strpos( $key, 'license_key_deactivate' ) ) {
+				if ( false !== strpos( $key, 'license_key_deactivate' ) ) {
 					// Don't activate a key when deactivating a different key
 					return;
 				}
@@ -429,9 +429,9 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 
 			$license = get_option( $this->item_shortname . '_license_active' );
 
-			if ( is_object( $license ) && 'valid' != $license->license && empty( $showed_invalid_message ) ) {
+			if ( is_object( $license ) && 'valid' !== $license->license && empty( $showed_invalid_message ) ) {
 
-				if ( empty( $_GET['tab'] ) || 'licenses' === $_GET['tab'] ) {
+				if ( empty( $_GET['tab'] ) || 'licenses' !== $_GET['tab'] ) {
 
 					$messages[] = sprintf(
 						__( 'You have invalid or expired license keys for Mobile DJ Manager. Please go to the <a href="%s">Licenses page</a> to correct this issue.', 'mobile-dj-manager' ),
@@ -469,7 +469,7 @@ if ( ! class_exists( 'MDJM_License' ) ) {
 
 			$license = get_option( $this->item_shortname . '_license_active' );
 
-			if ( ( ! is_object( $license ) || 'valid' != $license->license ) && empty( $showed_imissing_key_message[ $this->item_shortname ] ) ) {
+			if ( ( ! is_object( $license ) || 'valid' !== $license->license ) && empty( $showed_imissing_key_message[ $this->item_shortname ] ) ) {
 				echo '&nbsp;<strong><a href="' . esc_url( admin_url( 'edit.php?post_type=mdjm-event&page=mdjm-settings&tab=licenses' ) ) . '">' . esc_html__( 'Enter a valid license key for automatic updates.', 'mobile-dj-manager' ) . '</a></strong>';
 				$showed_imissing_key_message[ $this->item_shortname ] = true;
 			}

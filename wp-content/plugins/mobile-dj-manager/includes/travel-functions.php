@@ -132,7 +132,7 @@ function mdjm_travel_build_url( $start, $destination ) {
  * @return  str         The API key.
  */
 function mdjm_travel_get_api_key() {
-	return 'AIzaSyCUvA80Nf5fhbWUFE0WMWqTNZpcBSITba4';
+	return 'AIzaSyD48M90eaVk7D_ooFn8FwsWWI-ZDO7UvVw.apps.googleusercontent.com';
 } // mdjm_travel_get_api_key
 
 /**
@@ -313,7 +313,7 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 	$distance       = '';
 	$duration       = '';
 	$cost           = '';
-	$directions_url = sprintf( __( 'https://google.com/maps/dir/123%s', 'mobile-dj-manager' ), get_post_meta( '_mdjm_event_venue_postcode' ) );
+	$directions_url = 'https://google.com/maps/dir/';
 	$directions     = $mdjm_travel->get_directions_url();
 	$class          = 'mdjm-hidden';
 
@@ -342,7 +342,7 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 		</span>
 		<span class="mdjm-travel-unit">
 			<i class="fas fa-map-signs" aria-hidden="true" title="<?php esc_attr_e( 'Directions', 'mobile-dj-manager' ); ?>"></i>
-			<span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo $directions_url ?> " target="_blank"><?php esc_html_e( 'Directions', 'mobile-dj-manager' ); ?></a></span>
+			<span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo $directions_url, $venue_postcode ?> " target="_blank"><?php esc_html_e( 'Directions', 'mobile-dj-manager' ); ?></a></span>
 		</span>
 		</div>
 

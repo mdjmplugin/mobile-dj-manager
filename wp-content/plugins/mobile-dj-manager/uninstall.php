@@ -157,7 +157,6 @@ if ( mdjm_get_option( 'remove_on_uninstall' ) ) {
 		'mdjm_plugin_settings',
 		'mdjm_schedules',
 		'mdjm_settings',
-		'mdjm_dashboard',
 		'mdjm_templates_settings',
 		'mdjm_txn_terms_13',
 		'mdjm_updated',

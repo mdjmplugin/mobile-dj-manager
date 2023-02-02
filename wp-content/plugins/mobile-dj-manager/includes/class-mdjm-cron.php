@@ -150,7 +150,7 @@ class MDJM_Cron {
 				'lastran'     => 'Never',
 				'options'     => array(
 					'run_when' => 'after_event',
-					'age'      => '1 HOUR',	
+					'age'      => '1 HOUR',
 				),
 				'totalruns'   => '0',
 				'default'     => true,
