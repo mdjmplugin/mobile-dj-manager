@@ -196,7 +196,7 @@ class MDJM_Stats {
 				case 'this_month':
 					if ( $end_date ) {
 
-						$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+						$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 						$hour   = 23;
 						$minute = 59;
 						$second = 59;
@@ -218,7 +218,7 @@ class MDJM_Stats {
 					}
 
 					if ( $end_date ) {
-						$day = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+						$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 					}
 
 					break;
@@ -245,13 +245,13 @@ class MDJM_Stats {
 
 							--$year; // Today is January 1, so skip back to last day of December.
 							$month = 12;
-							$day   = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 
 						} else {
 
 							// Go back one month and get the last day of the month.
 							--$month;
-							$day = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 
 						}
 					}
@@ -320,7 +320,7 @@ class MDJM_Stats {
 							$month = 1;
 						} else {
 							$month  = 3;
-							$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 							$hour   = 23;
 							$minute = 59;
 							$second = 59;
@@ -331,7 +331,7 @@ class MDJM_Stats {
 							$month = 4;
 						} else {
 							$month  = 6;
-							$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 							$hour   = 23;
 							$minute = 59;
 							$second = 59;
@@ -342,7 +342,8 @@ class MDJM_Stats {
 							$month = 7;
 						} else {
 							$month  = 9;
-							$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year)); 
+							date('t', mktime(0, 0, 0, $month, 1, $year)); 
 							$hour   = 23;
 							$minute = 59;
 							$second = 59;
@@ -353,7 +354,7 @@ class MDJM_Stats {
 							$month = 10;
 						} else {
 							$month  = 12;
-							$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 							$hour   = 23;
 							$minute = 59;
 							$second = 59;
@@ -372,7 +373,7 @@ class MDJM_Stats {
 						} else {
 							--$year;
 							$month  = 12;
-							$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 							$hour   = 23;
 							$minute = 59;
 							$second = 59;
@@ -383,7 +384,7 @@ class MDJM_Stats {
 							$month = 1;
 						} else {
 							$month  = 3;
-							$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 							$hour   = 23;
 							$minute = 59;
 							$second = 59;
@@ -394,7 +395,7 @@ class MDJM_Stats {
 							$month = 4;
 						} else {
 							$month  = 6;
-							$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 							$hour   = 23;
 							$minute = 59;
 							$second = 59;
@@ -405,7 +406,7 @@ class MDJM_Stats {
 							$month = 7;
 						} else {
 							$month  = 9;
-							$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+							$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 							$hour   = 23;
 							$minute = 59;
 							$second = 59;
@@ -419,7 +420,7 @@ class MDJM_Stats {
 						$month = 1;
 					} else {
 						$month  = 12;
-						$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+						$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 						$hour   = 23;
 						$minute = 59;
 						$second = 59;
@@ -433,7 +434,7 @@ class MDJM_Stats {
 						$month = 1;
 					} else {
 						$month  = 12;
-						$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+						$day = date('t', mktime(0, 0, 0, $month, 1, $year));
 						$hour   = 23;
 						$minute = 59;
 						$second = 59;

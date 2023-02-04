@@ -117,7 +117,7 @@ class MDJM_Earnings_Export extends MDJM_Export {
 			while ( $m1 <= $m2 ) {
 
 				$date1 = mktime( 0, 0, 0, $m1, 1, $year );
-				$date2 = mktime( 0, 0, 0, $m1, cal_days_in_month( CAL_GREGORIAN, $m1, $year ), $year );
+				$date2 = mktime( 0, 0, 0, $m1, date('t', mktime(0, 0, 0, $m1, 1, $year)), $year );
 
 				$event_status = array_keys( mdjm_all_event_status() );
 
