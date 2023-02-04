@@ -340,10 +340,6 @@ function mdjm_show_travel_data_row( $dest, $employee_id = '' ) {
 			<i class="fas fa-pound-sign" aria-hidden="true" title="<?php esc_attr_e( 'Cost', 'mobile-dj-manager' ); ?>"></i>
 			<span class="mdjm-travel-cost"><?php echo esc_html( $cost ); ?></span>
 		</span>
-		<span class="mdjm-travel-unit">
-			<i class="fas fa-map-signs" aria-hidden="true" title="<?php esc_attr_e( 'Directions', 'mobile-dj-manager' ); ?>"></i>
-			<span class="mdjm-travel-directions"><a id="travel_directions" href="<?php echo $directions_url, $venue_postcode ?> " target="_blank"><?php esc_html_e( 'Directions', 'mobile-dj-manager' ); ?></a></span>
-		</span>
 		</div>
 
 	<?php
