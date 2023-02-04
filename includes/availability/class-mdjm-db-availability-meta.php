@@ -109,7 +109,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	 * 
 	 */
 
-	public function add_meta( $id = 0, $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $id = 0, $meta_key = '', $meta_value = '', $unique = false ) {
 
 		$id = $this->sanitize_entry_id( $id );
 		if ( false === $id ) {
@@ -138,7 +138,7 @@ class MDJM_DB_Availability_Meta extends MDJM_DB {
 	 * @access  private
 	 * @since   1.5.6
 	 */
-	public function update_meta( $id = 0, $meta_key = '', $meta_value, $prev_value = '' ) {
+	public function update_meta( $id = 0, $meta_key = '', $meta_value = '', $prev_value = '' ) {
 		$id = $this->sanitize_entry_id( $id );
 		if ( false === $id ) {
 			return false;
