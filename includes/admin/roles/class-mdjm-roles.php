@@ -271,7 +271,7 @@ if ( ! class_exists( 'MDJM_Roles' ) ) :
 			global $wpdb;
 
 			// If the artist setting has not been updated, we can return and do nothing
-			if ( $new_value['artist'] == $old_value['artist'] ) {
+			if ( !array_key_exists('artist', $new_value) || $new_value['artist'] == $old_value['artist'] ) {
 				return;
 			}
 
