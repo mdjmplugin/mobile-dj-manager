@@ -1011,7 +1011,7 @@ add_action( 'wp_ajax_add_event_transaction', 'mdjm_save_event_transaction_ajax' 
 function mdjm_add_event_type_ajax() {
 
 	$current = isset( $_POST['current'] ) ? sanitize_text_field( wp_unslash( $_POST['current'] ) ) : '';
-
+	$msg = '';
 	if ( empty( $_POST['type'] ) ) {
 		$msg = __( 'Enter a name for the new Event Type', 'mobile-dj-manager' );
 		wp_send_json_error(
@@ -1030,7 +1030,7 @@ function mdjm_add_event_type_ajax() {
 		}
 	}
 
-	$selected   = $msg == 'success' ? $term['term_id'] : $current;
+	$selected   = ( $msg == 'success' )? $term['term_id'] : $current;
 	$categories = get_terms( 'event-types', array( 'hide_empty' => false ) );
 	$options    = array();
 	$output     = '';

@@ -71,7 +71,8 @@ function mdjm_contract_posts_custom_column( $column_name, $post_id ) {
 				)
 			);
 
-			$total = count( $contract_events );
+			$total = (is_countable($contract_events) ? count( $contract_events ) : 0);
+
 			echo esc_html( $total . sprintf( _n( ' %1$s', ' %2$s', $total, 'mobile-dj-manager' ), mdjm_get_label_singular(), mdjm_get_label_plural() ) );
 
 			break;
@@ -163,7 +164,7 @@ function mdjm_save_contract_post( $post_id, $post, $update ) {
 		return;
 	}
 
-	if ( empty( $update ) ) {
+	if ( empty( $update ) || empty($post_id) ) {
 		return;
 	}
 
@@ -184,21 +185,21 @@ function mdjm_save_contract_post( $post_id, $post, $update ) {
 	do_action( 'mdjm_pre_contract_save', $post_id, $post, $update );
 
 	// Current value of the contract description for comaprison.
-	$current_desc = get_post_meta( $ID, '_contract_description', true );
+	$current_desc = get_post_meta( $post_id, '_contract_description', true );
 
 	// If we have a value and the key did not exist previously, add it.
 	if ( ! empty( $_POST['contract_description'] ) && empty( $current_desc ) ) {
-		add_post_meta( $ID, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ), true );
+		add_post_meta( $post_id, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ), true );
 	}
 
 	// If a value existed, but has changed, update it
 	elseif ( ! empty( $_POST['contract_description'] ) && $current_desc != $_POST['contract_description'] ) {
-		update_post_meta( $ID, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ) );
+		update_post_meta( $post_id, '_contract_description', sanitize_textarea_field( wp_unslash( $_POST['contract_description'] ) ) );
 	}
 
 	// If there is no new meta value but an old value exists, delete it.
 	elseif ( empty( $_POST['contract_description'] ) && ! empty( $current_desc ) ) {
-		delete_post_meta( $ID, '_contract_description' );
+		delete_post_meta( $post_id, '_contract_description' );
 	}
 
 	// Fire our post save hook
