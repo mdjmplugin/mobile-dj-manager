@@ -1,6 +1,10 @@
 {
     "/assets/js/mdjm-plugin.js": "/assets/js/mdjm-plugin.js",
+    "/assets/js/mdjm-admin.js": "/assets/js/mdjm-admin.js",
+    "/assets/css/mdjm-admin.css": "/assets/css/mdjm-admin.css",
     "/assets/css/mdjm-plugin.css": "/assets/css/mdjm-plugin.css",
     "/assets/css/mdjm-plugin.min.css": "/assets/css/mdjm-plugin.min.css",
-    "/assets/js/mdjm-plugin.min.js": "/assets/js/mdjm-plugin.min.js"
+    "/assets/js/mdjm-plugin.min.js": "/assets/js/mdjm-plugin.min.js",
+    "/assets/css/mdjm-admin.min.css": "/assets/css/mdjm-admin.min.css",
+    "/assets/js/mdjm-admin.min.js": "/assets/js/mdjm-admin.min.js"
 }
