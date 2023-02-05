@@ -100,7 +100,7 @@ function mdjm_load_scripts() {
 				'unavailable_redirect'      => mdjm_get_option( 'availability_check_fail_page', 'text' ) !== 'text' ? mdjm_get_formatted_url( mdjm_get_option( 'availability_check_fail_page' ) ) : 'text',
 				'terms_error'               => esc_html( $terms_error ),
 				'unavailable_text'          => mdjm_get_option( 'availability_check_fail_text', false ),
-				'payment_event_id' 			=> isset( $_GET['event_id'] ) ? esc_html( $_GET['event_id'] ) : '',
+				'payment_event_id'          => isset( $_GET['event_id'] ) ? esc_html( $_GET['event_id'] ) : '',
 			)
 		)
 	);
@@ -151,12 +151,6 @@ function mdjm_register_styles() {
 	if ( ! mdjm_get_option( 'unload_fontawesome', false ) ) {
 		wp_register_style( 'mdjm-font-awesome', MDJM_PLUGIN_URL . '/assets/libs/font-awesome/font-awesome.min.css' );
 		wp_enqueue_style( 'mdjm-font-awesome' );
-	}
-
-	// Added Dan to load new CSS
-	if ( is_page( mdjm_get_option( 'payments_page' ) ) ) {
-		wp_register_style( 'mdjm-payments-css', MDJM_PLUGIN_URL . '/assets/css/mdjm-payments.css' );
-		wp_enqueue_style( 'mdjm-payments-css' );
 	}
 
 	if ( ! empty( $post ) ) {
