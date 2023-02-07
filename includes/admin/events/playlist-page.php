@@ -26,7 +26,7 @@ function mdjm_display_event_playlist_page() {
 		);
 	}
 
-	if ( ! mdjm_employee_can( 'read_events' ) && ! mdjm_employee_working_event( absint( wp_unslash( $_GET['event_id'] ) ) ) ) {
+	if ( ! mdjm_employee_can( 'read_events' ) && mdjm_employee_working_event( wp_unslash( $_GET['event_id'] ) ) ) {
 		wp_die(
 			'<h1>' . esc_html__( 'Cheatin&#8217; uh?', 'mobile-dj-manager' ) . '</h1>' .
 			'<p>' . esc_html__( 'You do not have permission to view this playlist.', 'mobile-dj-manager' ) . '</p>',

@@ -1802,7 +1802,7 @@ function mdjm_update_event_meta( $event_id, $data ) {
 		// If we have a value and the key did not exist previously, add it.
 		if ( ! empty( $value ) && ( empty( $current_meta[ $key ] ) || empty( $current_meta[ $key ][0] ) ) ) {
 
-			$debug[] = sprintf( __( 'Adding %1$s value as %2$s', 'mobile-dj-manager' ), mdjm_event_get_meta_label( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
+			$debug[] = sprintf( __( 'Adding %1$s value as %2$s', 'mobile-dj-manager' ), mdjm_event_get_meta_label ( $key ), is_array( $value ) ? var_export( $value, true ) : $value );
 			add_post_meta( $event_id, $key, $value );
 
 		} elseif ( ! empty( $value ) && $value != $current_meta[ $key ][0] ) { // If a value existed, but has changed, update it.
@@ -1855,6 +1855,8 @@ function mdjm_event_get_meta_label( $key ) {
 
 	$keys = array(
 		'_mdjm_event_addons'            => __( 'Add-ons', 'mobile-dj-manager' ),
+		'_mdjm_event_addons_cost'       => __( 'Add-ons Cost', 'mobile-dj-manager' ),
+		'_mdjm_event_additional_cost'   => __( 'Additional Cost', 'mobile-dj-manager' ),
 		'_mdjm_event_admin_notes'       => __( 'Admin Notes', 'mobile-dj-manager' ),
 		'_mdjm_event_balance_status'    => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_balance_label() ),
 		'_mdjm_event_client'            => __( 'Client', 'mobile-dj-manager' ),
@@ -1865,20 +1867,23 @@ function mdjm_event_get_meta_label( $key ) {
 		'_mdjm_event_date'              => sprintf( __( '%s Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_deposit'           => mdjm_get_deposit_label(),
 		'_mdjm_event_deposit_status'    => sprintf( __( '%s Status', 'mobile-dj-manager' ), mdjm_get_deposit_label() ),
+		'_mdjm_event_discount'       => __( 'Discount', 'mobile-dj-manager' ),
 		'_mdjm_event_dj'                => sprintf( __( '%s Contract', 'mobile-dj-manager' ), mdjm_get_option( 'artist' ) ),
 		'_mdjm_event_dj_notes'          => __( 'Employee Notes', 'mobile-dj-manager' ),
 		'_mdjm_event_dj_payment_status' => sprintf( __( 'Primary Employee %s Payment Details', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
-		'_mdjm_event_djsetup_date'      => sprintf( __( '%s Setup Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
+		'_mdjm_event_djsetup'      => sprintf( __( '%s Setup Date', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_djsetup_time'      => sprintf( __( '%s Setup Time', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_dj_wage'           => sprintf( __( 'Primary Employee %s Wage', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_employees'         => __( 'Employees', 'mobile-dj-manager' ),
 		'_mdjm_event_employees_data'    => __( 'Employees Payment Data', 'mobile-dj-manager' ),
 		'_mdjm_event_enquiry_source'    => __( 'Enquiry Source', 'mobile-dj-manager' ),
+		'_mdjm_event_end_date'			=> __( 'End Date', 'mobile-dj-manager' ),
 		'_mdjm_event_finish'            => __( 'End Time', 'mobile-dj-manager' ),
 		'_mdjm_event_last_updated_by'   => __( 'Last Updated By', 'mobile-dj-manager' ),
 		'_mdjm_event_name'              => sprintf( __( '%s Name', 'mobile-dj-manager' ), mdjm_get_label_singular() ),
 		'_mdjm_event_notes'             => __( 'Description', 'mobile-dj-manager' ),
 		'_mdjm_event_package'           => __( 'Package', 'mobile-dj-manager' ),
+		'_mdjm_event_package_cost'		=> __( 'Package Cost', 'mobile-dj-manager' ),
 		'_mdjm_event_playlist'          => __( 'Playlist Enabled', 'mobile-dj-manager' ),
 		'_mdjm_event_playlist_access'   => __( 'Playlist Guest Access Code', 'mobile-dj-manager' ),
 		'_mdjm_event_playlist_limit'    => __( 'Playlist Limit', 'mobile-dj-manager' ),

@@ -504,7 +504,7 @@ class MDJM_PlayList_Table extends WP_List_Table {
 			exit;
 		}
 
-		?>
+		if ( mdjm_employee_can('manage_event') ) { ?>
 		<h3><?php esc_html_e( 'Add Entry to Playlist', 'mobile-dj-manager' ); ?></h3>
 		<form id="mdjm-playlist-form" name="mdjm-playlist-form" action="" method="post">
 			<?php wp_nonce_field( 'add_playlist_entry', 'mdjm_nonce', true, true ); ?>
@@ -577,7 +577,7 @@ class MDJM_PlayList_Table extends WP_List_Table {
 			);
 			?>
 		</form>
-		<?php
+		<?php }
 	} // entry_form
 
 	/**

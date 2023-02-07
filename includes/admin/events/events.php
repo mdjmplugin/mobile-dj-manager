@@ -279,7 +279,7 @@ function mdjm_event_posts_custom_column( $column_name, $post_id ) {
 				$total = mdjm_count_playlist_entries( $post_id );
 
 				echo '<a href="' . esc_url( mdjm_get_admin_page( 'playlists' ) . $post_id ) . '">' .
-					esc_html( _n( 'Details', 'Details', $total, 'mobile-dj-manager' ) ) . '</a>' . "\r\n";
+					esc_html( __( 'Details', $total, 'mobile-dj-manager' ) ) . '</a>' . "\r\n";
 			} else {
 				echo '&mdash;';
 			}
@@ -534,9 +534,7 @@ function mdjm_event_employee_filter_dropdown() {
 	$employees      = mdjm_get_employees();
 	$employee_count = count( $employees );
 
-	if ( ! $employee_count || 1 === $employee_count ) {
-		return;
-	}
+
 
 	?>
 	<label for="filter-by-employee" class="screen-reader-text"><?php esc_html_e( 'Filter by Employee', 'mobile-dj-manager' ); ?></label>
@@ -788,17 +786,15 @@ function mdjm_output_event_name_field( $post ) {
 	} else {
 		echo '&mdash;';
 	}
-	
-	$client = get_userdata( get_post_meta( $post->ID, '_mdjm_event_client', true ) );
-if(isset($client->ID)):
-		echo '<a class="button-primary" href="' . esc_url( mdjm_get_admin_page( 'comms' ) . '&recipient=' . $client->ID . '&event_id=' . $post->ID ) . '">' .
-		/* translators: %s Event or Events */
-		sprintf( esc_html__( 'Email Client', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ), "</a>\r\n";
-endif;
-	?>
-	<?php
+
+	if ( isset( $post->ID ) && isset( $client->ID ) ) {
+			echo '<a class="button-primary" href="' . esc_url( mdjm_get_admin_page( 'comms' ) . '&recipient=' . $client->ID . '&event_id=' . $post->ID ) . '">' .
+			/* translators: %s Event or Events */
+			sprintf( esc_html__( 'Email Client', 'mobile-dj-manager' ), esc_html( mdjm_get_label_singular() ) ), "</a>\r\n";
+		}
+
 } // mdjm_output_event_name_field
-add_action( 'edit_form_after_title', 'mdjm_output_event_name_field' ); 
+add_action( 'edit_form_after_title', 'mdjm_output_event_name_field' );
 
 /**
  * Rename the Publish and Update post buttons for events

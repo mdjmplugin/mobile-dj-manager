@@ -282,6 +282,7 @@ function mdjm_admin_notices() {
 			'error'
 		);
 	}
+	
 	if ( isset( $_GET['mdjm-action'] ) && 'get_event_availability' === $_GET['mdjm-action'] ) {
 
 		if ( ! isset( $_GET['mdjm_nonce'] ) || ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['mdjm_nonce'], 'get_event_availability' ) ) ) ) {

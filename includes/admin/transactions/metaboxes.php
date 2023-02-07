@@ -229,10 +229,10 @@ function mdjm_transaction_metabox_txn_details( $post ) {
 	?>
 	<style>
 	#paid_from_field	{
-		display: <?php echo ( $post->post_status != 'mdjm-expenditure' ? 'block' : 'none' ); ?>;
+		display: <?php echo ( sanitize_text_field( $post->post_status ) != 'mdjm-expenditure' ? 'block' : 'none' ); ?>;
 	}
 	#paid_to_field	{
-		display: <?php echo ( $post->post_status == 'mdjm-expenditure' ? 'block' : 'none' ); ?>;
+		display: <?php echo ( sanitize_text_field( $post->post_status ) == 'mdjm-expenditure' ? 'block' : 'none' ); ?>;
 	}
 	</style>
 	<script type="text/javascript">

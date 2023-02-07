@@ -32,7 +32,7 @@ function mdjm_admin_menu() {
 		   $mdjm_auto_tasks_page, $mdjm_clients_page, $mdjm_comms_page, $mdjm_comms_history_page,
 		   $mdjm_availability_page, $mdjm_emp_page, $mdjm_packages_page, $mdjm_reports_page, $mdjm_tools_page,
 		   $mdjm_transactions_page, $mdjm_venues_page, $mdjm_playlist_page, $mdjm_custom_event_fields_page,
-		   $mdjm_custom_client_fields_page, $mdjm_extensions_page;
+		   $mdjm_custom_client_fields_page, $mdjm_extensions_page, $mdjm_dashboard_page;
 
 	if ( mdjm_employee_can( 'manage_templates' ) ) {
 		$mdjm_contract_template_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Contract Templates', 'mobile-dj-manager' ), __( 'Contract Templates', 'mobile-dj-manager' ), 'mdjm_employee', 'edit.php?post_type=contract', '' );
@@ -102,6 +102,8 @@ function mdjm_admin_menu() {
 	$mdjm_settings_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Settings', 'mobile-dj-manager' ), __( '<strong><span style="color:#F90">Settings</span></strong>', 'mobile-dj-manager' ), 'manage_mdjm', 'mdjm-settings', 'mdjm_options_page' );
 
 	$mdjm_extensions_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'MDJM Extensions', 'mobile-dj-manager' ), __( '<strong><span style="color:#F90">Extensions</span></strong>', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-addons', 'mdjm_extensions_page' );
+	
+	$mdjm_dashboard_page = add_submenu_page( 'edit.php?post_type=mdjm-event', __( 'Dashboard', 'mobile-dj-manager' ), __( '<strong><span style="color:#FFF">Dashboard</span></strong>', 'mobile-dj-manager' ), 'mdjm_employee', 'mdjm-dashboard', 'mdjm_dashboard_page' );
 
 } // mdjm_admin_menu
 add_action( 'admin_menu', 'mdjm_admin_menu', 9 );
@@ -218,18 +220,19 @@ function mdjm_admin_toolbar( $admin_bar ) {
 				),
 			)
 		);
+		// Dashboard
+		$admin_bar->add_menu( 
+			array(
+				'id'		=> 'mdjm-dashboard',
+				'parent'	=> 'mdjm',
+				'title'	 => __( 'Dashboard', 'mobile-dj-manager' ),
+				'href'	  => admin_url( 'admin.php?page=mdjm-dashboard' ),
+				'meta'	  => array(
+					'title' => __( 'MDJM Dashboard', 'mobile-dj-manager' ),
+				),
+			) 
+		); 
 	}
-	// Dashboard
-	/**
-	$admin_bar->add_menu( array(
-		'id'		=> 'mdjm-dashboard',
-		'parent'	=> 'mdjm',
-		'title'	 => __( 'Dashboard', 'mobile-dj-manager' ),
-		'href'	  => admin_url( 'admin.php?page=mdjm-dashboard' ),
-		'meta'	  => array(
-			'title' => __( 'MDJM Dashboard', 'mobile-dj-manager' ),
-		),
-	) ); */ 
 	if ( mdjm_is_employer() && mdjm_employee_can( 'manage_employees' ) ) {
 		// Employees
 		$admin_bar->add_menu(
