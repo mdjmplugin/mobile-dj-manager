@@ -181,7 +181,7 @@ function mdjm_register_admin_styles( $hook ) {
 	$css_dir  = MDJM_PLUGIN_URL . '/assets/css/';
 	$libs_dir = MDJM_PLUGIN_URL . '/assets/libs/';
 	$suffix   = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-	$file     = 'mdjm-admin.css';
+	$file     = 'mdjm-admin.min.css';
 
 	wp_register_style( 'jquery-chosen', $css_dir . 'chosen.min.css', array(), MDJM_PLUGIN_URL );
 	wp_register_style( 'jquery-ui-css', $css_dir . 'jquery-ui-' . $ui_style . '.min.css' );
