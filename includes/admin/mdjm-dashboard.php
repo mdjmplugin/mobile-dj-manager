@@ -20,7 +20,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
-
 /**
  * Tasks Page
  *
@@ -30,47 +29,104 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return  void
  */
 function mdjm_dashboard_page() { 
+	
+	global $current_user;
+	
+	// Monthly Dashboard Variables
+		$current_month = date ( 'M Y' );
 		$item = wp_get_current_user();
 		$nextevent   = mdjm_get_employees_next_event( $item->ID );
-		$total_events = mdjm_count_employee_events( $item->ID );
-		// $completed_events = count ('mdjm-completed');
+		$completed_events = sprintf( '<a href="' . esc_url( admin_url( 'edit.php?post_status=mdjm-completed&post_type=mdjm-event' ) ) . '">' . mdjm_event_count ( 'mdjm-completed' ) . '</a>' );
 		$unattended_enquiries = sprintf( '<a href="' . esc_url( admin_url( 'edit.php?post_type=mdjm-event&post_status=mdjm-unattended' ) ) . '">'. mdjm_event_count( 'mdjm-unattended' ) . '</a>' );
+	 	$failed_enquiries = sprintf( '<a href="' . esc_url( admin_url( 'edit.php?post_status=mdjm-failed&post_type=mdjm-event' ) ) . '">' . mdjm_event_count ( 'mdjm-failed' ) . '</a>' );
 	
-		$completed_counts = array(
-			'month'     => 0,
-			'this_year' => 0,
-			'last_year' => 0,
+	// Yearly Dashboard Variables
+		$current_year = date('Y');
+	
+	
+// Get the start and end of the current month
+$now = new DateTime();
+$current_month_start = $now->format('Y-m-01');
+$current_month_end = $now->format('Y-m-t');
+
+$required_status = array( 'mdjm-completed', 'mdjm-enquiry', 'mdjm-contract', 'mdjm-approved' );
+
+// Set up the $args array with the required parameters
+$args = array(
+    'employee_id' => $item->ID,
+    'post_type' => 'mdjm-event',
+    'post_status' => $required_status,
+    'fields' => 'ids',
+    'meta_query' => array(
+        array(
+            'key' => '_mdjm_event_date',
+            'value' => array( $current_month_start, $current_month_end ),
+            'type' => 'DATE',
+            'compare' => 'BETWEEN'
+        )
+    )
+);
+	$events = mdjm_get_events( $args );
+
+
+// Count the number of events
+$total_events = count( $events );
+	
+	function get_earnings_by_date( $day = null, $month_num, $year = null, $hour = null ) {
+		$args = array(
+			'post_type'              => 'mdjm-transaction',
+			'nopaging'               => true,
+			'year'                   => $year,
+			'monthnum'               => $month_num,
+			'post_status'            => array( 'mdjm-income', 'mdjm-expenditure' ),
+			'meta_key'               => '_mdjm_txn_status',
+			'meta_value'             => 'Completed',
+			'fields'                 => 'ids',
+			'update_post_term_cache' => false,
 		);
-		$event_periods    = array(
-			'month'     => array( date( 'Y-m-01' ), date( 'Y-m-d' ) ),
-			'this_year' => array( date( 'Y-01-01' ), date( 'Y-m-d' ) ),
-			'last_year' => array( date( 'Y-m-01', strtotime( '-1 year' ) ), date( 'Y-12-31', strtotime( '-1 year' ) ) ),
-		);
+
+		if ( ! empty( $day ) ) {
+			$args['day'] = $day;
+		}
+
+		if ( ! empty( $hour ) ) {
+			$args['hour'] = $hour;
+		}
+
+		$args     = apply_filters( 'mdjm_get_earnings_by_date_args', $args );
+		$key      = 'mdjm_stats_' . substr( md5( serialize( $args ) ), 0, 15 );
+		$earnings = get_transient( $key );
+
+/*		if ( false === $earnings ) {
+			$income  = $this->get_income_by_date( $day, $month_num, $year, $hour );
+			$expense = $this->get_expenses_by_date( $day, $month_num, $year, $hour );
+
+			$earnings = $income - $expense;
+
+			// Cache the results for one hour.
+			set_transient( $key, $earnings, HOUR_IN_SECONDS );
+		}*/
+
+		return round( $earnings, 2 );
+	} // get_earnings_by_date
+
+
+	
 ?>
-		
+		<div class="wrap">
 		<h1>
-			<?php esc_html_e( 'Dashboard', 'mobile-dj-manager' ); ?>
+			Dashboard for <?php echo $current_user->display_name; ?>
 		</h1>
-<div class="wrap">
+
 <div class="enquiry-dashboard">
-       <table class="dashboard-table">
+       <table class="dashboard-monthly-table">
 		   <tbody>
             <tr>
-				<td colspan="2" class="dashboard-table-header"><strong>Monthly DJ Overview for <?php echo date( 'F Y' ); ?></strong></td>
+				<td colspan="2" class="dashboard-table-header"><strong>Monthly DJ Overview for <?php echo $current_month ?></strong></td>
             </tr>
           <tr>
-            <td class="dashboard-table-items" width="30%">Active Bookings:</td>
-            <td class="dashboard-table-content" width="70%"><?php printf(
-			__( '%s', 'mobile-dj-manager' ),
-			! empty( $total_events ) ? '<a href="' . esc_url(
-				admin_url(
-					'edit.php?s&post_type=mdjm-event&post_status=all' .
-					'&action=-1&mdjm_filter_date=0&mdjm_filter_type&mdjm_filter_employee=' . $item->ID .
-					'&mdjm_filter_client=0&filter_action=Filter&paged=1&action2=-1'
-				)
-			) . '">' . esc_html( $total_events ) . '</a>' :
-				'0'
-		); ?></td>
+            <td class="dashboard-table-items" width="30%">Bookings:</td>
+            <td class="dashboard-table-content" width="70%"><?php echo $total_events ?></td>
           </tr>
 		<tr>
             <td class="dashboard-table-items" width="30%">Next Booking:</td>
@@ -88,216 +144,79 @@ function mdjm_dashboard_page() {
               </tr>
               <tr>
                 <td class="dashboard-table-items" width="30%">Lost Enquiries:</td>
-                <td class="dashboard-table-content" width="70%"><?php echo "Too many" ?></td>
+                <td class="dashboard-table-content" width="70%"><?php echo $failed_enquiries ?></td>
               </tr>
 				<?php
 		  }
 		  ?>
           <tr>
            <td class="dashboard-table-items" width="30%">Completed Bookings:</td>
-            <td class="dashboard-table-content" width="70%"><?php echo $completed_counts['month'] ?></td>
+            <td class="dashboard-table-content" width="70%"><?php echo $completed_events?></td>
           </tr>
 		<?php if( current_user_can( 'administrator' ) )	{
 			?>
           <tr>
             <td class="dashboard-table-items" width="30%">Potential Earnings: </td>
-            <td class="dashboard-table-content" width="70%"><?php echo number_format( $dash_dj['potential_month_earn'], 2 ); ?></td>
+            <td class="dashboard-table-content" width="70%"><?php echo get_earnings_by_date($month,0) ?></td>
           </tr>
           <?php
 		}
 		  ?>
           <tr>
             <td class="dashboard-table-items" width="30%">Earnings so Far:</td>
-            <td class="dashboard-table-content" width="70%"><?php echo  number_format( $dash_dj['month_earn'], 2 ); ?></td>
+            <td class="dashboard-table-content" width="70%"><?php echo  mdjm_currency_filter( 0.00 ); ?></td>
           </tr>
 	</table>
-          <tr>
-            <td colspan="2" class="alternate"><strong>Annual DJ Overview for <?php echo date( 'Y' ); ?></strong></td>
+       <table class="dashboard-yearly-table">
+		   <tbody>
+            <tr>
+				<td colspan="2" class="dashboard-table-header"><strong>Yearly DJ Overview for <?php echo $current_year ?></strong></td>
             </tr>
-         <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
-			 ?>
           <tr>
-            <td>Outstanding Enquiries:</td>
-            <td><?php echo $dash_dj['year_enquiries']; ?></td>
+            <td class="dashboard-table-items" width="30%">Bookings:</td>
+            <td class="dashboard-table-content" width="70%"><?php echo $total_events ?></td>
           </tr>
-          <tr>
-            <td>Lost Enquiries:</td>
-            <td><?php echo $dash_dj['lost_year_enquiries']; ?></td>
+		<tr>
+            <td class="dashboard-table-items" width="30%">Next Booking:</td>
+            <td class="dashboard-table-content" width="70%"><?php printf(
+			! empty( $nextevent ) ? '<a href="' . esc_url( 'admin.php?page=mdjm-playlists&event_id=' . ( $nextevent->ID ) ) . '">' .
+			esc_html( mdjm_format_short_date( get_post_meta( $nextevent->ID, '_mdjm_event_date', true ) ) ) . '</a>' :
+			esc_html__( 'None', 'mobile-dj-manager' )
+		); ?></td>
           </tr>
-          <?php
-		 }
-		 ?>
-          <tr>
-            <td>Completed Bookings:</td>
-            <td><?php echo $dash_dj['year_completed']; ?></td>
-          </tr>
-          <?php if( current_user_can( 'administrator' ) || dj_can( 'view_enquiry' ) )	{
+          <?php if( user_can( $item->ID, 'administrator' ) )	{
 			  ?>
-          <tr>
-            <td>Potential Earnings:</td>
-            <td><?php echo f_mdjm_currency() . number_format( $dash_dj['potential_year_earn'], 2 ); ?></td>
-          </tr>
-          <?php
+              <tr>
+                <td class="dashboard-table-items" width="30%">Outstanding Enquiries:</td>
+                <td class="dashboard-table-content" width="70%"><?php echo $unattended_enquiries ?></td>
+              </tr>
+              <tr>
+                <td class="dashboard-table-items" width="30%">Lost Enquiries:</td>
+                <td class="dashboard-table-content" width="70%"><?php echo $failed_enquiries ?></td>
+              </tr>
+				<?php
 		  }
 		  ?>
           <tr>
-            <td>Earnings so Far:</td>
-            <td><?php echo f_mdjm_currency() . number_format( $dash_dj['year_earn'], 2 ); ?></td>
+           <td class="dashboard-table-items" width="30%">Completed Bookings:</td>
+            <td class="dashboard-table-content" width="70%"><?php echo $completed_events?></td>
           </tr>
-			   </tbody>
-            </table>
+		<?php if( current_user_can( 'administrator' ) )	{
+			?>
+          <tr>
+            <td class="dashboard-table-items" width="30%">Potential Earnings: </td>
+            <td class="dashboard-table-content" width="70%"><?php echo get_earnings_by_date($month,0) ?></td>
+          </tr>
+          <?php
+		}
+		  ?>
+          <tr>
+            <td class="dashboard-table-items" width="30%">Earnings so Far:</td>
+            <td class="dashboard-table-content" width="70%"><?php echo  mdjm_currency_filter( 0.00 ); ?></td>
+          </tr>
+	</table>
 </div>
 	</div>
-	
-        </td>
-            <td width="40%" valign="top"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
-              <tr>
-                <td colspan="2" class="alternate"><strong><?php echo date( 'l jS F Y' ); ?></strong></td>
-              </tr>
-              <tr>
-                <td width="35%">Your Status:</td>
-                <td width="65%"><?php if( $events['next_event'] == date( "jS F Y" ) ) echo 'Booked from ' . $events['next_event_start'] . ' (<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $events['event_id'] . '">view details</a>)'; else echo 'Available'; ?></td>
-              </tr>
-              <?php
-			  if( current_user_can( 'administrator' ) && $mdjm_options['multiple_dj'] )	{
-				  $dj_event_results = f_mdjm_dj_working_today();
-				  ?>
-				  <tr>
-					<td>Employee Bookings:</td>
-					<?php 
-					if( empty( $dj_event_results ) ) {
-							?>
-							<td>None</td>
-							<?php
-					}
-					else	{
-						echo '<td>';
-						foreach( $dj_event_results as $info )	{
-							$djinfo = get_userdata( $info->event_dj );
-							echo $djinfo->display_name . ' from ' . date( $mdjm_options['time_format'], strtotime( $info->event_start ) ) . ' (<a href="' . admin_url() . 'admin.php?page=mdjm-events&action=view_event_form&event_id=' . $info->event_id . '">view details</a>)<br />';
-						}
-						echo '</td>';
-					}
-					?>
-				  </tr>
-					<?php
-			  }
-			  ?>
-                <form name="availability-check" id="availability-check" method="post" action="<?php f_mdjm_admin_page( 'availability' ); ?>">
-                <?php
-				if( !current_user_can( 'administrator' ) )	{
-					?><input type="hidden" name="check_employee" id="check_employee" value="<?php echo get_current_user_id(); ?>" /><?php
-				}
-				else	{
-					?><input type="hidden" name="check_employee" id="check_employee" value="all" /><?php	
-				}
-				?>
-                <tr>
-                <td><label for="show_check_date">Availability Check:</label></th>
-                <td><input type="text" name="show_check_date" id="show_check_date" class="check_custom_date" required="required" />&nbsp;&nbsp;&nbsp;
-                <input type="hidden" name="check_date" id="check_date" />
-                <?php submit_button( 'Check Date', 'primary small', 'submit', false, '' ); ?>
-                </td>
-                </tr>
-                </form>
-              <tr>
-                  <td>To do list</td>
-                  <td>(coming soon)</td>
-              </tr>
-              <tr>
-                  <td colspan="2"><a href="http://twitter.com/mobiledjmanager" class="twitter-follow-button" data-show-count="false">Follow @mobiledjmanager</a>
-<script src="http://platform.twitter.com/widgets.js" type="text/javascript"></script><br />
-<div class="fb-like" data-href="https://www.facebook.com/pages/Mobile-DJ-Manager-for-WordPress/544353295709781?ref=bookmarks" data-layout="button" data-action="like" data-show-faces="false" data-share="false"></div></td>
-              </tr>
-              <tr class="alternate">
-                <td colspan="2"><strong>Your 7 Day Schedule</strong></td>
-              </tr>
-              <tr>
-              <td colspan="2"><?php get_availability_activity( 0, 0 ); ?></td>
-              </tr>
-            </table></td>
-          </tr>
-          </table>
-		<?php
-			if( current_user_can( 'administrator' ) && isset( $mdjm_options['multiple_dj'] ) && $mdjm_options['multiple_dj'] == 'Y' )	{
-				$dash_emp = f_mdjm_dashboard_employee_overview();
-		?>
-                <hr />
-                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
-                <tr>
-                <td width="60%"><table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
-                <tr>
-                <td colspan="2" class="alternate"><strong>Monthly Employer Overview for <?php echo date( 'F Y' ); ?></strong></td>
-                </tr>
-                <tr>
-                <td width="30%">Active Bookings:</td>
-                <td width="70%"><?php echo $dash_emp['month_active_events']; ?></td>
-                </tr>
-                <tr>
-                <td>Outstanding Enquiries:</td>
-                <td><?php echo $dash_emp['month_enquiries']; ?></td>
-                </tr>
-                <tr>
-                <td>Lost Enquiries:</td>
-                <td><?php echo $dash_emp['lost_month_enquiries']; ?></td>
-                </tr>
-                <tr>
-                <td>Completed Bookings:</td>
-                <td><?php echo $dash_emp['month_completed']; ?></td>
-                </tr>
-                <tr>
-                <td>Potential Earnings:</td>
-                <td><?php echo f_mdjm_currency() . number_format( $dash_emp['potential_month_earn'], 2 ); ?></td>
-                </tr>
-                <tr>
-                <td>Earnings so Far:</td>
-                <td><?php echo f_mdjm_currency() . number_format( $dash_emp['month_earn'], 2 ); ?></td>
-                </tr>
-                <tr>
-                <td colspan="2" class="alternate"><strong>Annual Employer Overview for <?php echo date( 'Y' ); ?></strong></td>
-                </tr>
-                <tr>
-                <td>Outstanding Enquiries:</td>
-                <td><?php echo $dash_emp['year_enquiries']; ?></td>
-                </tr>
-                <tr>
-                <td>Lost Enquiries:</td>
-                <td><?php echo $dash_emp['lost_year_enquiries']; ?></td>
-                </tr>
-                <tr>
-                <td>Completed Bookings:</td>
-                <td><?php echo $dash_emp['year_completed']; ?></td>
-                </tr>
-                <tr>
-                <td>Potential Earnings:</td>
-                <td><?php echo f_mdjm_currency() . number_format( $dash_emp['potential_year_earn'], 2 ); ?></td>
-                </tr>
-                <tr>
-                <td>Earnings so Far:</td>
-                <td><?php echo f_mdjm_currency() . number_format( $dash_emp['year_earn'], 2 ); ?></td>
-                </tr>
-                </table></td>
-                <td width="40%" valign="top">
-                <table width="100%" border="0" cellspacing="0" cellpadding="0" class="widefat">
-                  <tr>
-                    <td width="100%" class="alternate"><strong>Latest News from <a href="<?php f_mdjm_admin_page( 'mydjplanner' ); ?>">My DJ Planner</a></strong></td>
-                  </tr>
-                  <tr>
-                    <td><?php wp_widget_rss_output( 'http://www.mydjplanner.co.uk/category/news/feed/rss2/', $args = array( 'show_author' => 0, 'show_date' => 1, 'show_summary' => 1, 'items' => 3 ) ); ?></td>
-                  </tr>
-                  <tr>
-                    <td width="100%" class="alternate"><strong>Latest Support Topics</strong></td>
-                  </tr>
-                  <tr>
-                    <td><?php wp_widget_rss_output( 'http://www.mydjplanner.co.uk/forums/feed/?post_type=topic', $args = array( 'show_author' => 0, 'show_date' => 0, 'show_summary' => 0, 'items' => 3 ) ); ?></td>
-                  </tr>
-                </table>
-                </td>
-                </tr>
-                </table>
                 <?php
 			}
-		?>	
-<?php
-	}
 // mdjm_dashboard_page

@@ -906,13 +906,13 @@ function mdjm_count_employee_active_events( $employee_id = '', $args = array() )
 function mdjm_get_employees_next_event( $employee_id = '' ) {
 
 	$args = array(
-		'post_status'    => mdjm_active_event_statuses(),
 		'posts_per_page' => 1,
 		'meta_key'       => '_mdjm_event_date',
 		'meta_value'     => date( 'Y-m-d' ),
 		'meta_compare'   => '>=',
 		'orderby'        => 'meta_value',
 		'order'          => 'ASC',
+		'post_status'	 => array ( 'mdjm-completed', 'mdjm-enquiry', 'mdjm-contract', 'mdjm-approved' ),
 	);
 
 	$next_event = mdjm_get_employee_events( $employee_id, $args );

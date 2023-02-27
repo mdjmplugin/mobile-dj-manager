@@ -78,7 +78,7 @@ function mdjm_earnings_reports_graph() {
 		}
 	} elseif ( $dates['range'] == 'this_week' || $dates['range'] == 'last_week' ) {
 
-		$num_of_days = cal_days_in_month( CAL_GREGORIAN, $dates['m_start'], $dates['year'] );
+		$num_of_days = 	date('t', mktime(0, 0, 0, $dates['m_start'], 1, $dates['year']));
 
 		$report_dates = array();
 		$i            = 0;
@@ -155,7 +155,7 @@ function mdjm_earnings_reports_graph() {
 					}
 				} else {
 
-					$num_of_days = cal_days_in_month( CAL_GREGORIAN, $i, $y );
+					$num_of_days = date('t', mktime(0, 0, 0, $i, 1, $y));					
 
 				}
 
@@ -376,8 +376,8 @@ function mdjm_transactions_reports_graph() {
 		}
 	} elseif ( $dates['range'] == 'this_week' || $dates['range'] == 'last_week' ) {
 
-		$num_of_days = cal_days_in_month( CAL_GREGORIAN, $dates['m_start'], $dates['year'] );
-
+		$num_of_days = date('t', mktime(0, 0, 0, $dates['m_start'], 1, $dates['year']));
+		
 		$report_dates = array();
 		$i            = 0;
 		while ( $i <= 6 ) {
@@ -457,8 +457,8 @@ function mdjm_transactions_reports_graph() {
 					}
 				} else {
 
-					$num_of_days = cal_days_in_month( CAL_GREGORIAN, $i, $y );
-
+					$num_of_days = date('t', mktime(0, 0, 0, $i, 1, $y));
+					
 				}
 
 				while ( $d <= $num_of_days ) {
@@ -693,7 +693,8 @@ function mdjm_reports_graph_controls() {
 	$taxes   = ! empty( $_GET['exclude_taxes'] ) ? false : true;
 
 	if ( empty( $dates['day_end'] ) ) {
-		$dates['day_end'] = cal_days_in_month( CAL_GREGORIAN, date( 'n' ), date( 'Y' ) );
+		$dates['day_end'] = date('t', mktime(0, 0, 0, date( 'n' ), 1, date( 'Y')));
+		
 	}
 
 	?>
@@ -782,7 +783,7 @@ function mdjm_get_report_dates() {
 		$dates['m_start']  = isset( $_GET['m_start'] ) ? sanitize_text_field( wp_unslash( $_GET['m_start'] ) ) : 1;
 		$dates['m_end']    = isset( $_GET['m_end'] ) ? sanitize_text_field( wp_unslash( $_GET['m_end'] ) ) : 12;
 		$dates['day']      = isset( $_GET['day'] ) ? sanitize_text_field( wp_unslash( $_GET['day'] ) ) : 1;
-		$dates['day_end']  = isset( $_GET['day_end'] ) ? sanitize_text_field( wp_unslash( $_GET['day_end'] ) ) : cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
+		$dates['day_end']  = isset( $_GET['day_end'] ) ? sanitize_text_field( wp_unslash( $_GET['day_end'] ) ) : date('t', mktime(0, 0, 0, $dates['m_end'], 1, $dates['year']));
 	}
 
 	// Modify dates based on predefined ranges
@@ -792,7 +793,8 @@ function mdjm_get_report_dates() {
 			$dates['m_start']  = date( 'n', $current_time );
 			$dates['m_end']    = date( 'n', $current_time );
 			$dates['day']      = 1;
-			$dates['day_end']  = cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
+			$dates['day_end']  = date('t', mktime(0, 0, 0, $dates['m_end'], 1, $dates['year']));
+
 			$dates['year']     = date( 'Y' );
 			$dates['year_end'] = date( 'Y' );
 			break;
@@ -808,7 +810,7 @@ function mdjm_get_report_dates() {
 				$dates['m_end']    = date( 'n' ) - 1;
 				$dates['year_end'] = $dates['year'];
 			}
-			$dates['day_end'] = cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
+			$dates['day_end'] = date('t', mktime(0, 0, 0, $dates['m_end'], 1, $dates['year']));
 			break;
 
 		case 'today':
@@ -827,12 +829,12 @@ function mdjm_get_report_dates() {
 
 				$year -= 1;
 				$month = 12;
-				$day   = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+				$day   = date('t', mktime(0, 0, 0, $month, 1, $year));
 
 			} elseif ( $month > 1 && $day == 1 ) {
 
 				$month -= 1;
-				$day    = cal_days_in_month( CAL_GREGORIAN, $month, $year );
+				$day    = date('t', mktime(0, 0, 0, $month, 1, $year));
 
 			} else {
 
@@ -888,7 +890,7 @@ function mdjm_get_report_dates() {
 
 			}
 
-			$dates['day_end'] = cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
+			$dates['day_end'] = date('t', mktime(0, 0, 0, $dates['m_end'], 1, $dates['year']));
 			break;
 
 		case 'last_quarter':
@@ -920,7 +922,7 @@ function mdjm_get_report_dates() {
 
 			}
 
-			$dates['day_end']  = cal_days_in_month( CAL_GREGORIAN, $dates['m_end'], $dates['year'] );
+			$dates['day_end']  = date('t', mktime(0, 0, 0, $dates['m_end'], 1, $dates['year']));
 			$dates['year_end'] = $dates['year'];
 			break;
 

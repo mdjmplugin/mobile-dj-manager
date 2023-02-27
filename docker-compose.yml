@@ -10,14 +10,14 @@ services:
       WORDPRESS_DB_NAME: mdjm_plugin
       WORDPRESS_DB_HOST: db
     volumes:
-      - C:/Users/Dan Porter/Sites/mdjm-plugin/wp-content/plugins/mobile-dj-manager/:/var/www/html/wp-content/plugins/mobile-dj-manager/
-      - C:/Users/Dan Porter/Sites/mdjm-plugin/wp-content/:/var/www/html/wp-content
-      - C:/Users/Dan Porter/Sites/mdjm-plugin/wp-config.php:/var/www/html/wp-config.php
+      - C:/Users/jackm/Sites/mdjm-plugin/wp-content/plugins/mobile-dj-manager/:/var/www/html/wp-content/plugins/mobile-dj-manager/
+      - C:/Users/jackm/Sites/mdjm-plugin/wp-content/:/var/www/html/wp-content
+      - C:/Users/jackm/Sites/mdjm-plugin/wp-config.php:/var/www/html/wp-config.php
   npm:
     image: node:current
     working_dir: /var/www/html/wp-content/plugins/mobile-dj-manager/
     volumes:
-      - C:/Users/Dan Porter/Sites/mdjm-plugin/wp-content/plugins/mobile-dj-manager/:/var/www/html/wp-content/plugins/mobile-dj-manager/
+      - C:/Users/jackm/Sites/mdjm-plugin/wp-content/plugins/mobile-dj-manager/:/var/www/html/wp-content/plugins/mobile-dj-manager/
     entrypoint: ['npm']
     command: npm start
   db:
