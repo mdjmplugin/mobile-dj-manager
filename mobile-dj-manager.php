@@ -4,7 +4,7 @@
  * Plugin Name: MDJM Event Management
  * Plugin URI: https://www.mdjm.co.uk
  * Description: The flexible event management solution for WordPress - not just for DJs!
- * Version: 1.6.5
+ * Version: 1.7
  * Date: January 2023
  * Author: MDJM <info@mdjm.co.uk>
  * Author URI:  https://mdjm.co.uk
@@ -144,7 +144,7 @@ if ( ! class_exists( 'Mobile_DJ_Manager' ) ) :
 		 */
 		private function setup_constants() {
 			global $wpdb;
-			define( 'MDJM_VERSION_NUM', '1.6.5' );
+			define( 'MDJM_VERSION_NUM', '1.7' );
 			define( 'MDJM_VERSION_KEY', 'mdjm_version' );
 			define( 'MDJM_PLUGIN_DIR', untrailingslashit( dirname( __FILE__ ) ) );
 			define( 'MDJM_PLUGIN_URL', untrailingslashit( plugins_url( '', __FILE__ ) ) );
