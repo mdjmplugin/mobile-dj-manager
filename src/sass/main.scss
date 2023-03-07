@@ -1,11 +1,10 @@
-@charset "UTF-8";
-/**
-* mdjm-styles.css
-* 16/01/2015
-* @since 0.9.9.6
-* Stylesheet for frontend pages
-*/
-
+#mdjm_payment_items_wrap {
+	background: #fff;
+	padding: 20px;
+	border-radius: 4px;
+	border: 1px solid #ccc;
+	margin:10px 0;
+}
 /* -- General -- */
 .mdjm-label {
 	font-weight: bold;
@@ -51,31 +50,31 @@ input.mdjm-form-error {
 .mdjm-info {
 	color: #00529B;
 	background-color: #BDE5F8;
-	background-image: url('../images/info-icon.png');
+	background-image: url('/assets/images/info-icon.png');
 }
 
 .mdjm-success {
 	color: #4F8A10;
 	background-color: #DFF2BF;
-	background-image: url('../images/success-icon.png');
+	background-image: url('/assets/images/success-icon.png');
 }
 
 .mdjm-warning {
 	color: #9F6000;
 	background-color: #FEEFB3;
-	background-image: url('../images/warning-icon.png');
+	background-image: url('/assets/images/warning-icon.png');
 }
 
 .mdjm-error {
 	color: #D8000C;
 	background-color: #FFBABA;
-	background-image: url('../images/error-icon.png');
+	background-image: url('/assets/images/error-icon.png');
 }
 
 .mdjm-validation {
 	color: #D63301;
 	background-color: #FFCCBA;
-	background-image: url('../images/info-icon.png');
+	background-image: url('/assets/images/info-icon.png');
 }
 
 .mdjm-updating	{
