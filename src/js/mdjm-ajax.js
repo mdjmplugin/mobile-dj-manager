@@ -6,6 +6,9 @@
  */
 
 var mdjm_vars;
+
+console.log("nocard"+ mdjm_vars.no_card_name);
+ 
 jQuery( document ).ready(
 	function ($) {
 

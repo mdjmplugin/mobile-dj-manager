@@ -59,7 +59,7 @@ function mdjm_load_scripts() {
 		add_thickbox();
 	}
 
-	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax.js', array( 'jquery' ), MDJM_VERSION_NUM );
+	wp_register_script( 'mdjm-ajax', $js_dir . 'mdjm-ajax.min.js', array( 'jquery' ), MDJM_VERSION_NUM );
 	wp_enqueue_script( 'mdjm-ajax' );
 
 	wp_localize_script(
