@@ -11,5 +11,3 @@ mix.sass('src/sass/main.scss', 'assets/css/mdjm-plugin.min.css');
 // mix.js(['src/admin/js/admin.js'], 'assets/js/mdjm-admin.min.js');
 mix.sass('src/admin/sass/admin.scss', 'assets/css/mdjm-admin.min.css');
 // mix.minify(['assets/css/mdjm-admin.css', 'assets/js/mdjm-admin.min.js']);
-
-mix.js(['src/js/mdjm-ajax.js'], 'assets/js/mdjm-ajax.min.js');
