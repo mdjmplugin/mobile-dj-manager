@@ -105,7 +105,7 @@ class MDJM_DB_Playlist_Meta extends MDJM_DB {
 	 * @access private
 	 * @since 1.5
 	 */
-	public function add_meta( $id = 0, $meta_key = '', $meta_value, $unique = false ) {
+	public function add_meta( $id = 0, $meta_key = '', $meta_value = '', $unique = false ) {
 		$id = $this->sanitize_entry_id( $id );
 		if ( false === $id ) {
 			return false;

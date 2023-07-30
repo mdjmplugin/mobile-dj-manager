@@ -134,7 +134,7 @@ function mdjm_update_txn_cat( $old_value, $new_value ) {
 
 	foreach ( $options as $key ) {
 
-		if ( $key != 'other_amount_label' || $new_value[ $key ] == $old_value[ $key ] ) {
+		if (!array_key_exists('other_amount_label', $old_value) || $key != 'other_amount_label' || $new_value[ $key ] == $old_value[ $key ] ) {
 			continue;
 		}
 

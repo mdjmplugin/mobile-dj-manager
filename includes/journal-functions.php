@@ -268,20 +268,21 @@ function mdjm_remove_journal_entries_in_comment_counts( $stats, $post_id ) {
 		'trash'        => 'trash',
 		'post-trashed' => 'post-trashed',
 	);
-
+	$stats = [];
 	foreach ( (array) $count as $row ) {
 		// Don't count post-trashed toward totals
 		if ( 'post-trashed' != $row['comment_approved'] && 'trash' != $row['comment_approved'] ) {
 			$total += $row['num_comments'];
 		}
 
-		if ( isset( $approved[ $row['comment_approved'] ] ) ) {
-			$stats[ $approved[ $row['comment_approved'] ] ] = $row['num_comments'];
-		}
+		if (is_array($approved) && array_key_exists((int) $row['comment_approved'], $approved) && is_int($row['comment_approved'])) {
+			$stats[$approved[(int) $row['comment_approved']]] = $row['num_comments'];
+		  }
 	}
 
-	$stats['total_comments'] = $total;
+	$stats['total_comments'] = (int) $total;
 
+	
 	foreach ( $approved as $key ) {
 		if ( empty( $stats[ $key ] ) ) {
 			$stats[ $key ] = 0;

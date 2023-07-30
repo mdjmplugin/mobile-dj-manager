@@ -6,6 +6,7 @@
  */
 
 var mdjm_vars;
+ 
 jQuery( document ).ready(
 	function ($) {
 

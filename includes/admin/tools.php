@@ -198,7 +198,7 @@ function mdjm_tools_sysinfo_get() {
 	$return .= 'Remote Post:              ' . $WP_REMOTE_POST . "\n";
 	$return .= 'Table Prefix:             ' . 'Length: ' . strlen( $wpdb->prefix ) . '   Status: ' . ( strlen( $wpdb->prefix ) > 16 ? 'ERROR: Too long' : 'Acceptable' ) . "\n";
 	$return .= 'WP_DEBUG:                 ' . ( defined( 'WP_DEBUG' ) ? WP_DEBUG ? 'Enabled' : 'Disabled' : 'Not set' ) . "\n";
-	$return .= 'Memory Limit:             ' . WP_MDJMORY_LIMIT . "\n";
+	$return .= 'Memory Limit:             ' . WP_MEMORY_LIMIT . "\n";
 	$return .= 'Registered Post Stati:    ' . implode( ', ', get_post_stati() ) . "\n";
 
 	$return = apply_filters( 'mdjm_sysinfo_after_wordpress_config', $return );

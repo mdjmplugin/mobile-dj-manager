@@ -42,6 +42,7 @@ function mdjm_login_form( $redirect = '' ) {
 	$output = mdjm_do_content_tags( $output );
 
 	return apply_filters( 'mdjm_login_form', $output );
+	ob_get_clean();
 } // mdjm_login_form
 
 /**

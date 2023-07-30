@@ -44,3 +44,4 @@ wp-config.php
 
 # htaccess
 /.htaccess
+*.xml
